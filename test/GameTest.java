@@ -1,3 +1,4 @@
+import eod.Deck;
 import eod.Game;
 import eod.Player;
 import org.junit.After;
@@ -12,8 +13,8 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player();
-        B = new Player();
+        A = new Player(new Deck());
+        B = new Player(new Deck());
         game = new Game(A, B);
     }
 
