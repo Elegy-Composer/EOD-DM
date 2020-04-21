@@ -1,15 +1,14 @@
 package eod;
 
 import eod.card.abstraction.Card;
+import eod.card.abstraction.CardUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Deck {
+public class Deck implements Snapshotted {
 
     public List<Card> cards;
 
@@ -34,9 +33,9 @@ public class Deck {
      * This method will return all the cards left if the number of requested cards exceeds the number of cards in deck.
      * If the deck is empty, it will return an empty array.
     */
-    public Card[] draw(int count) {
+    public CardUtil[] draw(int count) {
         try {
-            Card[] drew = cards.subList(0, count-1).toArray(new Card[0]);
+            CardUtil[] drew = cards.subList(0, count-1).toArray(new CardUtil[0]);
             cards.subList(0, count-1).clear();
             return drew;
         } catch (IndexOutOfBoundsException exception) {
@@ -45,7 +44,8 @@ public class Deck {
 
     }
 
-    public Deck copyDeck() {
+    @Override
+    public Deck snapshot() {
         ArrayList<Card> newCards = new ArrayList<>();
         for (Card card : cards) {
             Card copy = card.copy();
@@ -54,5 +54,4 @@ public class Deck {
 
         return new Deck(newCards, false);
     }
-
 }

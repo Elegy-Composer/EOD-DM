@@ -1,16 +1,12 @@
 package eod.card.abstraction;
 
-public interface Card {
+import eod.Player;
 
-    //When a card doesn't have a cost, ex: passive
-    //it's getCost method should return 0
-    int getCost();
-    String getName();
-    CardParty getParty();
-    Card copy();
+public abstract class Card implements CardUtil{
+    public abstract Card copy();
 
-    default boolean cardTypeEquals(Class<? extends Card> c) {
-        return c.isInstance(this);
+    protected Player player;
+    public Card(Player p) {
+        player = p;
     }
-
 }

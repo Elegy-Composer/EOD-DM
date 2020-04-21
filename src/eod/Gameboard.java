@@ -1,5 +1,7 @@
 package eod;
 
+import eod.snapshots.BoardSnapshot;
+
 public class Gameboard {
 
     private static Character[][] board = new Character[8][8];

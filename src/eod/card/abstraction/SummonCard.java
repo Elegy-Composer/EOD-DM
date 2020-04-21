@@ -1,5 +1,11 @@
 package eod.card.abstraction;
 
-public abstract class SummonCard implements Card {
+import eod.Player;
+
+public abstract class SummonCard extends Card{
+    public SummonCard(Player p) {
+        super(p);
+    }
+
     public abstract void summon();
 }

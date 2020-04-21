@@ -13,8 +13,8 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player(new Deck());
-        B = new Player(new Deck());
+        A = new Player(new Deck(), game);
+        B = new Player(new Deck(), game);
         game = new Game(A, B);
     }
 

@@ -1,16 +1,19 @@
 package eod;
 
 import eod.card.abstraction.Card;
+import eod.card.abstraction.CardUtil;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Snapshotted{
 
+    private Game game;
     private Deck deck;
     private SpecialDeck specialDeck;
     private ArrayList<Card> hand = new ArrayList<>();
 
-    public Player(Deck deck) {
+    public Player(Deck deck, Game game) {
+        this.game = game;
         this.deck = deck;
         specialDeck = SpecialDeck.generateSpecialDeck(deck);
 
@@ -24,7 +27,7 @@ public class Player {
         deck.draw(count);
     }
 
-    public boolean checkInHand(Class<? extends Card> c) {
+    public boolean checkInHand(Class<? extends CardUtil> c) {
         for(Card card: hand) {
             if (card.cardTypeEquals(c)) {
                 return true;
@@ -38,9 +41,10 @@ public class Player {
         return true;
     }
 
-    public Player copyPlayer() {
-        Deck newDeck = deck.copyDeck();
-        Player clone = new Player(newDeck);
+    @Override
+    public Player snapshot() {
+        Deck newDeck = deck.snapshot();
+        Player clone = new Player(newDeck, game);
         clone.handReceive(hand);
 
         return clone;

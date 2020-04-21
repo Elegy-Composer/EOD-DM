@@ -1,4 +1,6 @@
-package eod;
+package eod.snapshots;
+
+import eod.Player;
 
 public class GameSnapshot {
     Player A, B;
