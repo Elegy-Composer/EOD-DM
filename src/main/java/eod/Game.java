@@ -26,7 +26,7 @@ public class Game {
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
-        while(handIsInvalid(A) || handIsInvalid(B)) {
+        while(handIsInalid(A) || handIsInvalid(B)) {
             if(handIsInvalid(order[0])) {
                 Player first = order[0];
 
