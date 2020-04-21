@@ -24,8 +24,6 @@ jobs:
       with:
       # The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x)
         java-version: 8
-    - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1.0.3
       
     - name: Checkout
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
