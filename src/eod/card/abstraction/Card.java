@@ -7,6 +7,7 @@ public interface Card {
     int getCost();
     String getName();
     CardParty getParty();
+    Card copy();
 
     default boolean cardTypeEquals(Class<? extends Card> c) {
         return c.isInstance(this);

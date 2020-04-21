@@ -46,4 +46,12 @@ public class Game {
     private boolean handIsInvalid(Player player) {
         return !player.checkInHand(ActionCard.class);
     }
+
+    public GameSnapshot getSnapshot() {
+        Player Aclone = A.copyPlayer();
+        Player Bclone = B.copyPlayer();
+        BoardSnapshot boardSnapshot = Gameboard.getSnapshot();
+
+        return new GameSnapshot(Aclone, Bclone, boardSnapshot);
+    }
 }

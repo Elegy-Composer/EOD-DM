@@ -16,6 +16,10 @@ public class Player {
 
     }
 
+    public void handReceive(ArrayList<Card> h) {
+        hand.addAll(h);
+    }
+
     public void drawFromDeck(int count) {
         deck.draw(count);
     }
@@ -33,4 +37,13 @@ public class Player {
     public boolean validateDeck() {
         return true;
     }
+
+    public Player copyPlayer() {
+        Deck newDeck = deck.copyDeck();
+        Player clone = new Player(newDeck);
+        clone.handReceive(hand);
+
+        return clone;
+    }
+
 }
