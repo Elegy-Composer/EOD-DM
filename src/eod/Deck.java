@@ -1,7 +1,6 @@
 package eod;
 
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CardUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,9 +32,9 @@ public class Deck implements Snapshotted {
      * This method will return all the cards left if the number of requested cards exceeds the number of cards in deck.
      * If the deck is empty, it will return an empty array.
     */
-    public CardUtil[] draw(int count) {
+    public Card[] draw(int count) {
         try {
-            CardUtil[] drew = cards.subList(0, count-1).toArray(new CardUtil[0]);
+            Card[] drew = cards.subList(0, count-1).toArray(new Card[0]);
             cards.subList(0, count-1).clear();
             return drew;
         } catch (IndexOutOfBoundsException exception) {
