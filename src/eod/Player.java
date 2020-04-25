@@ -1,7 +1,7 @@
 package eod;
 
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CardUtil;
+import eod.card.abstraction.ICard;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class Player implements Snapshotted{
         deck.draw(count);
     }
 
-    public boolean checkInHand(Class<? extends CardUtil> c) {
+    public boolean checkInHand(Class<? extends ICard> c) {
         for(Card card: hand) {
             if (card.cardTypeEquals(c)) {
                 return true;

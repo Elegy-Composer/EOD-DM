@@ -1,5 +1,5 @@
 import com.sun.tools.javac.util.List;
-import eod.card.abstraction.CardUtil;
+import eod.card.abstraction.ICard;
 import eod.Deck;
 import eod.SpecialDeck;
 import org.junit.After;
@@ -20,7 +20,7 @@ public class SpecialDeckTest {
     @Test
     public void generateSpecialDeckTest() {
         SpecialDeck generated = SpecialDeck.generateSpecialDeck(playerDeck);
-        CardUtil[] cards = {};
+        ICard[] cards = {};
         assertEquals(generated.cards, List.from(cards));
     }
 

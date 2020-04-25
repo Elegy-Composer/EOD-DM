@@ -2,7 +2,7 @@ package eod.card.abstraction;
 
 import eod.Deck;
 
-public interface CardUtil {
+public interface ICard {
 
     //When a card doesn't have a cost, ex: passive
     //it's getCost method should return 0
@@ -11,7 +11,7 @@ public interface CardUtil {
     CardParty getParty();
     Deck ownerDeck = null;
 
-    default boolean cardTypeEquals(Class<? extends CardUtil> c) {
+    default boolean cardTypeEquals(Class<? extends ICard> c) {
         return c.isInstance(this);
     }
 
