@@ -1,14 +1,19 @@
 package eod;
 
-public class Gameboard {
+import eod.snapshots.BoardSnapshot;
 
+public class Gameboard implements Snapshotted{
+
+    private Game game;
     private static Character[][] board = new Character[8][8];
 
-    public Gameboard() {
+    public Gameboard(Game game) {
+        this.game = game;
         board[0][0].isAttacked = true;
     }
 
-    public static BoardSnapshot getSnapshot() {
+    @Override
+    public BoardSnapshot snapshot() {
         return new BoardSnapshot(board);
     }
 }

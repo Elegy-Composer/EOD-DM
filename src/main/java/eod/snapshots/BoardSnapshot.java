@@ -1,4 +1,6 @@
-package eod;
+package eod.snapshots;
+
+import eod.Character;
 
 import java.util.Arrays;
 

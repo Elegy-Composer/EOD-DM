@@ -4,7 +4,7 @@ import eod.card.abstraction.Card;
 
 import java.util.*;
 
-public class Deck {
+public class Deck implements Snapshotted {
 
     public List<Card> cards;
 
@@ -16,6 +16,13 @@ public class Deck {
     public Deck(Card... cards) {
         this.cards = Arrays.asList(cards);
         Collections.shuffle(this.cards);
+    }
+
+    public Deck(ArrayList<Card> cards, boolean shuffle) {
+        this.cards = cards;
+        if (shuffle) {
+            Collections.shuffle(this.cards);
+        }
     }
 
     /**
@@ -48,5 +55,15 @@ public class Deck {
     @Override
     public int hashCode() {
         return Objects.hash(cards);
+    }
+
+    public Deck snapshot() {
+        ArrayList<Card> newCards = new ArrayList<>();
+        for(Card card : cards) {
+            Card copy = card.copy();
+            newCards.add(copy);
+        }
+
+        return new Deck(newCards, false);
     }
 }

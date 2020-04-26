@@ -1,10 +1,12 @@
 package eod;
 
 import eod.card.abstraction.ActionCard;
+import eod.snapshots.BoardSnapshot;
+import eod.snapshots.GameSnapshot;
 
 //represent a game instance
 //each manages a ongoing game
-public class Game {
+public class Game implements Snapshotted{
 
     private Player A;
     private Player B;
@@ -46,4 +48,20 @@ public class Game {
     private boolean handIsInvalid(Player player) {
         return !player.checkInHand(ActionCard.class);
     }
+
+    public Gameboard getBoard() {
+        return gameboard;
+    }
+
+    @Override
+    public GameSnapshot snapshot() {
+        Player Aclone = A.snapshot();
+        Player Bclone = B.snapshot();
+        BoardSnapshot boardSnapshot = gameboard.snapshot();
+
+        return new GameSnapshot(Aclone, Bclone, boardSnapshot);
+    }
+
+    /* TODO: while closing the game, tells players to clean the decks, decks to remove cards
+        then the game itself should remove the players to avoid circular referencing */
 }
