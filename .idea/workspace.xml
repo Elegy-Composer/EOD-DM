@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="89605329-4e65-49ba-a1c2-8e2974332df5" name="Default Changelist" comment="Merge https://github.com/Elegy-Composer/EOD-DM into main&#10;&#10;# Conflicts:&#10;#&#9;.idea/EOD-DM.iml&#10;#&#9;src/eod/BoardSnapshot.java&#10;#&#9;src/eod/snapshots/BoardSnapshot.java&#10;#&#9;src/main/java/eod/BoardSnapshot.java&#10;#&#9;src/main/java/eod/Deck.java&#10;#&#9;src/main/java/eod/Player.java&#10;#&#9;src/test/java/SpecialDeckTest.java">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eod/BoardSnapshot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eod/Round.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/EOD-DM.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Character.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/GameLosingException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/GameLosingException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Gameboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Gameboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Leader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Leader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/SpecialDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/SpecialDeck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/WarObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/WarObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/ActionCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ActionCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/AttackCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/AttackCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/CardParty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/CardParty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/ConditionalCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ConditionalCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/NormalCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/NormalCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/abstraction/SummonCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/SummonCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/concrete/EmergencyHeal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/concrete/EmergencyHeal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/card/concrete/WarObjectSpecifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/concrete/WarObjectSpecifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/effect/Effect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/effect/Effect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/effect/EffectFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/effect/EffectFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/effect/Heal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/effect/Heal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/specifier/Accessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/specifier/Accessing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/specifier/condition/Condition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/specifier/condition/Condition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/specifier/condition/Conditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/specifier/condition/Conditions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/specifier/timing/Timing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/specifier/timing/Timing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eod/specifier/timing/Timings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/specifier/timing/Timings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/GameTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SpecialDeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/SpecialDeckTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="EOD-DM" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="EOD-DM" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1b3myFZ0k39n44joTpl5X1ZBiLU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="89605329-4e65-49ba-a1c2-8e2974332df5" name="Default Changelist" comment="" />
+      <created>1587869404297</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587869404297</updated>
+      <workItem from="1587869410502" duration="296000" />
+      <workItem from="1587869729128" duration="368000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge https://github.com/Elegy-Composer/EOD-DM into main&#10;&#10;# Conflicts:&#10;#&#9;.idea/EOD-DM.iml&#10;#&#9;src/eod/BoardSnapshot.java&#10;#&#9;src/eod/snapshots/BoardSnapshot.java&#10;#&#9;src/main/java/eod/BoardSnapshot.java&#10;#&#9;src/main/java/eod/Deck.java&#10;#&#9;src/main/java/eod/Player.java&#10;#&#9;src/test/java/SpecialDeckTest.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge https://github.com/Elegy-Composer/EOD-DM into main&#10;&#10;# Conflicts:&#10;#&#9;.idea/EOD-DM.iml&#10;#&#9;src/eod/BoardSnapshot.java&#10;#&#9;src/eod/snapshots/BoardSnapshot.java&#10;#&#9;src/main/java/eod/BoardSnapshot.java&#10;#&#9;src/main/java/eod/Deck.java&#10;#&#9;src/main/java/eod/Player.java&#10;#&#9;src/test/java/SpecialDeckTest.java" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="184" y="127" width="1636" height="853" key="DiffContextDialog" timestamp="1587870097685">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="184" y="127" width="1636" height="853" key="DiffContextDialog/84.27.1836.1053@84.27.1836.1053" timestamp="1587870097685" />
+    <state x="731" y="253" width="532" height="607" key="FileChooserDialogImpl" timestamp="1587869845503">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="731" y="253" width="532" height="607" key="FileChooserDialogImpl/84.27.1836.1053@84.27.1836.1053" timestamp="1587869845503" />
+    <state x="647" y="374" width="734" height="328" key="MultipleFileMergeDialog" timestamp="1587869817531">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="647" y="374" width="734" height="328" key="MultipleFileMergeDialog/84.27.1836.1053@84.27.1836.1053" timestamp="1587869817531" />
+  </component>
+</project>
