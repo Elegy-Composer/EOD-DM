@@ -1,4 +1,9 @@
 package eod.card.abstraction;
 
-public abstract class ActionCard implements Card {
+import eod.Player;
+
+public abstract class ActionCard extends Card {
+    public ActionCard(Player p) {
+        super(p);
+    }
 }

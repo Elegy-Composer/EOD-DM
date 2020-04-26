@@ -7,8 +7,8 @@ import eod.specifier.Accessing;
 import java.util.Arrays;
 
 public class WarObjectSpecifier {
-    public static Accessing Character() {
-        Character[][] characters = Gameboard.getSnapshot().getAllCharacter();
+    public static Accessing Character(Gameboard gameboard) {
+        Character[][] characters = gameboard.snapshot().getAllCharacter();
 
         return new Accessing(Arrays.stream(characters)
                 .flatMap(Arrays::stream)
