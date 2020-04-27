@@ -30,12 +30,24 @@ public class Game implements Snapshotted, GameObject {
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
-        while(handIsInvalid(A) || handIsInvalid(B)) {
-            if(handIsInvalid(playerOrder[0])) {
-                Player first = playerOrder[0];
+        boolean hasInvalid;
+        int drawRound = 0;
+        do {
+            hasInvalid = false;
+            for(int i = 0;i < playerOrder.length;i++) {
+                Player player = playerOrder[i];
+                Player other = playerOrder[i==0?1:0];
 
+                if(handIsInvalid(player)) {
+                    hasInvalid = true;
+                    other.drawFromDeck(1);
+                    player.dropCards();
+                }
             }
-        }
+            if(hasInvalid) {
+                drawRound++;
+            }
+        } while(drawRound<3 || hasInvalid);
 
         while(true) {
             try {

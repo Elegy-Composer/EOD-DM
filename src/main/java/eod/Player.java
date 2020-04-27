@@ -6,6 +6,7 @@ import eod.snapshots.Snapshotted;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class Player implements Snapshotted, GameObject {
 
@@ -37,6 +38,23 @@ public class Player implements Snapshotted, GameObject {
             }
         }
         return false;
+    }
+
+    public void dropCards() {
+        hand.clear();
+    }
+
+    public void dropCards(int k) {
+        if(k>=hand.size()) {
+            dropCards();
+            return;
+        }
+
+        Random random = new Random();
+        for(int i = 0;i < k;i++) {
+            int toDrop = random.nextInt(hand.size());
+            hand.remove(toDrop);
+        }
     }
 
     //TODO: implement validateDeck, we didn't do it know because the types of card aren't enough
