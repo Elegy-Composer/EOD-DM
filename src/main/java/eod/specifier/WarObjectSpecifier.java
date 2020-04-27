@@ -1,4 +1,4 @@
-package eod.card.concrete;
+package eod.specifier;
 
 import eod.Character;
 import eod.Gameboard;

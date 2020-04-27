@@ -1,6 +1,7 @@
 package eod;
 
 import eod.card.abstraction.Card;
+import eod.snapshots.Snapshotted;
 
 import java.util.*;
 

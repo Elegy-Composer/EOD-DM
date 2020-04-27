@@ -1,4 +1,9 @@
 package eod;
 
-public class Leader {
+public class Leader implements WarObject {
+    private int hp;
+
+    public boolean isAlive() {
+        return hp > 0;
+    }
 }
