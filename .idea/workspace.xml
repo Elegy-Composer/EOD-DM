@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="de0d31bb-7a3b-400a-bc5c-7b6cd08e10df" name="Default Changelist" comment="Bug fix and done some teardown." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1b7ZMPsuK4qEcrHXR8gCanncCtv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="de0d31bb-7a3b-400a-bc5c-7b6cd08e10df" name="Default Changelist" comment="" />
+      <created>1587985044254</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587985044254</updated>
+      <workItem from="1587985049498" duration="2940000" />
+    </task>
+    <task id="LOCAL-00001" summary="Card disposal at the start of the game.">
+      <created>1587985528937</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587985528937</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Card disposal at the start of the game.">
+      <created>1587985568035</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1587985568035</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Bug fix and done some teardown.">
+      <created>1587987658716</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1587987658716</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Card disposal at the start of the game." />
+    <MESSAGE value="Bug fix and done some teardown." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fix and done some teardown." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="624" y="41" width="657" height="627" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1587985439527">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="624" y="41" width="657" height="627" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/84.27.1836.1053@84.27.1836.1053" timestamp="1587985439527" />
+    <state x="496" y="225" width="1002" height="663" key="Vcs.Push.Dialog.v2" timestamp="1587987752269">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="496" y="225" width="1002" height="663" key="Vcs.Push.Dialog.v2/84.27.1836.1053@84.27.1836.1053" timestamp="1587987752269" />
+  </component>
+</project>
