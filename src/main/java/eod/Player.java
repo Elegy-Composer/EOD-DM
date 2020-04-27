@@ -6,6 +6,7 @@ import eod.snapshots.Snapshotted;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class Player implements Snapshotted, GameObject {
 
@@ -39,6 +40,24 @@ public class Player implements Snapshotted, GameObject {
         return false;
     }
 
+    public void dropCards() {
+        hand.clear();
+    }
+
+    public void dropCards(int k) throws IllegalArgumentException {
+        if(k<0) throw new IllegalArgumentException("Attempting to drop negative number of cards");
+        if(k>=hand.size()) {
+            dropCards();
+            return;
+        }
+
+        Random random = new Random();
+        for(int i = 0;i < k;i++) {
+            int toDrop = random.nextInt(hand.size());
+            hand.remove(toDrop);
+        }
+    }
+
     //TODO: implement validateDeck, we didn't do it know because the types of card aren't enough
     public boolean validateDeck() {
         return true;
@@ -54,7 +73,10 @@ public class Player implements Snapshotted, GameObject {
 
     @Override
     public void teardown() {
-        //TODO: finish teardown
+        hand.clear();
+        hand = null;
+        deck.teardown();
+        deck = null;
     }
 
     @Override

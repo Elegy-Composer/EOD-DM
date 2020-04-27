@@ -43,6 +43,7 @@ public class Deck implements Snapshotted, GameObject {
 
     @Override
     public void teardown() {
+        cards.clear();
         cards = null;
     }
 
