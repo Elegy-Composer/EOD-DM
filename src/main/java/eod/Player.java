@@ -44,7 +44,8 @@ public class Player implements Snapshotted, GameObject {
         hand.clear();
     }
 
-    public void dropCards(int k) {
+    public void dropCards(int k) throws IllegalArgumentException {
+        if(k<0) throw new IllegalArgumentException("Attempting to drop negative number of cards");
         if(k>=hand.size()) {
             dropCards();
             return;
@@ -72,7 +73,10 @@ public class Player implements Snapshotted, GameObject {
 
     @Override
     public void teardown() {
-        //TODO: finish teardown
+        hand.clear();
+        hand = null;
+        deck.teardown();
+        deck = null;
     }
 
     @Override

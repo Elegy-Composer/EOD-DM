@@ -42,6 +42,7 @@ public class Game implements Snapshotted, GameObject {
                     hasInvalid = true;
                     other.drawFromDeck(1);
                     player.dropCards();
+                    player.drawFromDeck(3);
                 }
             }
             if(hasInvalid) {
@@ -57,6 +58,7 @@ public class Game implements Snapshotted, GameObject {
             }
         }
 
+        // TODO: things to do when a person wins
         if(A.isLeaderAlive()) {
             //A wins
         } else if(B.isLeaderAlive()) {
@@ -93,7 +95,7 @@ public class Game implements Snapshotted, GameObject {
         A = null;
         B = null;
         gameboard = null;
-    }
+    }//TODO: finish teardown
 
     public Gameboard getBoard() {
         return gameboard;
