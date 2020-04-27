@@ -5,7 +5,7 @@ import eod.snapshots.Snapshotted;
 
 import java.util.*;
 
-public class Deck implements Snapshotted {
+public class Deck implements Snapshotted, GameObject {
 
     public List<Card> cards;
 
@@ -39,6 +39,11 @@ public class Deck implements Snapshotted {
             throw new GameLosingException("Deck is drained");
         }
 
+    }
+
+    @Override
+    public void teardown() {
+        cards = null;
     }
 
     @Override

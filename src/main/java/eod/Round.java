@@ -2,13 +2,18 @@ package eod;
 
 import java.util.Objects;
 
-public class Round {
+public class Round implements GameObject {
     private Player roundPlayer;
     private int roundNumber;
 
     public Round(Player player, int roundNumber) {
         this.roundPlayer = player;
         this.roundNumber = roundNumber;
+    }
+
+    @Override
+    public void teardown() {
+        roundPlayer = null;
     }
 
     @Override
