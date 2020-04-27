@@ -1,13 +1,12 @@
 package eod.card.concrete;
 
 import eod.Player;
-import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
 import eod.card.abstraction.NormalCard;
 
 import static eod.specifier.condition.Conditions.Injured;
 import static eod.specifier.timing.Timings.LastEnemyTurn;
-import static eod.card.concrete.WarObjectSpecifier.*;
+import static eod.specifier.WarObjectSpecifier.*;
 import static eod.effect.EffectFunctions.*;
 
 public class EmergencyHeal extends NormalCard {

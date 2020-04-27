@@ -1,5 +1,6 @@
 import eod.Deck;
 import eod.Game;
+import eod.Leader;
 import eod.Player;
 import org.junit.After;
 import org.junit.Assert;
@@ -14,8 +15,8 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player(new Deck(), game);
-        B = new Player(new Deck(), game);
+        A = new Player(new Deck(), game, new Leader());
+        B = new Player(new Deck(), game, new Leader());
         game = new Game(A, B);
     }
 
