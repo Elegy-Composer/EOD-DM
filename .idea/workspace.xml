@@ -19,11 +19,29 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de0d31bb-7a3b-400a-bc5c-7b6cd08e10df" name="Default Changelist" comment="Bug fix and done some teardown." />
+    <list default="true" id="de0d31bb-7a3b-400a-bc5c-7b6cd08e10df" name="Default Changelist" comment="Bug fix and done some teardown.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/eod/card/concrete/Dodge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/Character.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Character.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/Gameboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Gameboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ActionCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ActionCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/AttackCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/AttackCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ConditionalCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/ConditionalCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/NormalCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/abstraction/NormalCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eod/card/concrete/EmergencyHeal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eod/card/concrete/EmergencyHeal.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,6 +68,8 @@
       <option name="presentableId" value="Default" />
       <updated>1587985044254</updated>
       <workItem from="1587985049498" duration="2940000" />
+      <workItem from="1587990939722" duration="1192000" />
+      <workItem from="1588045242119" duration="1441000" />
     </task>
     <task id="LOCAL-00001" summary="Card disposal at the start of the game.">
       <created>1587985528937</created>
@@ -88,6 +108,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Card disposal at the start of the game." />
@@ -95,6 +116,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Bug fix and done some teardown." />
   </component>
   <component name="WindowStateProjectService">
+    <state x="895" y="173" width="470" height="723" key="#com.intellij.ide.util.MemberChooser" timestamp="1587991753263">
+      <screen x="84" y="27" width="1836" height="1053" />
+    </state>
+    <state x="895" y="173" width="470" height="723" key="#com.intellij.ide.util.MemberChooser/84.27.1836.1053@84.27.1836.1053" timestamp="1587991753263" />
     <state x="624" y="41" width="657" height="627" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1587985439527">
       <screen x="84" y="27" width="1836" height="1053" />
     </state>

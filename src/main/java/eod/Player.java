@@ -71,6 +71,11 @@ public class Player implements Snapshotted, GameObject {
         return leader.isAlive();
     }
 
+    public Character selectCharacterOnBoard() {
+        Gameboard gameboard = getBoard();
+        return gameboard.selectCharacter(this, 1)[0];
+    }
+
     @Override
     public void teardown() {
         hand.clear();
