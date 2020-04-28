@@ -25,12 +25,12 @@ public class Gameboard implements Snapshotted, GameObject {
     }
 
     public void moveElement(Point from, Point to) throws MoveInvalidException, ArrayIndexOutOfBoundsException {
-        if(board[to.x][to.y] != null) {
-            throw new MoveInvalidException("There's already a character on ("+to.x+", "+to.y+").");
-        }
-
         if(to.x < 0 || to.x >= boardSize || to.y < 0 || to.y >= boardSize) {
             throw new ArrayIndexOutOfBoundsException("Trying to move a character to ("+to.x+", "+"to.y"+").");
+        }
+
+        if(board[to.x][to.y] != null) {
+            throw new MoveInvalidException("There's already a character on ("+to.x+", "+to.y+").");
         }
 
         board[to.x][to.y] = board[from.x][from.y];
