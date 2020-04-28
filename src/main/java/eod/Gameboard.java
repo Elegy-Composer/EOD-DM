@@ -1,41 +1,36 @@
 package eod;
 
+import eod.exceptions.MoveInvalidException;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.Snapshotted;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.awt.*;
 
 public class Gameboard implements Snapshotted, GameObject {
 
+    public static final int boardSize = 8;
     private Game game;
-    private Character[][] board = new Character[8][8];
+    private Character[][] board = new Character[boardSize][boardSize];
 
     public Gameboard(Game game) {
         this.game = game;
         board[0][0].isAttacked = true;
     }
 
-    public Character[] selectCharacter(Player player, int num) {
-        ArrayList<Character> canSelect = new ArrayList<>();
-        for(int i = 0;i < board.length;i++) {
-            for(int j = 0;j < board[i].length;j++) {
-                if(board[i][j] == null) {
-                    continue;
-                }
-                if(board[i][j].getPlayer() == player) {
-                    canSelect.add(board[i][j]);
-                    // TODO: let the characters glow on the board, indicating that the player can select them.
-                }
-            }
+    public boolean hasObjectOn(int x, int y) throws ArrayIndexOutOfBoundsException{
+        if(x<0 || x>= boardSize || y<0 || y>= boardSize) {
+            throw new ArrayIndexOutOfBoundsException("Trying to find an element at ("+x+", "+y+") on the board");
         }
-        return selectCharacter(canSelect, num);
+        return board[x][y]!=null;
     }
 
-    public Character[] selectCharacter(ArrayList<Character> canSelect, int num) {
-        // TODO: let the player select characters
-        Collections.shuffle(canSelect);
-        return canSelect.subList(0, num).stream().toArray(Character[]::new);
+    public void moveElement(Point from, Point to) throws MoveInvalidException {
+        if(board[to.x][to.y] != null) {
+            throw new MoveInvalidException("There's already a character on "+to.x+", "+to.y);
+        }
+        Character temp = board[from.x][from.y];
+        board[from.x][from.y] = null;
+        board[to.x][to.y] = temp;
     }
 
     @Override

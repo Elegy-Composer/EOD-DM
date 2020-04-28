@@ -1,10 +1,13 @@
-package eod.card.concrete;
+package eod.card.concrete.conditional;
 
-import eod.Character;
+import static eod.specifier.WarObjectSpecifier.*;
+import static eod.specifier.condition.Conditions.Targeted;
+
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
 import eod.card.abstraction.ConditionalCard;
+import eod.Character;
 
 public class Dodge extends ConditionalCard {
     public Dodge(Player p) {
@@ -29,6 +32,7 @@ public class Dodge extends ConditionalCard {
     @Override
     public void effect() {
         // TODO: finish the effect
-        Character toMove = player.selectCharacterOnBoard();
+        Character toMove = player.selectCharacter(Character(player.getBoard()).which(Targeted()).get());
+        toMove.move(1);
     }
 }

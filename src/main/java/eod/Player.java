@@ -4,7 +4,9 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.ICard;
 import eod.snapshots.Snapshotted;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 
@@ -71,11 +73,6 @@ public class Player implements Snapshotted, GameObject {
         return leader.isAlive();
     }
 
-    public Character selectCharacterOnBoard() {
-        Gameboard gameboard = getBoard();
-        return gameboard.selectCharacter(this, 1)[0];
-    }
-
     @Override
     public void teardown() {
         hand.clear();
@@ -110,5 +107,22 @@ public class Player implements Snapshotted, GameObject {
         clone.handReceive(hand);
 
         return clone;
+    }
+
+    public Character selectCharacter(Character[] characters) {
+        //TODO: asks the player to select a character
+        Random random = new Random();
+        return characters[random.nextInt(characters.length)];
+    }
+
+    public Point selectPosition(ArrayList<Point> points) {
+        //TODO: connection with the frontend
+        Random random = new Random();
+        return points.get(random.nextInt(points.size()));
+    }
+
+    public void moveCharacter(Character character, Point point) {
+        game.getBoard().moveElement(character.position, point);
+        character.moveTo(point);
     }
 }
