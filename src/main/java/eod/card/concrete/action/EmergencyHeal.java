@@ -1,4 +1,4 @@
-package eod.card.concrete;
+package eod.card.concrete.action;
 
 import eod.Player;
 import eod.card.abstraction.CardParty;

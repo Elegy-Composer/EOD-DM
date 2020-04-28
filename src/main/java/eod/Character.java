@@ -24,25 +24,36 @@ public class Character implements WarObject {
         }
     }
 
-    private void move() {
+    protected void move() {
         ArrayList<Point> possibleMoves = new ArrayList<>();
         int x = position.x, y = position.y;
+        int toX = x-1, toY = y;
         Gameboard gameboard = player.getBoard();
 
-        if(x!=0 && !gameboard.hasObjectOn(x-1, y)) {
-            possibleMoves.add(new Point(x-1, y));
-        }
-        if(x!=Gameboard.boardSize-1 && !gameboard.hasObjectOn(x+1, y)) {
-            possibleMoves.add(new Point(x+1, y));
-        }
-        if(y!=0 && !gameboard.hasObjectOn(x, y-1)) {
-            possibleMoves.add(new Point(x, y-1));
-        }
-        if(y!=Gameboard.boardSize-1 && !gameboard.hasObjectOn(x, y+1)) {
-            possibleMoves.add(new Point(x, y+1));
-        }
+        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
+        toX = x+1;
+        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
+        toX = x;
+        toY = y-1;
+        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
+        toY = y+1;
+        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
 
         player.moveCharacter(this, player.selectPosition(possibleMoves));
+    }
+
+    private boolean addPointIfEmpty(ArrayList<Point> points, int x, int y, Gameboard gameboard) {
+        try {
+            if(!gameboard.hasObjectOn(x, y)) {
+                points.add(new Point(x, y));
+                return true;
+            }
+            else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void moveTo(Point point) {

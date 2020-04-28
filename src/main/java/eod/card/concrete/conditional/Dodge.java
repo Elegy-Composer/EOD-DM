@@ -31,7 +31,6 @@ public class Dodge extends ConditionalCard {
 
     @Override
     public void effect() {
-        // TODO: finish the effect
         Character toMove = player.selectCharacter(Character(player.getBoard()).which(Targeted()).get());
         toMove.move(1);
     }
