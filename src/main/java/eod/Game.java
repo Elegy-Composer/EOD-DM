@@ -1,5 +1,7 @@
 package eod;
 
+import eod.IO.Input;
+import eod.IO.Output;
 import eod.card.abstraction.ActionCard;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.GameSnapshot;
@@ -60,9 +62,11 @@ public class Game implements Snapshotted, GameObject {
 
         // TODO: things to do when a person wins
         if(A.isLeaderAlive()) {
-            //A wins
+            A.announceWon();
+            B.announceLost();
         } else if(B.isLeaderAlive()) {
-            //B wins
+            B.announceWon();
+            A.announceLost();
         }
 
         teardown();
@@ -83,15 +87,16 @@ public class Game implements Snapshotted, GameObject {
     }
 
     private void gameLoop() throws GameLosingException {
-
+        //TODO: finish gameLoop
     }
 
     @Override
     public void teardown() {
         for(Player player: playerOrder) {
             player.teardown();
-            gameboard.teardown();
         }
+        gameboard.teardown();
+
         A = null;
         B = null;
         gameboard = null;
