@@ -3,6 +3,7 @@ package eod;
 import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.ActionCard;
+import eod.exceptions.GameLosingException;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.GameSnapshot;
 import eod.snapshots.Snapshotted;

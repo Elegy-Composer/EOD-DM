@@ -1,4 +1,4 @@
-package eod.card.concrete;
+package eod.card.concrete.action;
 
 import eod.Player;
 import eod.card.abstraction.CardParty;
@@ -12,7 +12,7 @@ import static eod.effect.EffectFunctions.*;
 public class EmergencyHeal extends NormalCard {
 
     public EmergencyHeal(Player p) {
-        super(p);
+        super(p, 1);
     }
 
     @Override
