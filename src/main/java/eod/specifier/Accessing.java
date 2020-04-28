@@ -1,7 +1,7 @@
 package eod.specifier;
 
 import eod.Character;
-import eod.specifier.condition.Condition;
+import eod.specifier.condition.AttackedCondition;
 import eod.specifier.timing.Timing;
 
 public class Accessing {
@@ -12,7 +12,7 @@ public class Accessing {
         this.objects = objects;
     }
 
-    public Accessing which(Condition condition) {
+    public Accessing which(AttackedCondition condition) {
         objects = condition.filter(objects);
         return this;
     }
