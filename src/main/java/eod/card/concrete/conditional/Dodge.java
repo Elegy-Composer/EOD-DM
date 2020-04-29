@@ -1,15 +1,16 @@
 package eod.card.concrete.conditional;
 
+import static eod.effect.EffectFunctions.RequestMove;
 import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.Targeted;
 
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
-import eod.card.abstraction.ConditionalCard;
-import eod.Character;
+import eod.card.abstraction.action.ConditionalCard;
+import eod.listener.AttackListener;
 
-public class Dodge extends ConditionalCard {
+public class Dodge extends ConditionalCard implements AttackListener {
     public Dodge(Player p) {
         super(p, 1);
     }
@@ -31,7 +32,6 @@ public class Dodge extends ConditionalCard {
 
     @Override
     public void effect() {
-        Character toMove = player.selectCharacter(Character(player.getBoard()).which(Targeted()).get());
-        toMove.move(1);
+        RequestMove(player, 1).from(Character(player.getBoard()).which(Targeted()).get());
     }
 }

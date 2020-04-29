@@ -8,10 +8,19 @@ public class Character implements WarObject {
     public boolean isTargeted;
     public Point position;
     public boolean isAttacked = false;
+    private int max_hp = 30;
+    private int hp;
 
     public Character(Player player, int x, int y) {
         this.player = player;
         position = new Point(x, y);
+    }
+
+    public Character(Player player, int x, int y, int hp) {
+        this.player = player;
+        position = new Point(x, y);
+        max_hp = hp;
+        this.hp = max_hp;
     }
 
     public Player getPlayer() {
@@ -21,6 +30,15 @@ public class Character implements WarObject {
     public void move(int steps) {
         for(int i = 0;i < steps;i++) {
             move();
+        }
+    }
+
+    public void heal(int gain) {
+        if(hp+gain >= max_hp) {
+            hp = max_hp;
+        }
+        else {
+            hp+=gain;
         }
     }
 
