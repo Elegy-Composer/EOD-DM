@@ -37,6 +37,16 @@ public class Gameboard implements Snapshotted, GameObject {
         board[from.x][from.y] = null;
     }
 
+    public void removeObject(int x, int y) throws NullPointerException, ArrayIndexOutOfBoundsException{
+        if(x<0 || x >= boardSize || y < 0 || y >= boardSize) {
+            throw new ArrayIndexOutOfBoundsException("Trying to remove a character at ("+x+", "+y+").");
+        }
+        if(board[x][y] == null) {
+            throw new NullPointerException("There's nothing at ("+x+", "+y+") on the board, cannot remove.");
+        }
+        board[x][y] = null;
+    }
+
     @Override
     public void teardown() {
         //TODO: finish teardown

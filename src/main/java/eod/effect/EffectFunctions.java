@@ -10,4 +10,8 @@ public class EffectFunctions {
     public static Move RequestMove(Player player, int step) {
         return new Move(player, step);
     }
+
+    public static Attack RequestAttack(Player player, int hp) {
+        return new Attack(player, hp);
+    }
 }

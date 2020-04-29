@@ -3,7 +3,6 @@ package eod.effect;
 import eod.Character;
 import eod.GameObject;
 import eod.Player;
-import eod.WarObject;
 
 public class Heal implements Effect, GameObject {
     private int hp;

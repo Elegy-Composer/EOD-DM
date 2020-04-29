@@ -3,7 +3,7 @@ package eod;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Character implements WarObject {
+public class Character implements WarObject, GameObject {
     private Player player;
     public boolean isTargeted;
     public Point position;
@@ -42,6 +42,17 @@ public class Character implements WarObject {
         }
     }
 
+    public void attack(Character[] targets, int hp) {
+        player.attack(this, targets, hp);
+    }
+
+    public void damage(int val) {
+        hp -= val;
+        if(hp <= 0) {
+            die();
+        }
+    }
+
     protected void move() {
         ArrayList<Point> possibleMoves = new ArrayList<>();
         int x = position.x, y = position.y;
@@ -76,5 +87,15 @@ public class Character implements WarObject {
 
     public void moveTo(Point point) {
         position.move(point.x, point.y);
+    }
+
+    private void die() {
+        player.loseCharacter(this);
+        teardown();
+    }
+
+    @Override
+    public void teardown() {
+        // Nothing to do
     }
 }
