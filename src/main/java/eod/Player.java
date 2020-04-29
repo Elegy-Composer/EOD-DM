@@ -153,6 +153,7 @@ public class Player implements Snapshotted, GameObject {
     }
 
     public void targetedTrigger() {
+        // If the player's characters has been targeted, trigger this function
         ConditionalCard[] candidates = hand.stream()
                 .filter(card -> card instanceof ConditionalCard)
                 .filter(card -> card instanceof AttackListener)
