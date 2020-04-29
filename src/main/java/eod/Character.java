@@ -14,6 +14,7 @@ public class Character implements WarObject, GameObject {
     public Character(Player player, int x, int y) {
         this.player = player;
         position = new Point(x, y);
+        hp = max_hp;
     }
 
     public Character(Player player, int x, int y, int hp) {
@@ -46,6 +47,10 @@ public class Character implements WarObject, GameObject {
         player.attack(this, targets, hp);
     }
 
+    public void attack(Character[] targets, int hp, boolean allowCondition) {
+        player.attack(this, targets, hp, allowCondition);
+    }
+
     public void damage(int val) {
         hp -= val;
         if(hp <= 0) {
@@ -76,8 +81,7 @@ public class Character implements WarObject, GameObject {
             if(!gameboard.hasObjectOn(x, y)) {
                 points.add(new Point(x, y));
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -96,6 +100,6 @@ public class Character implements WarObject, GameObject {
 
     @Override
     public void teardown() {
-        // Nothing to do
+        player = null;
     }
 }

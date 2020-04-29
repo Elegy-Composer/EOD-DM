@@ -95,9 +95,14 @@ public class Game implements Snapshotted, GameObject {
         //TODO: when a round starts, tells the rival player to add listeners
     }
 
-    public void targetedTrigger(Player from) {
+    public void triggerTargetedListener(Player from) {
         Player to = getRivalPlayer(from);
         to.targetedTrigger();
+    }
+
+    public void triggerTargetedListener(Player from, boolean allowCondition) {
+        Player to = getRivalPlayer(from);
+        to.targetedTrigger(allowCondition);
     }
 
     @Override

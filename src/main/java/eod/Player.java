@@ -1,6 +1,5 @@
 package eod;
 
-import eod.card.abstraction.ActionCard;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.ICard;
 import eod.card.abstraction.action.ConditionalCard;
@@ -140,7 +139,7 @@ public class Player implements Snapshotted, GameObject {
         for(Character character:to) {
             character.isTargeted = true;
         }
-        game.targetedTrigger(this);
+        game.triggerTargetedListener(this);
         to = Arrays.stream(to)
                 .filter(target -> target.isTargeted)
                 .toArray(Character[]::new);
@@ -152,13 +151,33 @@ public class Player implements Snapshotted, GameObject {
         }
     }
 
+    public void attack(Character from, Character[] to, int hp, boolean allowCondition) {
+        if(allowCondition) {
+            attack(from, to, hp);
+        }
+        for(Character character:to) {
+            character.isTargeted = true;
+        }
+        game.triggerTargetedListener(this, false);
+    }
+
     public void targetedTrigger() {
         // If the player's characters has been targeted, trigger this function
+        targetedTrigger(true);
+    }
+
+    public boolean targetedTrigger(boolean allowCondition) {
         ConditionalCard[] candidates = hand.stream()
                 .filter(card -> card instanceof ConditionalCard)
                 .filter(card -> card instanceof AttackListener)
                 .toArray(ConditionalCard[]::new);
-        selectCard(candidates).effect();
+        ConditionalCard toUse = selectCard(candidates);
+        if(allowCondition) {
+            toUse.effect();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void loseCharacter(Character character) {

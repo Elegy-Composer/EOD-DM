@@ -15,7 +15,7 @@ public class Conditions {
         return new OwnedCondition(player);
     }
 
-    public static BelongCondition BelongsTo(Class<? extends Character> type) {
+    public static BelongCondition Being(Class<? extends Character> type) {
         return new BelongCondition(type);
     }
 }

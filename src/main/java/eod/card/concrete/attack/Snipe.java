@@ -6,7 +6,9 @@ import eod.card.abstraction.CardParty;
 import eod.card.abstraction.action.AttackCard;
 import eod.characters.Sniper;
 import eod.specifier.Accessing;
-import eod.specifier.WarObjectSpecifier;
+import eod.Character;
+
+import java.util.Random;
 
 import static eod.effect.EffectFunctions.RequestAttack;
 import static eod.specifier.WarObjectSpecifier.*;
@@ -25,23 +27,34 @@ public class Snipe extends AttackCard {
     @Override
     public void attack() {
         Accessing characters = Character(player.getBoard());
+        Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RequestAttack(player, 8)
-                .from(characters.which(OwnedBy(player)).which(BelongsTo(Sniper.class)).get())
+                .from(ownedSnipers)
+                .allowCondition(twoSnipersOrRandom(ownedSnipers))
                 .to(characters.which(OwnedBy(rival)).get());
+    }
+
+    private boolean twoSnipersOrRandom(Character[] snipers) {
+        if(snipers.length >= 2) {
+            return true;
+        } else {
+            Random random = new Random();
+            return random.nextBoolean();
+        }
     }
 
     @Override
     public int getCost() {
-        return 0;
+        return 5;
     }
 
     @Override
     public String getName() {
-        return null;
+        return "狙殺";
     }
 
     @Override
     public CardParty getParty() {
-        return null;
+        return CardParty.TRANSPARENT;
     }
 }

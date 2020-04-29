@@ -20,6 +20,6 @@ public class Move implements Effect, GameObject {
 
     @Override
     public void teardown() {
-        //intentionally left blank
+        player = null;
     }
 }

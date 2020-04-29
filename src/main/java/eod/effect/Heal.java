@@ -20,6 +20,6 @@ public class Heal implements Effect, GameObject {
 
     @Override
     public void teardown() {
-        //don't need to do anything
+        player = null;
     }
 }

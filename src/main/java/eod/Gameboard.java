@@ -37,12 +37,12 @@ public class Gameboard implements Snapshotted, GameObject {
         board[from.x][from.y] = null;
     }
 
-    public void removeObject(int x, int y) throws NullPointerException, ArrayIndexOutOfBoundsException{
+    public void removeObject(int x, int y) throws IllegalArgumentException{
         if(x<0 || x >= boardSize || y < 0 || y >= boardSize) {
-            throw new ArrayIndexOutOfBoundsException("Trying to remove a character at ("+x+", "+y+").");
+            throw new IllegalArgumentException("Trying to remove a character at ("+x+", "+y+").");
         }
         if(board[x][y] == null) {
-            throw new NullPointerException("There's nothing at ("+x+", "+y+") on the board, cannot remove.");
+            throw new IllegalArgumentException("There's nothing at ("+x+", "+y+") on the board, cannot remove.");
         }
         board[x][y] = null;
     }
