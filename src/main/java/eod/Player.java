@@ -3,11 +3,14 @@ package eod;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.ICard;
 import eod.card.abstraction.action.ConditionalCard;
+import eod.effect.Target;
 import eod.listener.AttackListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
 import java.util.*;
+
+import static eod.effect.EffectFunctions.Target;
 
 public class Player implements Snapshotted, GameObject {
 
@@ -136,29 +139,19 @@ public class Player implements Snapshotted, GameObject {
     }
 
     public void attack(Character from, Character[] to, int hp) {
-        for(Character character:to) {
-            character.isTargeted = true;
-        }
-        game.triggerTargetedListener(this);
+        attack(from, to, hp, true);
+    }
+
+    public void attack(Character from, Character[] to, int hp, boolean allowCondition) {
+        Target targets = Target().on(to);
+        game.triggerTargetedListener(this, allowCondition);
         to = Arrays.stream(to)
                 .filter(target -> target.isTargeted)
                 .toArray(Character[]::new);
         for(Character target:to) {
             target.damage(hp);
         }
-        for(Character character:to) {
-            character.isTargeted = false;
-        }
-    }
-
-    public void attack(Character from, Character[] to, int hp, boolean allowCondition) {
-        if(allowCondition) {
-            attack(from, to, hp);
-        }
-        for(Character character:to) {
-            character.isTargeted = true;
-        }
-        game.triggerTargetedListener(this, false);
+        targets.unTarget();
     }
 
     public void targetedTrigger() {
@@ -172,12 +165,11 @@ public class Player implements Snapshotted, GameObject {
                 .filter(card -> card instanceof AttackListener)
                 .toArray(ConditionalCard[]::new);
         ConditionalCard toUse = selectCard(candidates);
+        hand.remove(toUse);
         if(allowCondition) {
             toUse.effect();
-            return true;
-        } else {
-            return false;
         }
+        return allowCondition;
     }
 
     public void loseCharacter(Character character) {

@@ -13,9 +13,10 @@ public class Move implements Effect, GameObject {
         this.player = player;
     }
 
-    public void from(Character[] characters) {
+    public Move from(Character[] characters) {
         Character selected = askToSelect(player, characters);
         selected.move(step);
+        return this;
     }
 
     @Override

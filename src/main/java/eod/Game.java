@@ -92,12 +92,10 @@ public class Game implements Snapshotted, GameObject {
     }
 
     private void gameLoop() throws GameLosingException {
-        //TODO: when a round starts, tells the rival player to add listeners
     }
 
     public void triggerTargetedListener(Player from) {
-        Player to = getRivalPlayer(from);
-        to.targetedTrigger();
+        triggerTargetedListener(from, true);
     }
 
     public void triggerTargetedListener(Player from, boolean allowCondition) {

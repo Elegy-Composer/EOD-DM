@@ -5,6 +5,8 @@ import eod.GameObject;
 import eod.Player;
 
 public class Attack implements Effect, GameObject {
+    // This class should be used only in direct attacks.
+    // If there's a ranged attack, create a new class.
     private int hp;
     private Player player;
     private Character from, to;
@@ -32,6 +34,6 @@ public class Attack implements Effect, GameObject {
 
     @Override
     public void teardown() {
-        //don't need to do anything
+        player = null;
     }
 }

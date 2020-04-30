@@ -14,4 +14,8 @@ public class EffectFunctions {
     public static Attack RequestAttack(Player player, int hp) {
         return new Attack(player, hp);
     }
+
+    public static Target Target() {
+        return new Target();
+    }
 }
