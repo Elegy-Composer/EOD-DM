@@ -3,15 +3,28 @@ package eod;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Character implements WarObject {
+public class Character implements WarObject, GameObject {
     private Player player;
     public boolean isTargeted;
     public Point position;
     public boolean isAttacked = false;
+    private int max_hp = 30;
+    private int hp;
+    public int attackRange;
 
-    public Character(Player player, int x, int y) {
+    public Character(Player player, int x, int y, int range) {
+        this.attackRange = range;
         this.player = player;
         position = new Point(x, y);
+        hp = max_hp;
+    }
+
+    public Character(Player player, int x, int y, int hp, int range) {
+        this.attackRange = range;
+        this.player = player;
+        position = new Point(x, y);
+        max_hp = hp;
+        this.hp = max_hp;
     }
 
     public Player getPlayer() {
@@ -21,6 +34,29 @@ public class Character implements WarObject {
     public void move(int steps) {
         for(int i = 0;i < steps;i++) {
             move();
+        }
+    }
+
+    public void heal(int gain) {
+        if(hp+gain >= max_hp) {
+            hp = max_hp;
+        } else {
+            hp+=gain;
+        }
+    }
+
+    public void attack(Character[] targets, int hp) {
+        player.attack(this, targets, hp);
+    }
+
+    public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
+        player.attack(this, targets, hp, allowCondition, willSuccess);
+    }
+
+    public void damage(int val) {
+        hp -= val;
+        if(hp <= 0) {
+            die();
         }
     }
 
@@ -47,8 +83,7 @@ public class Character implements WarObject {
             if(!gameboard.hasObjectOn(x, y)) {
                 points.add(new Point(x, y));
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -58,5 +93,15 @@ public class Character implements WarObject {
 
     public void moveTo(Point point) {
         position.move(point.x, point.y);
+    }
+
+    private void die() {
+        player.loseCharacter(this);
+        teardown();
+    }
+
+    @Override
+    public void teardown() {
+        player = null;
     }
 }

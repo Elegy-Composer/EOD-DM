@@ -15,8 +15,8 @@ Every message sent to the server should follow the format below, otherwise, the 
 
 The available message_id are shown below:
 - [enter_room](#enter_room)
-- enter_random
-- ready_start
+- [enter_random](#enter_random)
+- [ready_start](#ready_start)
 - play_card
 - move
 - end_round
@@ -25,13 +25,48 @@ The available message_id are shown below:
 ## message_id 
 
 ### enter_room
+Send when client wants to join specific room.
 
 ```json
 {
     "msg": "enter_room",
     "data": {
-        "player_id": integer,
         "room_number": integer
     }
 }
 ```
+<table>
+<tr>
+<th colspan="2">Fields</th>
+</tr>
+
+<tr>
+<td>room_number</td>
+<td>Room number of the room the client requires to join</td>
+</tr>
+</table>
+
+### enter_random
+Send when client wants to join a random room.
+
+**No data required**
+
+```json
+{
+    "msg": "enter_random",
+    "data": {}
+}
+```
+
+### ready_start
+Prerequest: client is in a room
+
+Send when client is ready for a game
+
+**No data required**
+
+```json
+{
+    "msg": "ready_start",
+    "data": {}
+}

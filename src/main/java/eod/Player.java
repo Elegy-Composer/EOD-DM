@@ -4,13 +4,15 @@ import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.ICard;
+import eod.card.abstraction.action.ConditionalCard;
+import eod.effect.Target;
+import eod.listener.AttackListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+
+import static eod.effect.EffectFunctions.Target;
 
 public class Player implements Snapshotted, GameObject {
 
@@ -121,6 +123,10 @@ public class Player implements Snapshotted, GameObject {
         return clone;
     }
 
+    public Player rival() {
+        return game.getRivalPlayer(this);
+    }
+
     public Character selectCharacter(Character[] characters) {
         //TODO: asks the player to select a character
         Random random = new Random();
@@ -133,8 +139,57 @@ public class Player implements Snapshotted, GameObject {
         return points.get(random.nextInt(points.size()));
     }
 
+    public <T extends Card> T selectCard(T[] cards) {
+        //TODO:connection with the frontend
+        Random random = new Random();
+        return cards[random.nextInt(cards.length)];
+    }
+
     public void moveCharacter(Character character, Point point) {
         game.getBoard().moveElement(character.position, point);
         character.moveTo(point);
+    }
+
+    public void attack(Character from, Character[] to, int hp) {
+        attack(from, to, hp, true, true);
+    }
+
+    public void attack(Character from, Character[] to, int hp, boolean allowCondition, boolean willSuccess) {
+        Target targets = Target().on(to);
+        if(allowCondition) {
+            game.triggerTargetedListener(this, willSuccess);
+            to = Arrays.stream(to)
+                    .filter(target -> target.isTargeted)
+                    .toArray(Character[]::new);
+        }
+        for(Character target:to) {
+            target.damage(hp);
+        }
+        targets.unTarget();
+    }
+
+    public void targetedTrigger() {
+        // If the player's characters has been targeted, trigger this function
+        targetedTrigger(true);
+    }
+
+    public boolean targetedTrigger(boolean willSuccess) {
+        ConditionalCard[] candidates = hand.stream()
+                .filter(card -> card instanceof ConditionalCard)
+                .filter(card -> card instanceof AttackListener)
+                .toArray(ConditionalCard[]::new);
+        ConditionalCard toUse = selectCard(candidates);
+        hand.remove(toUse);
+        toUse.teardown();
+        if(willSuccess) {
+            toUse.effect();
+        }
+        return willSuccess;
+    }
+
+    public void loseCharacter(Character character) {
+        Point pos = character.position;
+        int x = pos.x, y = pos.y;
+        getBoard().removeObject(x, y);
     }
 }

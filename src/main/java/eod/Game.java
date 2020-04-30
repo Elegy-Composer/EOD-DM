@@ -1,7 +1,5 @@
 package eod;
 
-import eod.IO.Input;
-import eod.IO.Output;
 import eod.card.abstraction.ActionCard;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.BoardSnapshot;
@@ -63,11 +61,9 @@ public class Game implements Snapshotted, GameObject {
 
         // TODO: things to do when a person wins
         if(A.isLeaderAlive()) {
-            A.announceWon();
-            B.announceLost();
+            //A wins
         } else if(B.isLeaderAlive()) {
-            B.announceWon();
-            A.announceLost();
+            //B wins
         }
 
         teardown();
@@ -83,21 +79,36 @@ public class Game implements Snapshotted, GameObject {
         }
     }
 
+    public Player getRivalPlayer(Player player) {
+        if(player == playerOrder[0]) {
+            return playerOrder[1];
+        } else {
+            return playerOrder[0];
+        }
+    }
+
     private boolean handIsInvalid(Player player) {
         return !player.checkInHand(ActionCard.class);
     }
 
     private void gameLoop() throws GameLosingException {
-        //TODO: finish gameLoop
+    }
+
+    public void triggerTargetedListener(Player from) {
+        triggerTargetedListener(from, true);
+    }
+
+    public void triggerTargetedListener(Player from, boolean willSuccess) {
+        Player to = getRivalPlayer(from);
+        to.targetedTrigger(willSuccess);
     }
 
     @Override
     public void teardown() {
         for(Player player: playerOrder) {
             player.teardown();
+            gameboard.teardown();
         }
-        gameboard.teardown();
-
         A = null;
         B = null;
         gameboard = null;

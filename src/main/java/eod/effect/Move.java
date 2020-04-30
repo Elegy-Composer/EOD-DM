@@ -1,21 +1,22 @@
 package eod.effect;
 
-import eod.Character;
 import eod.GameObject;
 import eod.Player;
+import eod.Character;
 
-public class Heal implements Effect, GameObject {
-    private int hp;
+public class Move implements Effect, GameObject {
+    private int step;
     private Player player;
 
-    public Heal(Player player, int hp) {
-        this.hp = hp;
+    public Move(Player player, int step) {
+        this.step = step;
         this.player = player;
     }
 
-    public void from(Character[] characters) {
+    public Move from(Character[] characters) {
         Character selected = askToSelect(player, characters);
-        selected.heal(hp);
+        selected.move(step);
+        return this;
     }
 
     @Override
