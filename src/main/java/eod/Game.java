@@ -98,9 +98,9 @@ public class Game implements Snapshotted, GameObject {
         triggerTargetedListener(from, true);
     }
 
-    public void triggerTargetedListener(Player from, boolean allowCondition) {
+    public void triggerTargetedListener(Player from, boolean willSuccess) {
         Player to = getRivalPlayer(from);
-        to.targetedTrigger(allowCondition);
+        to.targetedTrigger(willSuccess);
     }
 
     @Override

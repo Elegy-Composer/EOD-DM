@@ -139,15 +139,17 @@ public class Player implements Snapshotted, GameObject {
     }
 
     public void attack(Character from, Character[] to, int hp) {
-        attack(from, to, hp, true);
+        attack(from, to, hp, true, true);
     }
 
-    public void attack(Character from, Character[] to, int hp, boolean allowCondition) {
+    public void attack(Character from, Character[] to, int hp, boolean allowCondition, boolean willSuccess) {
         Target targets = Target().on(to);
-        game.triggerTargetedListener(this, allowCondition);
-        to = Arrays.stream(to)
-                .filter(target -> target.isTargeted)
-                .toArray(Character[]::new);
+        if(allowCondition) {
+            game.triggerTargetedListener(this, willSuccess);
+            to = Arrays.stream(to)
+                    .filter(target -> target.isTargeted)
+                    .toArray(Character[]::new);
+        }
         for(Character target:to) {
             target.damage(hp);
         }
@@ -159,17 +161,17 @@ public class Player implements Snapshotted, GameObject {
         targetedTrigger(true);
     }
 
-    public boolean targetedTrigger(boolean allowCondition) {
+    public boolean targetedTrigger(boolean willSuccess) {
         ConditionalCard[] candidates = hand.stream()
                 .filter(card -> card instanceof ConditionalCard)
                 .filter(card -> card instanceof AttackListener)
                 .toArray(ConditionalCard[]::new);
         ConditionalCard toUse = selectCard(candidates);
         hand.remove(toUse);
-        if(allowCondition) {
+        if(willSuccess) {
             toUse.effect();
         }
-        return allowCondition;
+        return willSuccess;
     }
 
     public void loseCharacter(Character character) {

@@ -11,6 +11,7 @@ public class Attack implements Effect, GameObject {
     private Player player;
     private Character from, to;
     private boolean allowConditional;
+    private boolean willSuccess;
 
     public Attack(Player player, int hp) {
         this.hp = hp;
@@ -27,9 +28,15 @@ public class Attack implements Effect, GameObject {
         return this;
     }
 
-    public void to(Character[] characters) {
+    public Attack willConditionSuccess(boolean success) {
+        this.willSuccess = success;
+        return this;
+    }
+
+    public Attack to(Character[] characters) {
         to = askToSelect(player.rival(), characters);
-        from.attack(new Character[] {to}, hp, allowConditional);
+        from.attack(new Character[] {to}, hp, allowConditional, willSuccess);
+        return this;
     }
 
     @Override

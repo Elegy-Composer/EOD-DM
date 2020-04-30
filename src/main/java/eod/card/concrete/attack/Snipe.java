@@ -30,12 +30,17 @@ public class Snipe extends AttackCard {
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RequestAttack(player, 8)
                 .from(ownedSnipers)
-                .allowCondition(twoSnipersOrRandom(ownedSnipers))
+                .allowCondition(moreThanTwoSnipers(ownedSnipers))
+                .willConditionSuccess(canSuccess(ownedSnipers))
                 .to(characters.which(OwnedBy(rival)).get());
     }
 
-    private boolean twoSnipersOrRandom(Character[] snipers) {
-        if(snipers.length >= 2) {
+    private boolean moreThanTwoSnipers(Character[] snipers) {
+        return snipers.length >= 2;
+    }
+
+    private boolean canSuccess(Character[] snipers) {
+        if(moreThanTwoSnipers(snipers)) {
             return true;
         } else {
             Random random = new Random();

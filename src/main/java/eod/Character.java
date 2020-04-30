@@ -37,8 +37,7 @@ public class Character implements WarObject, GameObject {
     public void heal(int gain) {
         if(hp+gain >= max_hp) {
             hp = max_hp;
-        }
-        else {
+        } else {
             hp+=gain;
         }
     }
@@ -47,8 +46,8 @@ public class Character implements WarObject, GameObject {
         player.attack(this, targets, hp);
     }
 
-    public void attack(Character[] targets, int hp, boolean allowCondition) {
-        player.attack(this, targets, hp, allowCondition);
+    public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
+        player.attack(this, targets, hp, allowCondition, willSuccess);
     }
 
     public void damage(int val) {
