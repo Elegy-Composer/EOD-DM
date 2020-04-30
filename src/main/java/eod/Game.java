@@ -79,12 +79,28 @@ public class Game implements Snapshotted, GameObject {
         }
     }
 
+    public Player getRivalPlayer(Player player) {
+        if(player == playerOrder[0]) {
+            return playerOrder[1];
+        } else {
+            return playerOrder[0];
+        }
+    }
+
     private boolean handIsInvalid(Player player) {
         return !player.checkInHand(ActionCard.class);
     }
 
     private void gameLoop() throws GameLosingException {
+    }
 
+    public void triggerTargetedListener(Player from) {
+        triggerTargetedListener(from, true);
+    }
+
+    public void triggerTargetedListener(Player from, boolean willSuccess) {
+        Player to = getRivalPlayer(from);
+        to.targetedTrigger(willSuccess);
     }
 
     @Override
