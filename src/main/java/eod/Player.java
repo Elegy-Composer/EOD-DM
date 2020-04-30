@@ -168,6 +168,7 @@ public class Player implements Snapshotted, GameObject {
                 .toArray(ConditionalCard[]::new);
         ConditionalCard toUse = selectCard(candidates);
         hand.remove(toUse);
+        toUse.teardown();
         if(willSuccess) {
             toUse.effect();
         }

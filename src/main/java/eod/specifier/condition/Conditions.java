@@ -18,4 +18,8 @@ public class Conditions {
     public static BelongCondition Being(Class<? extends Character> type) {
         return new BelongCondition(type);
     }
+
+    public static InAttackRangeCondition InRangeOf(Character center) {
+        return new InAttackRangeCondition(center);
+    }
 }

@@ -12,14 +12,20 @@ public class Attack implements Effect, GameObject {
     private Character from, to;
     private boolean allowConditional;
     private boolean willSuccess;
+    private int range;
 
     public Attack(Player player, int hp) {
         this.hp = hp;
         this.player = player;
     }
 
+    public Character attacker() {
+        return from;
+    }
+
     public Attack from(Character[] characters) {
         from = askToSelect(player, characters);
+        range = from.attackRange;
         return this;
     }
 

@@ -4,7 +4,8 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
 import eod.card.abstraction.action.AttackCard;
-import eod.characters.Sniper;
+import eod.characters.disturber.Sniper;
+import eod.effect.Attack;
 import eod.specifier.Accessing;
 import eod.Character;
 
@@ -28,11 +29,11 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        RequestAttack(player, 8)
-                .from(ownedSnipers)
-                .allowCondition(moreThanTwoSnipers(ownedSnipers))
+        Attack attack = RequestAttack(player, 8)
+                .from(ownedSnipers);
+        attack.allowCondition(moreThanTwoSnipers(ownedSnipers))
                 .willConditionSuccess(canSuccess(ownedSnipers))
-                .to(characters.which(OwnedBy(rival)).get());
+                .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
     }
 
     private boolean moreThanTwoSnipers(Character[] snipers) {

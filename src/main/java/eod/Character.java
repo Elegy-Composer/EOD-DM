@@ -10,14 +10,17 @@ public class Character implements WarObject, GameObject {
     public boolean isAttacked = false;
     private int max_hp = 30;
     private int hp;
+    public int attackRange;
 
-    public Character(Player player, int x, int y) {
+    public Character(Player player, int x, int y, int range) {
+        this.attackRange = range;
         this.player = player;
         position = new Point(x, y);
         hp = max_hp;
     }
 
-    public Character(Player player, int x, int y, int hp) {
+    public Character(Player player, int x, int y, int hp, int range) {
+        this.attackRange = range;
         this.player = player;
         position = new Point(x, y);
         max_hp = hp;
