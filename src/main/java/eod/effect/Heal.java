@@ -14,12 +14,17 @@ public class Heal implements Effect, GameObject {
     }
 
     public void from(Character[] characters) {
-        Character selected = askToSelect(player, characters);
+        Character selected = askToSelectFrom(characters);
         selected.heal(hp);
     }
 
     @Override
     public void teardown() {
         player = null;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
     }
 }

@@ -45,6 +45,14 @@ public class Character implements WarObject, GameObject {
         }
     }
 
+    public void attack(Character target, int hp) {
+        attack(new Character[] {target}, hp);
+    }
+
+    public void attack(Character target, int hp, boolean allowCondition, boolean willSuccess) {
+        attack(new Character[] {target}, hp, allowCondition, willSuccess);
+    }
+
     public void attack(Character[] targets, int hp) {
         player.attack(this, targets, hp);
     }

@@ -2,6 +2,7 @@ package eod.effect;
 
 import eod.Player;
 
+//Effect functions should only be used by effect and its subclass
 public class EffectFunctions {
     public static Heal RequestHeal(Player player, int hp) {
         return new Heal(player, hp);
@@ -13,9 +14,5 @@ public class EffectFunctions {
 
     public static Attack RequestAttack(Player player, int hp) {
         return new Attack(player, hp);
-    }
-
-    public static Target Target() {
-        return new Target();
     }
 }
