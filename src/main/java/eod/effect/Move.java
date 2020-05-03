@@ -16,6 +16,10 @@ public class Move implements Effect, GameObject {
     public Move from(Character[] characters) {
         Character selected = askToSelectFrom(characters);
         selected.move(step);
+        //TODO: This is a temporary fix
+        // attack should later be cataloged into Regional attach and personal attack
+        selected.isTargeted = false;
+
         return this;
     }
 

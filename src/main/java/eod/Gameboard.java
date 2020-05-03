@@ -37,7 +37,14 @@ public class Gameboard implements Snapshotted, GameObject {
         board[from.x][from.y] = null;
     }
 
-    public void removeObject(int x, int y) throws IllegalArgumentException{
+    public void removeCharacter(Character character) throws IllegalArgumentException {
+        Point position = character.position;
+        int x = position.x;
+        int y = position.y;
+        removeObject(x, y);
+    }
+
+    public void removeObject(int x, int y) throws IllegalArgumentException {
         if(x<0 || x >= boardSize || y < 0 || y >= boardSize) {
             throw new IllegalArgumentException("Trying to remove a character at ("+x+", "+y+").");
         }

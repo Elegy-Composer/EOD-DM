@@ -12,7 +12,7 @@ public abstract class AttackCard extends ActionCard {
     public abstract void attack();
 
     @Override
-    public void effect() {
+    public void applyEffect() {
         attack();
     }
 }

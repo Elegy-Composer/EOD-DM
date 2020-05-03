@@ -1,4 +1,4 @@
-package eod;
+package eod.card.collection;
 
 public class SpecialDeck extends Deck {
 

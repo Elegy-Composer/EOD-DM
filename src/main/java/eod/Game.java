@@ -1,6 +1,9 @@
 package eod;
 
 import eod.card.abstraction.action.ActionCard;
+import eod.event.AttackEvent;
+import eod.event.EventManager;
+import eod.event.listener.AttackListener;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.GameSnapshot;
@@ -16,10 +19,14 @@ public class Game implements Snapshotted, GameObject {
     private Player B;
     private Gameboard gameboard;
     private Player[] playerOrder;
+    private EventManager eventManager = new EventManager();
 
     public Game(Player A, Player B) {
         this.A = A;
         this.B = B;
+
+        A.attachToGame(this);
+        B.attachToGame(this);
     }
 
 
@@ -94,13 +101,16 @@ public class Game implements Snapshotted, GameObject {
     private void gameLoop() throws GameLosingException {
     }
 
-    public void triggerTargetedListener(Player from) {
-        triggerTargetedListener(from, true);
+    public void registerListener(AttackListener listener) {
+        eventManager.registerAttackEvent(listener);
     }
 
-    public void triggerTargetedListener(Player from, boolean willSuccess) {
-        Player to = getRivalPlayer(from);
-        to.targetedTrigger(willSuccess);
+    public void sendEvent(AttackEvent event) {
+        eventManager.sendAttack(event);
+    }
+
+    public void unregisterListener(AttackListener listener) {
+        eventManager.unregisterAttackEvent(listener);
     }
 
     @Override

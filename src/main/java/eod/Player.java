@@ -3,64 +3,64 @@ package eod;
 import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.ICard;
 import eod.card.abstraction.action.ConditionalCard;
-import eod.listener.AttackListener;
+import eod.card.collection.Deck;
+import eod.card.collection.Hand;
+import eod.card.collection.SpecialDeck;
+import eod.event.AttackEvent;
+import eod.event.listener.AttackListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Player implements Snapshotted, GameObject {
 
     private Deck deck;
     private Game game;
     private SpecialDeck specialDeck;
-    private ArrayList<Card> hand = new ArrayList<>();
+    private Hand hand;
     private Leader leader;
     private Input input;
     private Output output;
+    private OnAttackListener listener = new OnAttackListener();;
 
-    public Player(Deck deck, Game game, Leader leader) {
-        this.game = game;
+    public Player(Deck deck, Leader leader) {
+        this(deck, leader, new Hand());
+    }
+
+    public Player(Deck deck, Leader leader, Hand hand) {
         this.deck = deck;
-        specialDeck = SpecialDeck.generateSpecialDeck(deck);
+        this.specialDeck = SpecialDeck.generateSpecialDeck(deck);
         this.leader = leader;
+        this.hand = hand;
+    }
+
+    public void attachToGame(Game game) {
+        this.game = game;
+        game.registerListener(listener);
     }
 
     public void handReceive(ArrayList<Card> h) {
-        hand.addAll(h);
+        hand.receive(h);
     }
 
     public void drawFromDeck(int count) {
-        deck.draw(count);
+        Card[] cards = deck.draw(count);
+        handReceive(new ArrayList<>(Arrays.asList(cards)));
     }
 
-    public boolean checkInHand(Class<? extends ICard> c) {
-        for(Card card: hand) {
-            if (card.cardTypeEquals(c)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean checkInHand(Class<? extends Card> c) {
+        return hand.containsType(c);
     }
 
     public void dropCards() {
-        hand.clear();
+        hand.dropAllCards();
     }
 
     public void dropCards(int k) throws IllegalArgumentException {
-        if(k<0) throw new IllegalArgumentException("Attempting to drop negative number of cards");
-        if(k>=hand.size()) {
-            dropCards();
-            return;
-        }
-
-        Random random = new Random();
-        for(int i = 0;i < k;i++) {
-            int toDrop = random.nextInt(hand.size());
-            hand.remove(toDrop);
-        }
+        hand.randomlyDropCards(k);
     }
     
     public void announceWon() {
@@ -86,10 +86,16 @@ public class Player implements Snapshotted, GameObject {
 
     @Override
     public void teardown() {
-        hand.clear();
+        hand.teardown();
         hand = null;
         deck.teardown();
         deck = null;
+        specialDeck.teardown();
+        specialDeck = null;
+        leader.teardown();
+        leader = null;
+        game.unregisterListener(listener);
+        listener = null;
     }
 
     @Override
@@ -114,9 +120,8 @@ public class Player implements Snapshotted, GameObject {
     @Override
     public Player snapshot() {
         Deck newDeck = deck.snapshot();
-        Player clone = new Player(newDeck, game, leader);
-        clone.handReceive(hand);
-
+        Player clone = new Player(newDeck, leader, hand);
+        clone.attachToGame(game);
         return clone;
     }
 
@@ -147,51 +152,32 @@ public class Player implements Snapshotted, GameObject {
         character.moveTo(point);
     }
 
-    public void attack(Character from, Character[] to, int hp) {
-        attack(from, to, hp, true, true);
-    }
-
-    public void attack(Character from, Character[] to, int hp, boolean allowCondition, boolean willSuccess) {
-        for(Character target:to) {
-            target.isTargeted = true;
+    public void sendAttackEvent(AttackEvent event) {
+        if(event.isConditionAllowed()) {
+            game.sendEvent(event);
         }
-
-        if(allowCondition) {
-            game.triggerTargetedListener(this, willSuccess);
-            to = Arrays.stream(to)
-                    .filter(target -> target.isTargeted)
-                    .toArray(Character[]::new);
-        }
-        for(Character target:to) {
-            target.damage(hp);
-        }
-        for(Character target:to) {
-            target.isTargeted = false;
-        }
-    }
-
-    public void targetedTrigger() {
-        // If the player's characters has been targeted, trigger this function
-        targetedTrigger(true);
-    }
-
-    public boolean targetedTrigger(boolean willSuccess) {
-        ConditionalCard[] candidates = hand.stream()
-                .filter(card -> card instanceof ConditionalCard)
-                .filter(card -> card instanceof AttackListener)
-                .toArray(ConditionalCard[]::new);
-        ConditionalCard toUse = selectCard(candidates);
-        hand.remove(toUse);
-        toUse.teardown();
-        if(willSuccess) {
-            toUse.effect();
-        }
-        return willSuccess;
     }
 
     public void loseCharacter(Character character) {
-        Point pos = character.position;
-        int x = pos.x, y = pos.y;
-        getBoard().removeObject(x, y);
+        getBoard().removeCharacter(character);
+    }
+
+
+    class OnAttackListener implements AttackListener {
+
+        @Override
+        public void onAttack(Player sender, AttackEvent event) {
+            if (sender.equals(rival())) {
+                ConditionalCard[] candidates = hand.stream()
+                        .filter(card -> card instanceof ConditionalCard)
+                        .toArray(ConditionalCard[]::new);
+                ConditionalCard toUse = selectCard(candidates);
+                hand.remove(toUse);
+                if (event.willSuccess()) {
+                    toUse.applyEffect();
+                }
+                toUse.teardown();
+            }
+        }
     }
 }

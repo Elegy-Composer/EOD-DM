@@ -10,5 +10,5 @@ public abstract class ActionCard extends Card {
         level = lv;
     }
 
-    public abstract void effect();
+    public abstract void applyEffect();
 }

@@ -1,7 +1,10 @@
 package eod;
 
+import eod.event.AttackEvent;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Character implements WarObject, GameObject {
     private Player player;
@@ -54,11 +57,18 @@ public class Character implements WarObject, GameObject {
     }
 
     public void attack(Character[] targets, int hp) {
-        player.attack(this, targets, hp);
+        attack(targets, hp, true, true);
     }
 
     public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
-        player.attack(this, targets, hp, allowCondition, willSuccess);
+        AttackEvent event = new AttackEvent(player, this, targets, hp, allowCondition, willSuccess);
+        player.sendAttackEvent(event);
+        Arrays.stream(targets)
+                .filter(character -> character.isTargeted)
+                .forEach(character -> {
+                    character.damage(hp);
+                    character.isTargeted = false;
+                });
     }
 
     public void damage(int val) {
