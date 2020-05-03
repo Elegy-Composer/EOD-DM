@@ -9,7 +9,7 @@ public class Attack implements Effect, GameObject {
     // If there's a ranged attack, create a new class.
     private int hp;
     private Player player;
-    private Character from, to;
+    private Character attacker, target;
     private boolean allowConditional;
     private boolean willSuccess;
     private int range;
@@ -20,12 +20,12 @@ public class Attack implements Effect, GameObject {
     }
 
     public Character attacker() {
-        return from;
+        return attacker;
     }
 
     public Attack from(Character[] characters) {
-        from = askToSelect(player, characters);
-        range = from.attackRange;
+        attacker = askToSelectFrom(characters);
+        range = attacker.attackRange;
         return this;
     }
 
@@ -40,13 +40,20 @@ public class Attack implements Effect, GameObject {
     }
 
     public Attack to(Character[] characters) {
-        to = askToSelect(player.rival(), characters);
-        from.attack(new Character[] {to}, hp, allowConditional, willSuccess);
+        target = askToSelectFrom(characters);
+        attacker.attack(target, hp, allowConditional, willSuccess);
         return this;
     }
 
     @Override
     public void teardown() {
         player = null;
+        attacker = null;
+        target = null;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
     }
 }

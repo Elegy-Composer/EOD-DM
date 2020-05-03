@@ -29,8 +29,7 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        Attack attack = RequestAttack(player, 8)
-                .from(ownedSnipers);
+        Attack attack = RequestAttack(player, 8).from(ownedSnipers);
         attack.allowCondition(moreThanTwoSnipers(ownedSnipers))
                 .willConditionSuccess(canSuccess(ownedSnipers))
                 .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());

@@ -5,7 +5,10 @@ import eod.Character;
 
 //Base interface of all effect
 public interface Effect {
-    default Character askToSelect(Player player, Character[] from) {
-        return player.selectCharacter(from);
+
+    Player getPlayer();
+
+    default Character askToSelectFrom(Character[] from) {
+        return getPlayer().selectCharacter(from);
     }
 }

@@ -14,7 +14,7 @@ public class Move implements Effect, GameObject {
     }
 
     public Move from(Character[] characters) {
-        Character selected = askToSelect(player, characters);
+        Character selected = askToSelectFrom(characters);
         selected.move(step);
         return this;
     }
@@ -22,5 +22,10 @@ public class Move implements Effect, GameObject {
     @Override
     public void teardown() {
         player = null;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
     }
 }

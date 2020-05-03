@@ -1,16 +1,15 @@
 package eod;
 
+import eod.IO.Input;
+import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.ICard;
 import eod.card.abstraction.action.ConditionalCard;
-import eod.effect.Target;
 import eod.listener.AttackListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
 import java.util.*;
-
-import static eod.effect.EffectFunctions.Target;
 
 public class Player implements Snapshotted, GameObject {
 
@@ -19,6 +18,8 @@ public class Player implements Snapshotted, GameObject {
     private SpecialDeck specialDeck;
     private ArrayList<Card> hand = new ArrayList<>();
     private Leader leader;
+    private Input input;
+    private Output output;
 
     public Player(Deck deck, Game game, Leader leader) {
         this.game = game;
@@ -60,6 +61,14 @@ public class Player implements Snapshotted, GameObject {
             int toDrop = random.nextInt(hand.size());
             hand.remove(toDrop);
         }
+    }
+    
+    public void announceWon() {
+        
+    }
+    
+    public void announceLost() {
+        
     }
 
     //TODO: implement validateDeck, we didn't do it know because the types of card aren't enough
@@ -143,7 +152,10 @@ public class Player implements Snapshotted, GameObject {
     }
 
     public void attack(Character from, Character[] to, int hp, boolean allowCondition, boolean willSuccess) {
-        Target targets = Target().on(to);
+        for(Character target:to) {
+            target.isTargeted = true;
+        }
+
         if(allowCondition) {
             game.triggerTargetedListener(this, willSuccess);
             to = Arrays.stream(to)
@@ -153,7 +165,9 @@ public class Player implements Snapshotted, GameObject {
         for(Character target:to) {
             target.damage(hp);
         }
-        targets.unTarget();
+        for(Character target:to) {
+            target.isTargeted = false;
+        }
     }
 
     public void targetedTrigger() {
