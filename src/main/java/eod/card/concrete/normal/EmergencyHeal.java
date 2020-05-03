@@ -31,7 +31,7 @@ public class EmergencyHeal extends NormalCard {
     }
 
     @Override
-    public void effect() {
+    public void applyEffect() {
         RequestHeal(player, 3).from(Character(player.getBoard()).which(Injured()).in(LastEnemyTurn()).get());
     }
 

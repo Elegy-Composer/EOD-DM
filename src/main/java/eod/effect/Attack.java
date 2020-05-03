@@ -41,6 +41,8 @@ public class Attack implements Effect, GameObject {
 
     public Attack to(Character[] characters) {
         target = askToSelectFrom(characters);
+        target.isTargeted = true;
+
         attacker.attack(target, hp, allowConditional, willSuccess);
         return this;
     }

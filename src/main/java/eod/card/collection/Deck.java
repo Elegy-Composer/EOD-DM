@@ -1,5 +1,6 @@
-package eod;
+package eod.card.collection;
 
+import eod.GameObject;
 import eod.card.abstraction.Card;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;

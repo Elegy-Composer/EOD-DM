@@ -1,6 +1,6 @@
-import eod.card.abstraction.ICard;
-import eod.Deck;
-import eod.SpecialDeck;
+import eod.card.abstraction.Card;
+import eod.card.collection.Deck;
+import eod.card.collection.SpecialDeck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class SpecialDeckTest {
     @Test
     public void generateSpecialDeckTest() {
         SpecialDeck generated = SpecialDeck.generateSpecialDeck(playerDeck);
-        ICard[] cards = {};
+        Card[] cards = {};
         assertTrue(true);
     }
 

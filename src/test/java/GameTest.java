@@ -1,4 +1,4 @@
-import eod.Deck;
+import eod.card.collection.Deck;
 import eod.Game;
 import eod.Leader;
 import eod.Player;
