@@ -15,14 +15,13 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player(new Deck(), game, new Leader());
-        B = new Player(new Deck(), game, new Leader());
+        A = new Player(new Deck(), new Leader());
+        B = new Player(new Deck(), new Leader());
         game = new Game(A, B);
     }
 
     @Test
     public void gameStartTest() {
-
         Assert.assertTrue(true);
     }
 

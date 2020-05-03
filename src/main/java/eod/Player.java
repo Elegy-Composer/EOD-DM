@@ -24,18 +24,21 @@ public class Player implements Snapshotted, GameObject {
     private Leader leader;
     private Input input;
     private Output output;
-    private OnAttackListener listener = new OnAttackListener();
+    private OnAttackListener listener = new OnAttackListener();;
 
-    public Player(Deck deck, Game game, Leader leader) {
-        this(deck, game, leader, new Hand());
+    public Player(Deck deck, Leader leader) {
+        this(deck, leader, new Hand());
     }
 
-    public Player(Deck deck, Game game, Leader leader, Hand hand) {
-        this.game = game;
+    public Player(Deck deck, Leader leader, Hand hand) {
         this.deck = deck;
         this.specialDeck = SpecialDeck.generateSpecialDeck(deck);
         this.leader = leader;
         this.hand = hand;
+    }
+
+    public void attachToGame(Game game) {
+        this.game = game;
         game.registerListener(listener);
     }
 
@@ -117,8 +120,9 @@ public class Player implements Snapshotted, GameObject {
     @Override
     public Player snapshot() {
         Deck newDeck = deck.snapshot();
-
-        return new Player(newDeck, game, leader, hand);
+        Player clone = new Player(newDeck, leader, hand);
+        clone.attachToGame(game);
+        return clone;
     }
 
     public Player rival() {

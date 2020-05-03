@@ -24,6 +24,9 @@ public class Game implements Snapshotted, GameObject {
     public Game(Player A, Player B) {
         this.A = A;
         this.B = B;
+
+        A.attachToGame(this);
+        B.attachToGame(this);
     }
 
 
