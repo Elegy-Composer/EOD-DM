@@ -67,6 +67,7 @@ public class Character implements WarObject, GameObject {
             try {
                 Character target = gameboard.getObjectOn(p.x, p.y);
                 targetCandidate.remove(target);
+                target.damage(hp);
                 target.isTargeted = false;
             } catch (IllegalArgumentException e) { }
         }
