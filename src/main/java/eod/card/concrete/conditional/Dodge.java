@@ -34,4 +34,11 @@ public class Dodge extends ConditionalCard {
         RequestMove(player, 1).from(Character(player.getBoard()).which(Targeted()).get());
 
     }
+
+    @Override
+    public ConditionType[] capableConditions() {
+        return new ConditionType[] {
+                ConditionType.ATTACK_REGIONAL
+        };
+    }
 }
