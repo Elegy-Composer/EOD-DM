@@ -11,6 +11,7 @@ public class RegionalAttackEvent extends AttackEvent{
 
     public RegionalAttackEvent(Player sender, Character attacker, Point[] targets, int hp, boolean allowCondition, boolean willSuccess) {
         super(sender, attacker, hp, allowCondition, willSuccess);
+        this.targets = targets;
     }
 
     public  Point[] getTargets() {

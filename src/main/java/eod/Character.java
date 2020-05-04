@@ -54,11 +54,12 @@ public class Character implements WarObject, GameObject {
     }
 
     public void attack(ArrayList<Point> targets, int hp, boolean allowCondition, boolean willSuccess) {
+        Point[] targetArray = targets.stream().toArray(Point[]::new);
         RegionalAttackEvent event = new RegionalAttackEvent(player, this
-                , targets.toArray(Point[]::new), hp, allowCondition, willSuccess);
+                , targetArray, hp, allowCondition, willSuccess);
         player.sendAttackEvent(event);
         Gameboard gameboard = player.getBoard();
-        for(Point p:targets) {
+        for(Point p:targetArray) {
             try {
                 gameboard.getObjectOn(p.x, p.y).damage(hp);
             } catch (IllegalArgumentException e) { }
