@@ -35,4 +35,12 @@ public class Dodge extends ConditionalCard implements AttackHandler {
         RequestMove(player, 1).from(Character(player.getBoard()).which(Targeted()).get());
         // TODO: fix the targeted issues
     }
+
+    @Override
+    public ConditionType[] capableConditions() {
+        return new ConditionType[] {
+                ConditionType.ATTACK_REGIONAL,
+                ConditionType.ATTACK_DIRECT
+        };
+    }
 }
