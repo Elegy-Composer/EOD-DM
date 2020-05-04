@@ -61,6 +61,13 @@ public class RegionalAttack implements Effect, GameObject {
         return this;
     }
 
+    public RegionalAttack to(Character[] characters) {
+        Character target = askToSelectFrom(characters);
+        ArrayList<Point> singleTarget = new ArrayList<>();
+        singleTarget.add(target.position);
+        return to(singleTarget);
+    }
+
     @Override
     public void teardown() {
         player = null;
