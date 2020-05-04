@@ -12,7 +12,6 @@ public class Attack implements Effect, GameObject {
     private Character attacker, target;
     private boolean allowConditional;
     private boolean willSuccess;
-    private int range;
 
     public Attack(Player player, int hp) {
         this.hp = hp;
@@ -25,7 +24,6 @@ public class Attack implements Effect, GameObject {
 
     public Attack from(Character[] characters) {
         attacker = askToSelectFrom(characters);
-        range = attacker.attackRange;
         return this;
     }
 

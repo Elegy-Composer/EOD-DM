@@ -56,7 +56,14 @@ public class Gameboard implements Snapshotted, GameObject {
 
     @Override
     public void teardown() {
-        //TODO: finish teardown
+        game = null;
+
+        for(Character[] line:board) {
+            for(Character character:line) {
+                character.teardown();
+            }
+        }
+        board = null;
     }
 
     @Override

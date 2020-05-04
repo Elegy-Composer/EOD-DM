@@ -81,9 +81,10 @@ public class Character implements WarObject, GameObject {
     protected void move() {
         ArrayList<Point> possibleMoves = new ArrayList<>();
         int x = position.x, y = position.y;
-        int toX = x-1, toY = y;
         Gameboard gameboard = player.getBoard();
 
+        int toX = x-1;
+        int toY = y;
         addPointIfEmpty(possibleMoves, toX, toY, gameboard);
         toX = x+1;
         addPointIfEmpty(possibleMoves, toX, toY, gameboard);

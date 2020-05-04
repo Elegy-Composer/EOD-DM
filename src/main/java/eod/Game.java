@@ -117,11 +117,15 @@ public class Game implements Snapshotted, GameObject {
     public void teardown() {
         for(Player player: playerOrder) {
             player.teardown();
-            gameboard.teardown();
         }
         A = null;
         B = null;
+
+        gameboard.teardown();
         gameboard = null;
+
+        eventManager.teardown();
+        eventManager = null;
     }//TODO: finish teardown
 
     public Gameboard getBoard() {
