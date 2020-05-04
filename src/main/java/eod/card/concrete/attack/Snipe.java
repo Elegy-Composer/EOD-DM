@@ -5,7 +5,7 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
 import eod.card.abstraction.action.AttackCard;
 import eod.characters.disturber.Sniper;
-import eod.effect.Attack;
+import eod.effect.DirectAttack;
 import eod.specifier.Accessing;
 import eod.Character;
 
@@ -16,6 +16,7 @@ import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.*;
 
 public class Snipe extends AttackCard {
+    // TODO: fix the direct attack issues
     public Snipe(Player p) {
         super(p, 2);
     }
@@ -29,10 +30,10 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        Attack attack = RequestAttack(player, 8).from(ownedSnipers);
-        attack.allowCondition(moreThanTwoSnipers(ownedSnipers))
+        DirectAttack directAttack = RequestAttack(player, 8).from(ownedSnipers);
+        directAttack.allowCondition(moreThanTwoSnipers(ownedSnipers))
                 .willConditionSuccess(canSuccess(ownedSnipers))
-                .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
+                .to(characters.which(OwnedBy(rival)).which(InRangeOf(directAttack.attacker())).get());
     }
 
     private boolean moreThanTwoSnipers(Character[] snipers) {

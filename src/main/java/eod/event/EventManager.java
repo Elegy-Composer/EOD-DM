@@ -1,10 +1,11 @@
 package eod.event;
 
+import eod.GameObject;
 import eod.event.listener.AttackListener;
 
 import java.util.ArrayList;
 
-public class EventManager {
+public class EventManager implements GameObject {
     private ArrayList<AttackListener> attackListeners = new ArrayList<>();
 
     public void registerAttackEvent(AttackListener listener) {
@@ -19,5 +20,11 @@ public class EventManager {
         for(AttackListener listener: attackListeners) {
             listener.onAttack(event.getSender(), event);
         }
+    }
+
+    @Override
+    public void teardown() {
+        attackListeners.clear();
+        attackListeners = null;
     }
 }
