@@ -16,7 +16,7 @@ public class EffectFunctions {
         return new DirectAttack(player, hp);
     }
 
-    public static RegionalAttack RequestRegionaltAttack(Player player, int hp) {
+    public static RegionalAttack RequestRegionalAttack(Player player, int hp) {
         return new RegionalAttack(player, hp);
     }
 }
