@@ -2,9 +2,9 @@ package eod.card.concrete.attack;
 
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CardParty;
+import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.characters.disturber.Sniper;
+import eod.characters.abstraction.disturber.Sniper;
 import eod.effect.DirectAttack;
 import eod.specifier.Accessing;
 import eod.Character;
@@ -60,7 +60,7 @@ public class Snipe extends AttackCard {
     }
 
     @Override
-    public CardParty getParty() {
-        return CardParty.TRANSPARENT;
+    public Party getParty() {
+        return Party.TRANSPARENT;
     }
 }
