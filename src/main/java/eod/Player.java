@@ -4,12 +4,10 @@ import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ConditionalCard;
-import eod.card.abstraction.handler.AttackHandler;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
 import eod.event.AttackEvent;
-import eod.event.DirectAttackEvent;
 import eod.event.listener.AttackListener;
 import eod.snapshots.Snapshotted;
 
@@ -169,9 +167,12 @@ public class Player implements Snapshotted, GameObject {
         @Override
         public void onAttack(Player sender, AttackEvent event) {
             if (sender.equals(rival())) {
-                ConditionalCard[] candidates = hand.stream()
+                ConditionalCard[] candidates =
+                    hand.stream()
                         .filter(card -> card instanceof ConditionalCard)
-                        .filter(card -> card instanceof AttackHandler)
+                        .filter(card ->
+                            ((ConditionalCard)card).canHandle(event.getAttackType())
+                        )
                         .toArray(ConditionalCard[]::new);
                 ConditionalCard toUse = selectCard(candidates);
                 hand.remove(toUse);
