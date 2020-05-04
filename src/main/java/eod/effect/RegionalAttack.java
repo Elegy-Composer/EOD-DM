@@ -64,6 +64,7 @@ public class RegionalAttack implements Effect, GameObject {
     @Override
     public void teardown() {
         player = null;
+        attacker = null;
     }
 
     @Override
