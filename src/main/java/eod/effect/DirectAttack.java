@@ -45,6 +45,15 @@ public class DirectAttack implements Effect, GameObject {
         return this;
     }
 
+    public DirectAttack toAll(Character[] characters) {
+        for(Character target:characters) {
+            target.isTargeted = true;
+
+            attacker.attack(target, hp, allowConditional, willSuccess);
+        }
+        return this;
+    }
+
     @Override
     public void teardown() {
         player = null;

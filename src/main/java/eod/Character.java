@@ -17,14 +17,6 @@ public class Character implements WarObject, GameObject {
     public int attackRange;
     protected final Party party;
 
-    public Character(Player player, int x, int y, int range, Party party) {
-        this.attackRange = range;
-        this.player = player;
-        position = new Point(x, y);
-        hp = max_hp;
-        this.party = party;
-    }
-
     public Character(Player player, int x, int y, int hp, int range, Party party) {
         this.attackRange = range;
         this.player = player;
