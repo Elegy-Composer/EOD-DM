@@ -43,7 +43,7 @@ public class RegionalAttack implements Effect, GameObject {
     }
 
     public RegionalAttack to(ArrayList<Point> targets) {
-        attacker.attack(targets, hp);
+        attacker.attack(targets, hp, allowConditional, willSuccess);
         return this;
     }
 

@@ -1,7 +1,6 @@
 package eod.specifier;
 
 import eod.Character;
-import eod.specifier.condition.AttackedCondition;
 import eod.specifier.condition.Condition;
 import eod.specifier.timing.Timing;
 

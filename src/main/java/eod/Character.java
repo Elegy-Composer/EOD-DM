@@ -50,14 +50,28 @@ public class Character implements WarObject, GameObject {
 
     public void attack(ArrayList<Point> targets, int hp, boolean allowCondition, boolean willSuccess) {
         Point[] targetArray = targets.toArray(new Point[0]);
-        RegionalAttackEvent event = new RegionalAttackEvent(player, this
-                , targetArray, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
+        ArrayList<Character> targetCandidate = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targetArray) {
             try {
-                gameboard.getObjectOn(p.x, p.y).damage(hp);
+                Character candidate = gameboard.getObjectOn(p.x, p.y);
+                targetCandidate.add(candidate);
+                candidate.isTargeted = true;
+            } catch (IllegalArgumentException e) {}
+        }
+        RegionalAttackEvent event = new RegionalAttackEvent(player, this
+                , targetArray, hp, allowCondition, willSuccess);
+        player.sendAttackEvent(event);
+
+        for(Point p:targetArray) {
+            try {
+                Character target = gameboard.getObjectOn(p.x, p.y);
+                targetCandidate.remove(target);
+                target.isTargeted = false;
             } catch (IllegalArgumentException e) { }
+        }
+        for(Character survivor:targetCandidate) {
+            survivor.isTargeted = false;
         }
     }
 

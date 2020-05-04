@@ -33,7 +33,6 @@ public class Dodge extends ConditionalCard implements AttackHandler {
     @Override
     public void applyEffect() {
         RequestMove(player, 1).from(Character(player.getBoard()).which(Targeted()).get());
-        // TODO: fix the targeted issues
     }
 
     @Override
