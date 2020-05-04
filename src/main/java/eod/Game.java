@@ -64,9 +64,7 @@ public class Game implements Snapshotted, GameObject {
 
 
         // the second player should receive a Dodge at the start
-        ArrayList<Card> firstHand = new ArrayList<>() {{
-            new Dodge(playerOrder[1]);
-        }};
+        ArrayList<Card> firstHand = new ArrayList<>();
         firstHand.add(new Dodge(playerOrder[1]));
         playerOrder[1].handReceive(firstHand);
 
