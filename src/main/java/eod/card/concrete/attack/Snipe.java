@@ -11,7 +11,7 @@ import eod.Character;
 
 import java.util.Random;
 
-import static eod.effect.EffectFunctions.RequestAttack;
+import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.*;
 
@@ -30,7 +30,7 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        DirectAttack directAttack = RequestAttack(player, 8).from(ownedSnipers);
+        DirectAttack directAttack = RequestDirectAttack(player, 8).from(ownedSnipers);
         directAttack.allowCondition(moreThanTwoSnipers(ownedSnipers))
                 .willConditionSuccess(canSuccess(ownedSnipers))
                 .to(characters.which(OwnedBy(rival)).which(InRangeOf(directAttack.attacker())).get());
