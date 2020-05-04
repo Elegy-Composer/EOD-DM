@@ -8,9 +8,11 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.Party;
 import eod.card.abstraction.action.ConditionalCard;
-import eod.card.abstraction.handler.AttackHandler;
 
-public class Dodge extends ConditionalCard implements AttackHandler {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Dodge extends ConditionalCard {
     public Dodge(Player p) {
         super(p, 1);
     }
@@ -37,10 +39,11 @@ public class Dodge extends ConditionalCard implements AttackHandler {
     }
 
     @Override
-    public ConditionType[] capableConditions() {
-        return new ConditionType[] {
-                ConditionType.ATTACK_REGIONAL,
-                ConditionType.ATTACK_DIRECT
+    public ArrayList<ConditionType> capableConditions() {
+        ConditionType[] conditions = new ConditionType[] {
+            ConditionType.ATTACK_REGIONAL,
+            ConditionType.ATTACK_DIRECT
         };
+        return new ArrayList<>(Arrays.asList(conditions));
     }
 }
