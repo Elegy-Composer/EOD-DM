@@ -9,7 +9,7 @@ import eod.effect.DirectAttack;
 import eod.specifier.Accessing;
 
 import static eod.specifier.WarObjectSpecifier.*;
-import static eod.effect.EffectFunctions.RequestAttack;
+import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {
@@ -21,7 +21,7 @@ public class PreciseShot extends AttackCard {
     @Override
     public void attack() {
         Accessing characters = Character(player.getBoard());
-        DirectAttack directAttack = RequestAttack(player, 3).from(characters.which(OwnedBy(player)).which(Being(Shooter.class)).get());
+        DirectAttack directAttack = RequestDirectAttack(player, 3).from(characters.which(OwnedBy(player)).which(Being(Shooter.class)).get());
         directAttack.allowCondition(false)
                 .to(characters.which(OwnedBy(rival)).which(InRangeOf(directAttack.attacker())).get());
     }
