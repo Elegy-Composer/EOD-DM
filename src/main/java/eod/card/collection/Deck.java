@@ -34,8 +34,8 @@ public class Deck implements Snapshotted, GameObject {
     */
     public Card[] draw(int count) {
         try {
-            Card[] drew = cards.subList(0, count-1).toArray(new Card[0]);
-            cards.subList(0, count-1).clear();
+            Card[] drew = cards.subList(0, count).toArray(new Card[0]);
+            cards.subList(0, count).clear();
             return drew;
         } catch (IndexOutOfBoundsException exception) {
             throw new GameLosingException("Deck is drained");

@@ -2,6 +2,7 @@ package eod;
 
 import eod.card.abstraction.action.ActionCard;
 import eod.event.AttackEvent;
+import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
 import eod.event.listener.AttackListener;
 import eod.exceptions.GameLosingException;
@@ -117,11 +118,15 @@ public class Game implements Snapshotted, GameObject {
     public void teardown() {
         for(Player player: playerOrder) {
             player.teardown();
-            gameboard.teardown();
         }
         A = null;
         B = null;
+
+        gameboard.teardown();
         gameboard = null;
+
+        eventManager.teardown();
+        eventManager = null;
     }//TODO: finish teardown
 
     public Gameboard getBoard() {

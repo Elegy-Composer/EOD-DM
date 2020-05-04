@@ -4,17 +4,16 @@ import eod.Character;
 import eod.GameObject;
 import eod.Player;
 
-public class Attack implements Effect, GameObject {
+public class DirectAttack implements Effect, GameObject {
     // This class should be used only in direct attacks.
-    // If there's a ranged attack, create a new class.
+    // If there's a ranged attack, use RegionalAttack.
     private int hp;
     private Player player;
     private Character attacker, target;
-    private boolean allowConditional;
-    private boolean willSuccess;
-    private int range;
+    private boolean allowConditional = true;
+    private boolean willSuccess = true;
 
-    public Attack(Player player, int hp) {
+    public DirectAttack(Player player, int hp) {
         this.hp = hp;
         this.player = player;
     }
@@ -23,23 +22,22 @@ public class Attack implements Effect, GameObject {
         return attacker;
     }
 
-    public Attack from(Character[] characters) {
+    public DirectAttack from(Character[] characters) {
         attacker = askToSelectFrom(characters);
-        range = attacker.attackRange;
         return this;
     }
 
-    public Attack allowCondition(boolean allow) {
+    public DirectAttack allowCondition(boolean allow) {
         allowConditional = allow;
         return this;
     }
 
-    public Attack willConditionSuccess(boolean success) {
+    public DirectAttack willConditionSuccess(boolean success) {
         this.willSuccess = success;
         return this;
     }
 
-    public Attack to(Character[] characters) {
+    public DirectAttack to(Character[] characters) {
         target = askToSelectFrom(characters);
         target.isTargeted = true;
 
