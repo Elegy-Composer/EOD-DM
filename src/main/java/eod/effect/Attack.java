@@ -6,12 +6,12 @@ import eod.Player;
 
 public class Attack implements Effect, GameObject {
     // This class should be used only in direct attacks.
-    // If there's a ranged attack, create a new class.
+    // If there's a ranged attack, use RegionalAttack.
     private int hp;
     private Player player;
     private Character attacker, target;
-    private boolean allowConditional;
-    private boolean willSuccess;
+    private boolean allowConditional = true;
+    private boolean willSuccess = true;
 
     public Attack(Player player, int hp) {
         this.hp = hp;

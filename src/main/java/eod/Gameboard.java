@@ -17,6 +17,13 @@ public class Gameboard implements Snapshotted, GameObject {
         board[0][0].isAttacked = true;
     }
 
+    public Character getObjectOn(int x, int y) throws IllegalArgumentException {
+        if(!hasObjectOn(x, y)) {
+            throw new IllegalArgumentException("There's no character on ("+x+", "+y+").");
+        }
+        return board[x][y];
+    }
+
     public boolean hasObjectOn(int x, int y) throws ArrayIndexOutOfBoundsException {
         if(x<0 || x>= boardSize || y<0 || y>= boardSize) {
             throw new ArrayIndexOutOfBoundsException("Trying to find an element at ("+x+", "+y+") on the board.");

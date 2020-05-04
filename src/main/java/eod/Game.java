@@ -2,6 +2,7 @@ package eod;
 
 import eod.card.abstraction.action.ActionCard;
 import eod.event.AttackEvent;
+import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
 import eod.event.listener.AttackListener;
 import eod.exceptions.GameLosingException;

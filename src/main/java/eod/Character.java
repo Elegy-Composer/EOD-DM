@@ -1,6 +1,7 @@
 package eod;
 
-import eod.event.AttackEvent;
+import eod.event.DirectAttackEvent;
+import eod.event.RegionalAttackEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -48,6 +49,22 @@ public class Character implements WarObject, GameObject {
         }
     }
 
+    public void attack(ArrayList<Point> targets, int hp) {
+        attack(targets, hp, true, true);
+    }
+
+    public void attack(ArrayList<Point> targets, int hp, boolean allowCondition, boolean willSuccess) {
+        RegionalAttackEvent event = new RegionalAttackEvent(player, this
+                , targets.toArray(Point[]::new), hp, allowCondition, willSuccess);
+        player.sendAttackEvent(event);
+        Gameboard gameboard = player.getBoard();
+        for(Point p:targets) {
+            try {
+                gameboard.getObjectOn(p.x, p.y).damage(hp);
+            } catch (IllegalArgumentException e) { }
+        }
+    }
+
     public void attack(Character target, int hp) {
         attack(new Character[] {target}, hp);
     }
@@ -61,7 +78,7 @@ public class Character implements WarObject, GameObject {
     }
 
     public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
-        AttackEvent event = new AttackEvent(player, this, targets, hp, allowCondition, willSuccess);
+        DirectAttackEvent event = new DirectAttackEvent(player, this, targets, hp, allowCondition, willSuccess);
         player.sendAttackEvent(event);
         Arrays.stream(targets)
                 .filter(character -> character.isTargeted)

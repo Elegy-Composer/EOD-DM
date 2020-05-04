@@ -8,8 +8,9 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.CardParty;
 import eod.card.abstraction.action.ConditionalCard;
+import eod.card.abstraction.handler.AttackHandler;
 
-public class Dodge extends ConditionalCard {
+public class Dodge extends ConditionalCard implements AttackHandler {
     public Dodge(Player p) {
         super(p, 1);
     }
@@ -32,6 +33,6 @@ public class Dodge extends ConditionalCard {
     @Override
     public void applyEffect() {
         RequestMove(player, 1).from(Character(player.getBoard()).which(Targeted()).get());
-
+        // TODO: fix the targeted issues
     }
 }
