@@ -6,7 +6,7 @@ import static eod.specifier.condition.Conditions.Targeted;
 
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CardParty;
+import eod.Party;
 import eod.card.abstraction.action.ConditionalCard;
 import eod.card.abstraction.handler.AttackHandler;
 
@@ -21,8 +21,8 @@ public class Dodge extends ConditionalCard implements AttackHandler {
     }
 
     @Override
-    public CardParty getParty() {
-        return CardParty.TRANSPARENT;
+    public Party getParty() {
+        return Party.TRANSPARENT;
     }
 
     @Override

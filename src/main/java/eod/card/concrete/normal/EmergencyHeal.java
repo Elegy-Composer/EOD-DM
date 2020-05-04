@@ -1,7 +1,7 @@
 package eod.card.concrete.normal;
 
 import eod.Player;
-import eod.card.abstraction.CardParty;
+import eod.Party;
 import eod.card.abstraction.action.NormalCard;
 
 import static eod.specifier.condition.Conditions.Injured;
@@ -26,8 +26,8 @@ public class EmergencyHeal extends NormalCard {
     }
 
     @Override
-    public CardParty getParty() {
-        return CardParty.TRANSPARENT;
+    public Party getParty() {
+        return Party.TRANSPARENT;
     }
 
     @Override

@@ -15,20 +15,15 @@ public class Character implements WarObject, GameObject {
     private int max_hp = 30;
     private int hp;
     public int attackRange;
+    protected final Party party;
 
-    public Character(Player player, int x, int y, int range) {
-        this.attackRange = range;
-        this.player = player;
-        position = new Point(x, y);
-        hp = max_hp;
-    }
-
-    public Character(Player player, int x, int y, int hp, int range) {
+    public Character(Player player, int x, int y, int hp, int range, Party party) {
         this.attackRange = range;
         this.player = player;
         position = new Point(x, y);
         max_hp = hp;
         this.hp = max_hp;
+        this.party = party;
     }
 
     public Player getPlayer() {
@@ -140,5 +135,9 @@ public class Character implements WarObject, GameObject {
     @Override
     public void teardown() {
         player = null;
+    }
+
+    public Party getParty() {
+        return party;
     }
 }

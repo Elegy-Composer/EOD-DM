@@ -2,9 +2,9 @@ package eod.card.concrete.attack;
 
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CardParty;
+import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.characters.assaulter.Shooter;
+import eod.characters.abstraction.assaulter.Shooter;
 import eod.effect.DirectAttack;
 import eod.specifier.Accessing;
 
@@ -42,7 +42,7 @@ public class PreciseShot extends AttackCard {
     }
 
     @Override
-    public CardParty getParty() {
-        return CardParty.TRANSPARENT;
+    public Party getParty() {
+        return Party.TRANSPARENT;
     }
 }
