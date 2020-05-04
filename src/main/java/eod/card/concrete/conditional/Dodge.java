@@ -39,7 +39,8 @@ public class Dodge extends ConditionalCard implements AttackHandler {
     @Override
     public ConditionType[] capableConditions() {
         return new ConditionType[] {
-                ConditionType.ATTACK_REGIONAL
+                ConditionType.ATTACK_REGIONAL,
+                ConditionType.ATTACK_DIRECT
         };
     }
 }
