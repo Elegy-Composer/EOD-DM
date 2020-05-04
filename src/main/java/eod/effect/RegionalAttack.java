@@ -57,7 +57,7 @@ public class RegionalAttack implements Effect, GameObject {
             targets.add(target);
             candidates.remove(target);
         }
-        attacker.attack(targets, hp);
+        attacker.attack(targets, hp, allowConditional, willSuccess);
         return this;
     }
 

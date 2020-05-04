@@ -54,7 +54,7 @@ public class Character implements WarObject, GameObject {
     }
 
     public void attack(ArrayList<Point> targets, int hp, boolean allowCondition, boolean willSuccess) {
-        Point[] targetArray = targets.toArray(Point[]::new);
+        Point[] targetArray = targets.toArray(new Point[0]);
         RegionalAttackEvent event = new RegionalAttackEvent(player, this
                 , targetArray, hp, allowCondition, willSuccess);
         player.sendAttackEvent(event);
