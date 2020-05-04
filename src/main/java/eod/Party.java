@@ -1,6 +1,6 @@
-package eod.card.abstraction;
+package eod;
 
-public enum CardParty {
+public enum Party {
     RED,
     BLUE,
     WHITE,

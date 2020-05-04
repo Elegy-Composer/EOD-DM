@@ -1,6 +1,8 @@
 package eod;
 
+import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
+import eod.card.concrete.conditional.Dodge;
 import eod.event.AttackEvent;
 import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
@@ -10,6 +12,7 @@ import eod.snapshots.BoardSnapshot;
 import eod.snapshots.GameSnapshot;
 import eod.snapshots.Snapshotted;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 //represent a game instance
@@ -58,6 +61,12 @@ public class Game implements Snapshotted, GameObject {
                 drawRound++;
             }
         } while(drawRound<3 || hasInvalid);
+
+
+        // the second player should receive a Dodge at the start
+        ArrayList<Card> firstHand = new ArrayList<>();
+        firstHand.add(new Dodge(playerOrder[1]));
+        playerOrder[1].handReceive(firstHand);
 
         while(true) {
             try {
