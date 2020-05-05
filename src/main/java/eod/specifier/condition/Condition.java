@@ -1,7 +1,7 @@
 package eod.specifier.condition;
 
-import eod.Character;
+import eod.characters.Character;
 
 public interface Condition {
-    public Character[] filter(Character[] characters);
+    Character[] filter(Character[] characters);
 }

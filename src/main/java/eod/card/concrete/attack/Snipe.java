@@ -7,7 +7,7 @@ import eod.card.abstraction.action.AttackCard;
 import eod.characters.abstraction.disturber.Sniper;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
-import eod.Character;
+import eod.characters.Character;
 
 import java.util.Random;
 

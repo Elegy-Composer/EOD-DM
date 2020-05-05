@@ -1,5 +1,6 @@
-package eod;
+package eod.characters;
 
+import eod.*;
 import eod.card.abstraction.Card;
 import eod.event.DirectAttackEvent;
 import eod.event.RegionalAttackEvent;
@@ -10,9 +11,8 @@ import java.util.Arrays;
 
 public abstract class Character implements WarObject, GameObject {
     protected Player player;
-    public boolean isTargeted;
     public Point position;
-    public boolean isAttacked = false;
+    public ArrayList<Status> status = new ArrayList<>();
     protected int max_hp;
     protected int hp;
     public int attackRange;
@@ -59,7 +59,7 @@ public abstract class Character implements WarObject, GameObject {
             try {
                 Character candidate = gameboard.getObjectOn(p.x, p.y);
                 targetCandidate.add(candidate);
-                candidate.isTargeted = true;
+                candidate.status.add(Status.TARGETED);
             } catch (IllegalArgumentException e) {}
         }
         RegionalAttackEvent event = new RegionalAttackEvent(player, this
@@ -71,11 +71,12 @@ public abstract class Character implements WarObject, GameObject {
                 Character target = gameboard.getObjectOn(p.x, p.y);
                 targetCandidate.remove(target);
                 target.damage(hp);
-                target.isTargeted = false;
+                target.status.add(Status.ATTACKED);
+                target.status.remove(Status.TARGETED);
             } catch (IllegalArgumentException e) { }
         }
         for(Character survivor:targetCandidate) {
-            survivor.isTargeted = false;
+            survivor.status.remove(Status.TARGETED);
         }
     }
 
@@ -95,10 +96,11 @@ public abstract class Character implements WarObject, GameObject {
         DirectAttackEvent event = new DirectAttackEvent(player, this, targets, hp, allowCondition, willSuccess);
         player.sendAttackEvent(event);
         Arrays.stream(targets)
-                .filter(character -> character.isTargeted)
+                .filter(character -> character.status.contains(Status.TARGETED))
                 .forEach(character -> {
                     character.damage(hp);
-                    character.isTargeted = false;
+                    character.status.add(Status.ATTACKED);
+                    character.status.remove(Status.TARGETED);
                 });
     }
 

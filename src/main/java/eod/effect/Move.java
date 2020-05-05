@@ -2,7 +2,7 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
-import eod.Character;
+import eod.characters.Character;
 import eod.exceptions.MoveInvalidException;
 
 import java.awt.*;

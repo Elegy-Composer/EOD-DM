@@ -1,6 +1,6 @@
 package eod.characters.abstraction.supporter;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.Party;
 import eod.Player;
 

@@ -7,6 +7,7 @@ import eod.card.abstraction.action.ConditionalCard;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
+import eod.characters.Character;
 import eod.event.AttackEvent;
 import eod.event.listener.AttackListener;
 import eod.snapshots.Snapshotted;

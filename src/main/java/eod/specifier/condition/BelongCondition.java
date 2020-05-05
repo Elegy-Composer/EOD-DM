@@ -1,6 +1,6 @@
 package eod.specifier.condition;
 
-import eod.Character;
+import eod.characters.Character;
 
 import java.util.Arrays;
 

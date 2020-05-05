@@ -1,8 +1,9 @@
 package eod.effect;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.GameObject;
 import eod.Player;
+import eod.characters.Status;
 
 public class DirectAttack implements Effect, GameObject {
     // This class should be used only in direct attacks.
@@ -39,7 +40,7 @@ public class DirectAttack implements Effect, GameObject {
 
     public DirectAttack to(Character[] characters) {
         target = askToSelectFrom(characters);
-        target.isTargeted = true;
+        target.status.add(Status.TARGETED);
 
         attacker.attack(target, hp, allowConditional, willSuccess);
         return this;
@@ -47,7 +48,7 @@ public class DirectAttack implements Effect, GameObject {
 
     public DirectAttack toAll(Character[] characters) {
         for(Character target:characters) {
-            target.isTargeted = true;
+            target.status.add(Status.TARGETED);
 
             attacker.attack(target, hp, allowConditional, willSuccess);
         }

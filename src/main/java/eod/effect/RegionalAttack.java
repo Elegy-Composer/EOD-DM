@@ -1,13 +1,11 @@
 package eod.effect;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.GameObject;
 import eod.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class RegionalAttack implements Effect, GameObject {
     // This class should be used only in regional attacks.

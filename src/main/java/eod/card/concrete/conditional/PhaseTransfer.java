@@ -7,7 +7,7 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ConditionalCard;
 import eod.characters.concrete.transparent.Spacezipper;
 import eod.effect.Move;
-import eod.Character;
+import eod.characters.Character;
 
 import java.util.ArrayList;
 import java.util.Arrays;

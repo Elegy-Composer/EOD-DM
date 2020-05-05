@@ -1,5 +1,6 @@
 package eod;
 
+import eod.characters.Character;
 import eod.exceptions.MoveInvalidException;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.Snapshotted;
@@ -16,7 +17,6 @@ public class Gameboard implements Snapshotted, GameObject {
 
     public Gameboard(Game game) {
         this.game = game;
-        board[0][0].isAttacked = true;
     }
 
     public Character getObjectOn(int x, int y) throws IllegalArgumentException {

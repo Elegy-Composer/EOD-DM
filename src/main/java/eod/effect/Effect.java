@@ -1,7 +1,7 @@
 package eod.effect;
 
 import eod.Player;
-import eod.Character;
+import eod.characters.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
