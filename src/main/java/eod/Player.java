@@ -3,7 +3,6 @@ package eod;
 import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.action.ConditionalCard;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;

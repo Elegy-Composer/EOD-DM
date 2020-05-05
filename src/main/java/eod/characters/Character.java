@@ -9,7 +9,7 @@ import java.util.Arrays;
 public abstract class Character implements WarObject, GameObject {
     protected Player player;
     public Point position;
-    public ArrayList<Status> status = new ArrayList<>();
+    private ArrayList<Status> status = new ArrayList<>();
     protected int max_hp;
     protected int hp;
     public int attackRange;
@@ -26,6 +26,20 @@ public abstract class Character implements WarObject, GameObject {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public boolean hasStatus(Status s) {
+        return status.contains(s);
+    }
+
+    public void addStatus(Status s) {
+        if(!hasStatus(s)) {
+            status.add(s);
+        }
+    }
+
+    public void removeStatus(Status s) {
+        status.remove(s);
     }
 
     public void move(int steps) {
@@ -54,7 +68,6 @@ public abstract class Character implements WarObject, GameObject {
             try {
                 Character candidate = gameboard.getObjectOn(p.x, p.y);
                 targetCandidate.add(candidate);
-                candidate.status.add(Status.TARGETED);
             } catch (IllegalArgumentException e) {}
         }
 
@@ -63,12 +76,8 @@ public abstract class Character implements WarObject, GameObject {
                 Character target = gameboard.getObjectOn(p.x, p.y);
                 targetCandidate.remove(target);
                 target.damage(hp);
-                target.status.add(Status.ATTACKED);
-                target.status.remove(Status.TARGETED);
+                target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) { }
-        }
-        for(Character survivor:targetCandidate) {
-            survivor.status.remove(Status.TARGETED);
         }
     }
 
@@ -86,11 +95,9 @@ public abstract class Character implements WarObject, GameObject {
 
     public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
         Arrays.stream(targets)
-                .filter(character -> character.status.contains(Status.TARGETED))
                 .forEach(character -> {
                     character.damage(hp);
                     character.status.add(Status.ATTACKED);
-                    character.status.remove(Status.TARGETED);
                 });
     }
 

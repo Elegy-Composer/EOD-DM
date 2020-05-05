@@ -2,8 +2,8 @@ package eod;
 
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
-import eod.card.concrete.conditional.Dodge;
-import eod.event.Event;
+import eod.event.AttackEvent;
+import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
@@ -64,7 +64,7 @@ public class Game implements Snapshotted, GameObject {
 
         // the second player should receive a Dodge at the start
         ArrayList<Card> firstHand = new ArrayList<>();
-        firstHand.add(new Dodge(playerOrder[1]));
+        // TODO: add the first card of the second player
         playerOrder[1].handReceive(firstHand);
 
         while(true) {
