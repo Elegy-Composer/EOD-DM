@@ -57,9 +57,6 @@ public abstract class Character implements WarObject, GameObject {
                 candidate.status.add(Status.TARGETED);
             } catch (IllegalArgumentException e) {}
         }
-        RegionalAttackEvent event = new RegionalAttackEvent(player, this
-                , targetArray, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
 
         for(Point p:targetArray) {
             try {
@@ -88,8 +85,6 @@ public abstract class Character implements WarObject, GameObject {
     }
 
     public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
-        DirectAttackEvent event = new DirectAttackEvent(player, this, targets, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
         Arrays.stream(targets)
                 .filter(character -> character.status.contains(Status.TARGETED))
                 .forEach(character -> {
