@@ -1,9 +1,6 @@
 package eod.characters;
 
 import eod.*;
-import eod.card.abstraction.Card;
-import eod.event.DirectAttackEvent;
-import eod.event.RegionalAttackEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,8 +23,6 @@ public abstract class Character implements WarObject, GameObject {
         this.hp = max_hp;
         this.party = party;
     }
-
-    public abstract ArrayList<Card> generateSpecialCards();
 
     public Player getPlayer() {
         return player;
@@ -62,9 +57,6 @@ public abstract class Character implements WarObject, GameObject {
                 candidate.status.add(Status.TARGETED);
             } catch (IllegalArgumentException e) {}
         }
-        RegionalAttackEvent event = new RegionalAttackEvent(player, this
-                , targetArray, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
 
         for(Point p:targetArray) {
             try {
@@ -93,8 +85,6 @@ public abstract class Character implements WarObject, GameObject {
     }
 
     public void attack(Character[] targets, int hp, boolean allowCondition, boolean willSuccess) {
-        DirectAttackEvent event = new DirectAttackEvent(player, this, targets, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
         Arrays.stream(targets)
                 .filter(character -> character.status.contains(Status.TARGETED))
                 .forEach(character -> {

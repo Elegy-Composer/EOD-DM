@@ -12,14 +12,4 @@ public class Spacezipper extends Dictator {
     public Spacezipper(Player player, int x, int y, int hp, int range) {
         super(player, x, y, hp, range, Party.TRANSPARENT);
     }
-
-    @Override
-    public ArrayList<Card> generateSpecialCards() {
-        ArrayList<Card> cards = new ArrayList<>(3);
-        cards.add(new PhaseTransfer(player));
-        // TODO: create two more cards
-
-
-        return cards;
-    }
 }
