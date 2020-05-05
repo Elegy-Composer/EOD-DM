@@ -91,7 +91,9 @@ public class Gameboard implements Snapshotted, GameObject {
         ArrayList<Point> points = new ArrayList<>();
         for(int i = iMin;i < iMax;i++) {
             for(int j =0;j < boardSize;j++) {
-                points.add(new Point(i, j));
+                if(!hasObjectOn(i, j)) {
+                    points.add(new Point(i, j));
+                }
             }
         }
         return points;
