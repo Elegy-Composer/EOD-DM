@@ -5,19 +5,17 @@ import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
-import eod.card.collection.SpecialDeck;
 import eod.characters.Character;
-import eod.event.listener.EventListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
 import java.util.*;
 
-public class Player implements Snapshotted, GameObject {
+public class Player implements Snapshotted<Player.Snapshot>,
+                                GameObject {
 
     private Deck deck;
     private Game game;
-    private SpecialDeck specialDeck;
     private Hand hand;
     private Leader leader;
     private Input input;
@@ -29,7 +27,6 @@ public class Player implements Snapshotted, GameObject {
 
     public Player(Deck deck, Leader leader, Hand hand) {
         this.deck = deck;
-        this.specialDeck = SpecialDeck.generateSpecialDeck(deck);
         this.leader = leader;
         this.hand = hand;
     }
@@ -86,8 +83,6 @@ public class Player implements Snapshotted, GameObject {
         hand = null;
         deck.teardown();
         deck = null;
-        specialDeck.teardown();
-        specialDeck = null;
         leader.teardown();
         leader = null;
     }
@@ -102,21 +97,17 @@ public class Player implements Snapshotted, GameObject {
         }
         Player player = (Player) o;
         return Objects.equals(deck, player.deck) &&
-                Objects.equals(specialDeck, player.specialDeck) &&
                 Objects.equals(hand, player.hand);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(deck, specialDeck, hand);
+        return Objects.hash(deck, hand);
     }
 
     @Override
-    public Player snapshot() {
-        Deck newDeck = deck.snapshot();
-        Player clone = new Player(newDeck, leader, hand);
-        clone.attachToGame(game);
-        return clone;
+    public Snapshot takeSnapshot() {
+        return new Snapshot();
     }
 
     public Player rival() {
@@ -148,5 +139,18 @@ public class Player implements Snapshotted, GameObject {
 
     public void loseCharacter(Character character) {
         getBoard().removeCharacter(character);
+    }
+
+    public class Snapshot implements eod.snapshots.Snapshot {
+        private Deck.Snapshot deckSnapshot = deck.takeSnapshot();
+        private Hand.Snapshot handSnapshot = hand.takeSnapshot();
+
+        public Deck.Snapshot getDeck() {
+            return deckSnapshot;
+        }
+
+        public Hand.Snapshot getHand() {
+            return handSnapshot;
+        }
     }
 }

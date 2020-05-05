@@ -1,5 +1,5 @@
 package eod.snapshots;
 
-public interface Snapshotted {
-    Object snapshot();
+public interface Snapshotted<T extends Snapshot> {
+    T takeSnapshot();
 }

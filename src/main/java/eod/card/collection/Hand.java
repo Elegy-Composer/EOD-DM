@@ -2,11 +2,12 @@ package eod.card.collection;
 
 import eod.GameObject;
 import eod.card.abstraction.Card;
+import eod.snapshots.Snapshotted;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public class Hand implements GameObject, Iterable<Card> {
+public class Hand implements GameObject, Iterable<Card>, Snapshotted<Hand.Snapshot> {
     private ArrayList<Card> hand = new ArrayList<>();
 
     public void receive(ArrayList<Card> cards) {
@@ -76,5 +77,25 @@ public class Hand implements GameObject, Iterable<Card> {
     @Override
     public Iterator<Card> iterator() {
         return hand.iterator();
+    }
+
+    @Override
+    public Snapshot takeSnapshot() {
+        return new Snapshot();
+    }
+
+    public class Snapshot implements eod.snapshots.Snapshot {
+        private ArrayList<Card> cards = new ArrayList<>();
+
+        public Snapshot() {
+            for (Card card : hand) {
+                Card copy = card.copy();
+                cards.add(copy);
+            }
+        }
+
+        public ArrayList<Card> getCards() {
+            return cards;
+        }
     }
 }
