@@ -148,7 +148,7 @@ public class Player implements Snapshotted, GameObject {
 
     public void moveCharacter(Character character, Point point) {
         game.getBoard().moveElement(character.position, point);
-        character.moveTo(point);
+        character.updatePosition(point);
     }
 
     public void sendAttackEvent(AttackEvent event) {
