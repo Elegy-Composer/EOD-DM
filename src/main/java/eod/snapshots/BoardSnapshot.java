@@ -15,7 +15,7 @@ public class BoardSnapshot {
     public Character[] getCharactersBeingAttacked() {
         return Arrays.stream(allCharacter)
                 .flatMap(Arrays::stream)
-                .filter(character -> character.status.contains(Status.ATTACKED))
+                .filter(character -> character.hasStatus(Status.ATTACKED))
                 .toArray(Character[]::new);
     }
 

@@ -40,7 +40,6 @@ public class DirectAttack implements Effect, GameObject {
 
     public DirectAttack to(Character[] characters) {
         target = askToSelectFrom(characters);
-        target.status.add(Status.TARGETED);
 
         attacker.attack(target, hp, allowConditional, willSuccess);
         return this;
@@ -48,8 +47,6 @@ public class DirectAttack implements Effect, GameObject {
 
     public DirectAttack toAll(Character[] characters) {
         for(Character target:characters) {
-            target.status.add(Status.TARGETED);
-
             attacker.attack(target, hp, allowConditional, willSuccess);
         }
         return this;

@@ -2,7 +2,6 @@ package eod.event;
 
 import eod.characters.Character;
 import eod.Player;
-import eod.card.concrete.conditional.ConditionType;
 
 public abstract class AttackEvent {
     protected Player sender;
@@ -38,5 +37,4 @@ public abstract class AttackEvent {
         return willSuccess;
     }
 
-    public abstract ConditionType getAttackType();
 }

@@ -10,7 +10,7 @@ public class AttackedCondition implements Condition {
     @Override
     public Character[] filter(Character[] characters) {
         return Arrays.stream(characters)
-                .filter(character -> character.status.contains(Status.ATTACKED))
+                .filter(character -> character.hasStatus(Status.ATTACKED))
                 .toArray(Character[]::new);
     }
 }

@@ -2,7 +2,6 @@ package eod.event;
 
 import eod.characters.Character;
 import eod.Player;
-import eod.card.concrete.conditional.ConditionType;
 
 import java.awt.*;
 
@@ -16,10 +15,5 @@ public class RegionalAttackEvent extends AttackEvent {
 
     public  Point[] getTargets() {
         return targets;
-    }
-
-    @Override
-    public ConditionType getAttackType() {
-        return ConditionType.ATTACK_REGIONAL;
     }
 }

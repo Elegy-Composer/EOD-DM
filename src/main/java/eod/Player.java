@@ -3,7 +3,6 @@ package eod;
 import eod.IO.Input;
 import eod.IO.Output;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.action.ConditionalCard;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
@@ -24,7 +23,6 @@ public class Player implements Snapshotted, GameObject {
     private Leader leader;
     private Input input;
     private Output output;
-    private OnAttackListener listener = new OnAttackListener();
 
     public Player(Deck deck, Leader leader) {
         this(deck, leader, new Hand());
@@ -39,7 +37,6 @@ public class Player implements Snapshotted, GameObject {
 
     public void attachToGame(Game game) {
         this.game = game;
-        game.registerListener(listener);
     }
 
     public void handReceive(ArrayList<Card> h) {
@@ -94,8 +91,6 @@ public class Player implements Snapshotted, GameObject {
         specialDeck = null;
         leader.teardown();
         leader = null;
-        game.unregisterListener(listener);
-        listener = null;
     }
 
     @Override
@@ -160,28 +155,5 @@ public class Player implements Snapshotted, GameObject {
 
     public void loseCharacter(Character character) {
         getBoard().removeCharacter(character);
-    }
-
-
-    class OnAttackListener implements AttackListener {
-
-        @Override
-        public void onAttack(Player sender, AttackEvent event) {
-            if (sender.equals(rival())) {
-                ConditionalCard[] candidates =
-                    hand.stream()
-                        .filter(card -> card instanceof ConditionalCard)
-                        .filter(card ->
-                            ((ConditionalCard)card).canHandle(event.getAttackType())
-                        )
-                        .toArray(ConditionalCard[]::new);
-                ConditionalCard toUse = selectCard(candidates);
-                hand.remove(toUse);
-                if (event.willSuccess()) {
-                    toUse.applyEffect();
-                }
-                toUse.teardown();
-            }
-        }
     }
 }

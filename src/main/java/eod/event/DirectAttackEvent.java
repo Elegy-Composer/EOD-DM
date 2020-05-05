@@ -2,7 +2,6 @@ package eod.event;
 
 import eod.characters.Character;
 import eod.Player;
-import eod.card.concrete.conditional.ConditionType;
 
 public class DirectAttackEvent extends AttackEvent {
     private Character[] targets;
@@ -15,10 +14,5 @@ public class DirectAttackEvent extends AttackEvent {
 
     public Character[] getTargets() {
         return targets;
-    }
-
-    @Override
-    public ConditionType getAttackType() {
-        return ConditionType.ATTACK_DIRECT;
     }
 }
