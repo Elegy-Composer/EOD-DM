@@ -8,6 +8,7 @@ import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
 import eod.characters.Character;
 import eod.event.listener.EventListener;
+import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
@@ -67,9 +68,14 @@ public class Player implements Snapshotted, GameObject {
         
     }
 
-    //TODO: implement validateDeck, we didn't do it know because the types of card aren't enough
+    //TODO: implement validateDeck, just by checking the number of cards and other things.
+    // There's no need to look into the deck.
     public boolean validateDeck() {
         return true;
+    }
+
+    public Leader getLeader() {
+        return leader;
     }
 
     public Gameboard getBoard() {
@@ -148,5 +154,9 @@ public class Player implements Snapshotted, GameObject {
 
     public void loseCharacter(Character character) {
         getBoard().removeCharacter(character);
+    }
+
+    public void loseLeader() throws GameLosingException {
+        throw new GameLosingException("Player "+this+" loses.");
     }
 }

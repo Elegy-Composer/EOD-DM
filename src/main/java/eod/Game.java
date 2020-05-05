@@ -77,9 +77,11 @@ public class Game implements Snapshotted, GameObject {
 
         // TODO: things to do when a person wins
         if(A.isLeaderAlive()) {
-            //A wins
+            A.announceWon();
+            B.announceLost();
         } else if(B.isLeaderAlive()) {
-            //B wins
+            B.announceWon();
+            A.announceLost();
         }
 
         teardown();

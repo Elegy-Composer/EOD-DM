@@ -13,9 +13,8 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {
-    // TODO: fix the direct attack issues
     public PreciseShot(Player p) {
-        super(p, 1);
+        super(p);
     }
 
     @Override
