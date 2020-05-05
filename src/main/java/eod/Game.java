@@ -5,7 +5,7 @@ import eod.card.abstraction.action.ActionCard;
 import eod.event.AttackEvent;
 import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
-import eod.event.listener.AttackListener;
+import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.BoardSnapshot;
 import eod.snapshots.GameSnapshot;
@@ -110,15 +110,10 @@ public class Game implements Snapshotted, GameObject {
     private void gameLoop() throws GameLosingException {
     }
 
-    public void registerListener(AttackListener listener) {
+    public void registerListener(EventListener listener) {
         eventManager.registerAttackEvent(listener);
     }
-
-    public void sendEvent(AttackEvent event) {
-        eventManager.sendAttack(event);
-    }
-
-    public void unregisterListener(AttackListener listener) {
+    public void unregisterListener(EventListener listener) {
         eventManager.unregisterAttackEvent(listener);
     }
 

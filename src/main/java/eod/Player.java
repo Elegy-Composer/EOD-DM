@@ -7,8 +7,7 @@ import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
 import eod.characters.Character;
-import eod.event.AttackEvent;
-import eod.event.listener.AttackListener;
+import eod.event.listener.EventListener;
 import eod.snapshots.Snapshotted;
 
 import java.awt.*;
@@ -145,12 +144,6 @@ public class Player implements Snapshotted, GameObject {
     public void moveCharacter(Character character, Point point) {
         game.getBoard().moveElement(character.position, point);
         character.updatePosition(point);
-    }
-
-    public void sendAttackEvent(AttackEvent event) {
-        if(event.isConditionAllowed()) {
-            game.sendEvent(event);
-        }
     }
 
     public void loseCharacter(Character character) {
