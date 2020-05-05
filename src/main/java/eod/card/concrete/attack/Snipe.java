@@ -18,7 +18,7 @@ import static eod.specifier.condition.Conditions.*;
 public class Snipe extends AttackCard {
     // TODO: fix the direct attack issues
     public Snipe(Player p) {
-        super(p, 2);
+        super(p);
     }
 
     @Override

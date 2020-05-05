@@ -2,9 +2,9 @@ package eod;
 
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
-import eod.event.AttackEvent;
-import eod.event.DirectAttackEvent;
 import eod.event.EventManager;
+import eod.event.RoundEndEvent;
+import eod.event.RoundStartEvent;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.BoardSnapshot;
@@ -23,6 +23,7 @@ public class Game implements Snapshotted, GameObject {
     private Gameboard gameboard;
     private Player[] playerOrder;
     private EventManager eventManager = new EventManager();
+    private Round currentRound;
 
     public Game(Player A, Player B) {
         this.A = A;
@@ -62,14 +63,25 @@ public class Game implements Snapshotted, GameObject {
         } while(drawRound<3 || hasInvalid);
 
 
-        // the second player should receive a Dodge at the start
+        // the second player should receive a {placeholder} at the start
         ArrayList<Card> firstHand = new ArrayList<>();
         // TODO: add the first card of the second player
         playerOrder[1].handReceive(firstHand);
 
+        currentRound = new Round(playerOrder[0], 1);
         while(true) {
             try {
+                eventManager.send(this, new RoundStartEvent(currentRound));
+
                 gameLoop();
+
+                eventManager.send(this, new RoundEndEvent(currentRound));
+                if(currentRound.getPlayer().equals(playerOrder[0])) {
+                    currentRound = new Round(playerOrder[1], currentRound.getNumber());
+                } else {
+                    currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
+                }
+
             } catch (GameLosingException e) {
                 break;
             }
