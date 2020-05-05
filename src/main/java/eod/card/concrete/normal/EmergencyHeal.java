@@ -12,7 +12,7 @@ import static eod.effect.EffectFunctions.*;
 public class EmergencyHeal extends NormalCard {
 
     public EmergencyHeal(Player p) {
-        super(p, 1);
+        super(p);
     }
 
     @Override
