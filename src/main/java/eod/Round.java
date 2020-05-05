@@ -11,6 +11,14 @@ public class Round implements GameObject {
         this.roundNumber = roundNumber;
     }
 
+    public Player getPlayer() {
+        return roundPlayer;
+    }
+
+    public int getNumber() {
+        return roundNumber;
+    }
+
     @Override
     public void teardown() {
         roundPlayer = null;

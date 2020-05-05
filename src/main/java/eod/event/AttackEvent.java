@@ -3,7 +3,7 @@ package eod.event;
 import eod.characters.Character;
 import eod.Player;
 
-public abstract class AttackEvent {
+public abstract class AttackEvent implements Event {
     protected Player sender;
     protected Character attacker;
     protected int hp;

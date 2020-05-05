@@ -1,24 +1,31 @@
 package eod.event;
 
 import eod.GameObject;
+import eod.Player;
 import eod.event.listener.EventListener;
 
 import java.util.ArrayList;
 
 public class EventManager implements GameObject {
-    private ArrayList<EventListener> attackListeners = new ArrayList<>();
+    private ArrayList<EventListener> listeners = new ArrayList<>();
 
     public void registerAttackEvent(EventListener listener) {
-        attackListeners.add(listener);
+        listeners.add(listener);
     }
 
     public void unregisterAttackEvent(EventListener listener) {
-        attackListeners.remove(listener);
+        listeners.remove(listener);
+    }
+
+    public void send(GameObject sender, Event event) {
+        listeners.stream()
+                .filter(listener -> listener.supportedEventTypes().contains(event.getClass()))
+                .forEach(listener -> listener.onEventOccurred(sender, event));
     }
 
     @Override
     public void teardown() {
-        attackListeners.clear();
-        attackListeners = null;
+        listeners.clear();
+        listeners = null;
     }
 }
