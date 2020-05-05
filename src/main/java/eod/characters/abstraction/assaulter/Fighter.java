@@ -1,6 +1,6 @@
 package eod.characters.abstraction.assaulter;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.Party;
 import eod.Player;
 

@@ -1,6 +1,6 @@
 package eod.event;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.Player;
 import eod.card.concrete.conditional.ConditionType;
 

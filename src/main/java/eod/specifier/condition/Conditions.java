@@ -1,6 +1,6 @@
 package eod.specifier.condition;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.Player;
 
 public class Conditions {

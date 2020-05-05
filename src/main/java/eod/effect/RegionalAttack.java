@@ -1,13 +1,11 @@
 package eod.effect;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.GameObject;
 import eod.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class RegionalAttack implements Effect, GameObject {
     // This class should be used only in regional attacks.
@@ -43,7 +41,7 @@ public class RegionalAttack implements Effect, GameObject {
     }
 
     public RegionalAttack to(ArrayList<Point> targets) {
-        attacker.attack(targets, hp);
+        attacker.attack(targets, hp, allowConditional, willSuccess);
         return this;
     }
 
@@ -59,6 +57,13 @@ public class RegionalAttack implements Effect, GameObject {
         }
         attacker.attack(targets, hp, allowConditional, willSuccess);
         return this;
+    }
+
+    public RegionalAttack to(Character[] characters) {
+        Character target = askToSelectFrom(characters);
+        ArrayList<Point> singleTarget = new ArrayList<>();
+        singleTarget.add(target.position);
+        return to(singleTarget);
     }
 
     @Override

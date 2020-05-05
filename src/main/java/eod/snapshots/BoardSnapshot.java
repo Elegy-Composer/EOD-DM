@@ -1,6 +1,7 @@
 package eod.snapshots;
 
-import eod.Character;
+import eod.characters.Character;
+import eod.characters.Status;
 
 import java.util.Arrays;
 
@@ -14,7 +15,7 @@ public class BoardSnapshot {
     public Character[] getCharactersBeingAttacked() {
         return Arrays.stream(allCharacter)
                 .flatMap(Arrays::stream)
-                .filter(character -> character.isAttacked)
+                .filter(character -> character.status.contains(Status.ATTACKED))
                 .toArray(Character[]::new);
     }
 

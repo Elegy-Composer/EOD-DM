@@ -5,13 +5,13 @@ import eod.card.abstraction.Card;
 import eod.Party;
 import eod.card.abstraction.action.AttackCard;
 import eod.characters.abstraction.disturber.Sniper;
-import eod.effect.DirectAttack;
+import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
-import eod.Character;
+import eod.characters.Character;
 
 import java.util.Random;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
+import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.*;
 
@@ -30,10 +30,10 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        DirectAttack directAttack = RequestDirectAttack(player, 8).from(ownedSnipers);
-        directAttack.allowCondition(moreThanTwoSnipers(ownedSnipers))
+        RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
+        attack.allowCondition(moreThanTwoSnipers(ownedSnipers))
                 .willConditionSuccess(canSuccess(ownedSnipers))
-                .to(characters.which(OwnedBy(rival)).which(InRangeOf(directAttack.attacker())).get());
+                .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
     }
 
     private boolean moreThanTwoSnipers(Character[] snipers) {

@@ -1,5 +1,7 @@
-package eod;
+package eod.characters;
 
+import eod.*;
+import eod.card.abstraction.Card;
 import eod.event.DirectAttackEvent;
 import eod.event.RegionalAttackEvent;
 
@@ -7,13 +9,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Character implements WarObject, GameObject {
-    private Player player;
-    public boolean isTargeted;
+public abstract class Character implements WarObject, GameObject {
+    protected Player player;
     public Point position;
-    public boolean isAttacked = false;
-    private int max_hp = 30;
-    private int hp;
+    public ArrayList<Status> status = new ArrayList<>();
+    protected int max_hp;
+    protected int hp;
     public int attackRange;
     protected final Party party;
 
@@ -25,6 +26,8 @@ public class Character implements WarObject, GameObject {
         this.hp = max_hp;
         this.party = party;
     }
+
+    public abstract ArrayList<Card> generateSpecialCards();
 
     public Player getPlayer() {
         return player;
@@ -50,14 +53,30 @@ public class Character implements WarObject, GameObject {
 
     public void attack(ArrayList<Point> targets, int hp, boolean allowCondition, boolean willSuccess) {
         Point[] targetArray = targets.toArray(new Point[0]);
-        RegionalAttackEvent event = new RegionalAttackEvent(player, this
-                , targetArray, hp, allowCondition, willSuccess);
-        player.sendAttackEvent(event);
+        ArrayList<Character> targetCandidate = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targetArray) {
             try {
-                gameboard.getObjectOn(p.x, p.y).damage(hp);
+                Character candidate = gameboard.getObjectOn(p.x, p.y);
+                targetCandidate.add(candidate);
+                candidate.status.add(Status.TARGETED);
+            } catch (IllegalArgumentException e) {}
+        }
+        RegionalAttackEvent event = new RegionalAttackEvent(player, this
+                , targetArray, hp, allowCondition, willSuccess);
+        player.sendAttackEvent(event);
+
+        for(Point p:targetArray) {
+            try {
+                Character target = gameboard.getObjectOn(p.x, p.y);
+                targetCandidate.remove(target);
+                target.damage(hp);
+                target.status.add(Status.ATTACKED);
+                target.status.remove(Status.TARGETED);
             } catch (IllegalArgumentException e) { }
+        }
+        for(Character survivor:targetCandidate) {
+            survivor.status.remove(Status.TARGETED);
         }
     }
 
@@ -77,10 +96,11 @@ public class Character implements WarObject, GameObject {
         DirectAttackEvent event = new DirectAttackEvent(player, this, targets, hp, allowCondition, willSuccess);
         player.sendAttackEvent(event);
         Arrays.stream(targets)
-                .filter(character -> character.isTargeted)
+                .filter(character -> character.status.contains(Status.TARGETED))
                 .forEach(character -> {
                     character.damage(hp);
-                    character.isTargeted = false;
+                    character.status.add(Status.ATTACKED);
+                    character.status.remove(Status.TARGETED);
                 });
     }
 
@@ -124,6 +144,10 @@ public class Character implements WarObject, GameObject {
     }
 
     public void moveTo(Point point) {
+        player.moveCharacter(this, point);
+    }
+
+    public void updatePosition(Point point) {
         position.move(point.x, point.y);
     }
 

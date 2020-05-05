@@ -1,6 +1,6 @@
 package eod.effect;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.GameObject;
 import eod.Player;
 

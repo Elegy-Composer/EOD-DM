@@ -1,6 +1,6 @@
 package eod.specifier.timing;
 
-import eod.Character;
+import eod.characters.Character;
 
 public class Timing {
     public Character[] filter(Character[] characters) {

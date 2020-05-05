@@ -12,6 +12,10 @@ public class EffectFunctions {
         return new Move(player, step);
     }
 
+    public static Move RequestMove(Player player) {
+        return new Move(player);
+    }
+
     public static DirectAttack RequestDirectAttack(Player player, int hp) {
         return new DirectAttack(player, hp);
     }

@@ -1,8 +1,7 @@
 package eod.specifier;
 
-import eod.Character;
+import eod.characters.Character;
 import eod.Gameboard;
-import eod.specifier.Accessing;
 
 import java.util.Arrays;
 
