@@ -1,9 +1,6 @@
 package eod.characters;
 
 import eod.*;
-import eod.card.abstraction.Card;
-import eod.event.DirectAttackEvent;
-import eod.event.RegionalAttackEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,8 +23,6 @@ public abstract class Character implements WarObject, GameObject {
         this.hp = max_hp;
         this.party = party;
     }
-
-    public abstract ArrayList<Card> generateSpecialCards();
 
     public Player getPlayer() {
         return player;
