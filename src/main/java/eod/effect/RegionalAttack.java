@@ -2,6 +2,7 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
+import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
 import eod.warObject.WarObject;
 
@@ -35,7 +36,9 @@ public class RegionalAttack implements Effect, GameObject {
     }
 
     public RegionalAttack to(ArrayList<Point> targets) {
-        attacker.attack(targets, hp);
+        try {
+            attacker.attack(targets, hp);
+        } catch (NotSupportedException e) {}
         return this;
     }
 
@@ -49,7 +52,9 @@ public class RegionalAttack implements Effect, GameObject {
             targets.add(target);
             candidates.remove(target);
         }
-        attacker.attack(targets, hp);
+        try {
+            attacker.attack(targets, hp);
+        } catch (NotSupportedException e) {}
         return this;
     }
 

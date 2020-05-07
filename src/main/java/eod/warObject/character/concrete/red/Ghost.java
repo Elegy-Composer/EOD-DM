@@ -12,6 +12,11 @@ public class Ghost extends Character {
     }
 
     @Override
+    public String getName() {
+        return "亡靈";
+    }
+
+    @Override
     public void attack() {
         // TODO
     }

@@ -1,5 +1,6 @@
 package eod.specifier.condition;
 
+import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
 import eod.warObject.WarObject;
 
@@ -23,6 +24,10 @@ public class InAttackRangeCondition implements Condition{
         int dy = Math.abs(target.position.y - center.position.y);
 
         CanAttack c = (CanAttack) center;
-        return dx <= c.getAttackRange() && dy <= c.getAttackRange();
+        try {
+            return dx <= c.getAttackRange() && dy <= c.getAttackRange();
+        } catch (NotSupportedException e) {
+            return false;
+        }
     }
 }

@@ -2,6 +2,7 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
+import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -35,14 +36,17 @@ public class DirectAttack implements Effect, GameObject {
 
     public DirectAttack to(WarObject[] objects) {
         target = (Damageable) askToSelectFrom(objects);
-
-        attacker.attack(target, hp);
+        try {
+            attacker.attack(target, hp);
+        } catch (NotSupportedException e) { }
         return this;
     }
 
     public DirectAttack toAll(Damageable[] targets) {
         for(Damageable target:targets) {
-            attacker.attack(target, hp);
+            try {
+                attacker.attack(target, hp);
+            } catch (NotSupportedException e) {}
         }
         return this;
     }
