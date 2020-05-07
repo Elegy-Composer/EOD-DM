@@ -1,9 +1,9 @@
 package eod;
 
-import eod.warObject.character.Character;
 import eod.exceptions.MoveInvalidException;
 import eod.snapshots.Snapshotted;
 import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -113,14 +113,15 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
                 if(y < 0 || y >= boardSize) {
                     continue;
                 }
-                points.add(new Point(x, y));
+                if(!hasObjectOn(x, y)) {
+                    points.add(new Point(x, y));
+                }
             }
         }
         return points;
     }
 
-    public void summonObject(WarObject object) throws IllegalArgumentException {
-        int x = object.position.x, y = object.position.y;
+    public void summonObject(WarObject object, int x, int y) throws IllegalArgumentException {
         if(hasObjectOn(x, y)) {
             throw new IllegalArgumentException("There's already an object on ("+x+", "+y+").");
         }

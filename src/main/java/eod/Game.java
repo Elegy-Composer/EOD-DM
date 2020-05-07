@@ -124,7 +124,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     }
 
     public boolean isPlayerA(Player unknown) {
-        return unknown == A;
+        return unknown.equals(A);
     }
 
     private boolean handIsInvalid(Player player) {

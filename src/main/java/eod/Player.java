@@ -6,13 +6,16 @@ import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.exceptions.GameLosingException;
-import eod.warObject.character.Character;
-import eod.warObject.leader.Leader;
 import eod.snapshots.Snapshotted;
 import eod.warObject.WarObject;
+import eod.warObject.character.Character;
+import eod.warObject.leader.Leader;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject {
@@ -96,8 +99,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
     }
 
-    public void summonObject(WarObject object) {
-        getBoard().summonObject(object);
+    public void summonObject(WarObject object, int x, int y) {
+        getBoard().summonObject(object, x, y);
     }
 
     @Override
