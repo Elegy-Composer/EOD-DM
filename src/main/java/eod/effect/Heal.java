@@ -1,6 +1,7 @@
 package eod.effect;
 
-import eod.characters.Character;
+import eod.warObject.Touchable;
+import eod.warObject.WarObject;
 import eod.GameObject;
 import eod.Player;
 
@@ -13,8 +14,8 @@ public class Heal implements Effect, GameObject {
         this.player = player;
     }
 
-    public void from(Character[] characters) {
-        Character selected = askToSelectFrom(characters);
+    public void from(WarObject[] objects) {
+        Touchable selected = (Touchable) askToSelectFrom(objects);
         selected.heal(hp);
     }
 

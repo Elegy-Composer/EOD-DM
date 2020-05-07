@@ -1,9 +1,10 @@
 package eod.specifier.timing;
 
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 public class Timing {
-    public Character[] filter(Character[] characters) {
+    public WarObject[] filter(WarObject[] characters) {
         return characters;
     }
 }

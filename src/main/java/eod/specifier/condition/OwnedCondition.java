@@ -1,6 +1,7 @@
 package eod.specifier.condition;
 
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.Player;
 
 import java.util.Arrays;
@@ -13,9 +14,9 @@ public class OwnedCondition implements Condition {
     }
 
     @Override
-    public Character[] filter(Character[] characters) {
-        return Arrays.stream(characters)
-                .filter(character -> character.getPlayer() == player)
-                .toArray(Character[]::new);
+    public WarObject[] filter(WarObject[] objects) {
+        return Arrays.stream(objects)
+                .filter(object -> object.getPlayer() == player)
+                .toArray(WarObject[]::new);
     }
 }

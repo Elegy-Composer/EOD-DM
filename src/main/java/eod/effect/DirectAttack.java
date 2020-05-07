@@ -1,53 +1,49 @@
 package eod.effect;
 
-import eod.characters.Character;
+import eod.warObject.CanAttack;
+import eod.warObject.Touchable;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.GameObject;
 import eod.Player;
-import eod.characters.Status;
 
 public class DirectAttack implements Effect, GameObject {
     // This class should be used only in direct attacks.
     // If there's a ranged attack, use RegionalAttack.
     private int hp;
     private Player player;
-    private Character attacker, target;
-    private boolean allowConditional = true;
-    private boolean willSuccess = true;
+    private CanAttack attacker;
+    private Touchable target;
 
     public DirectAttack(Player player, int hp) {
         this.hp = hp;
         this.player = player;
     }
 
-    public Character attacker() {
+    public CanAttack attacker() {
         return attacker;
     }
 
-    public DirectAttack from(Character[] characters) {
-        attacker = askToSelectFrom(characters);
+    public DirectAttack from(WarObject[] objects) {
+        attacker = (CanAttack) askToSelectFrom(objects);
         return this;
     }
 
-    public DirectAttack allowCondition(boolean allow) {
-        allowConditional = allow;
+    public DirectAttack from(WarObject object) {
+        attacker = (CanAttack) object;
         return this;
     }
 
-    public DirectAttack willConditionSuccess(boolean success) {
-        this.willSuccess = success;
+    public DirectAttack to(WarObject[] objects) {
+        target = (Touchable) askToSelectFrom(objects);
+
+        attacker.attack(target, hp);
         return this;
     }
 
-    public DirectAttack to(Character[] characters) {
-        target = askToSelectFrom(characters);
-
-        attacker.attack(target, hp, allowConditional, willSuccess);
-        return this;
-    }
-
-    public DirectAttack toAll(Character[] characters) {
-        for(Character target:characters) {
-            attacker.attack(target, hp, allowConditional, willSuccess);
+    public DirectAttack toAll(Touchable[] targets) {
+        for(Touchable target:targets) {
+            attacker.attack(target, hp);
         }
         return this;
     }

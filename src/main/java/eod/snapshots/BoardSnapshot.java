@@ -1,25 +1,28 @@
 package eod.snapshots;
 
-import eod.characters.Character;
-import eod.characters.Status;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
+import eod.warObject.character.Status;
 
 import java.util.Arrays;
 
 public class BoardSnapshot {
-    private Character[][] allCharacter;
+    private WarObject[][] allObjects;
 
-    public BoardSnapshot(Character[][] allCharacter) {
-        this.allCharacter = allCharacter;
+    public BoardSnapshot(WarObject[][] allCharacter) {
+        this.allObjects = allCharacter;
     }
 
     public Character[] getCharactersBeingAttacked() {
-        return Arrays.stream(allCharacter)
+        return Arrays.stream(Arrays.stream(allObjects)
                 .flatMap(Arrays::stream)
+                .filter(object -> object instanceof Character)
+                .toArray(Character[]::new))
                 .filter(character -> character.hasStatus(Status.ATTACKED))
                 .toArray(Character[]::new);
     }
 
-    public Character[][] getAllCharacter() {
-        return allCharacter;
+    public WarObject[][] getAllObjects() {
+        return allObjects;
     }
 }

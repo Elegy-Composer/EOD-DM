@@ -1,6 +1,8 @@
 package eod.specifier.condition;
 
-import eod.characters.Character;
+import eod.warObject.CanAttack;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.Player;
 
 public class Conditions {
@@ -12,11 +14,11 @@ public class Conditions {
         return new OwnedCondition(player);
     }
 
-    public static BelongCondition Being(Class<? extends Character> type) {
+    public static BelongCondition Being(Class type) {
         return new BelongCondition(type);
     }
 
-    public static InAttackRangeCondition InRangeOf(Character center) {
+    public static InAttackRangeCondition InRangeOf(CanAttack center) {
         return new InAttackRangeCondition(center);
     }
 }

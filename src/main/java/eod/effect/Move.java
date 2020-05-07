@@ -2,7 +2,8 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.exceptions.MoveInvalidException;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ public class Move implements Effect, GameObject {
     private final MoveMode mode;
     private int step;
     private Player player;
-    private Character target;
+    private WarObject target;
 
     public Move(Player player) {
         // this declares a teleport move
@@ -29,8 +30,8 @@ public class Move implements Effect, GameObject {
         this.player = player;
     }
 
-    public Move from(Character[] characters) {
-        target = askToSelectFrom(characters);
+    public Move from(WarObject[] objects) {
+        target = askToSelectFrom(objects);
         if(mode==MoveMode.STEP) {
             target.move(step);
         }
@@ -46,7 +47,7 @@ public class Move implements Effect, GameObject {
         return this;
     }
 
-    public Character getTarget() {
+    public WarObject getTarget() {
         return target;
     }
 

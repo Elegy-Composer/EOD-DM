@@ -6,10 +6,11 @@ import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.card.collection.SpecialDeck;
-import eod.characters.Character;
-import eod.event.listener.EventListener;
+import eod.warObject.character.Character;
 import eod.exceptions.GameLosingException;
+import eod.warObject.leader.Leader;
 import eod.snapshots.Snapshotted;
+import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.*;
@@ -86,6 +87,21 @@ public class Player implements Snapshotted, GameObject {
         return leader.isAlive();
     }
 
+    public ArrayList<Point> getBase() {
+        Gameboard gameboard = game.getBoard();
+        int boardEdge = Gameboard.boardSize-1;
+        if(game.isPlayerA(this)) {
+            return gameboard.allEmptySpaces(new Point(0, 0));
+        }
+        else {
+            return gameboard.allEmptySpaces(new Point(boardEdge, boardEdge));
+        }
+    }
+
+    public void summonObject(WarObject object) {
+        getBoard().summonObject(object);
+    }
+
     @Override
     public void teardown() {
         hand.teardown();
@@ -129,10 +145,10 @@ public class Player implements Snapshotted, GameObject {
         return game.getRivalPlayer(this);
     }
 
-    public Character selectCharacter(Character[] characters) {
+    public WarObject selectObject(WarObject[] objects) {
         //TODO: asks the player to select a character
         Random random = new Random();
-        return characters[random.nextInt(characters.length)];
+        return objects[random.nextInt(objects.length)];
     }
 
     public Point selectPosition(ArrayList<Point> points) {
@@ -147,13 +163,13 @@ public class Player implements Snapshotted, GameObject {
         return cards[random.nextInt(cards.length)];
     }
 
-    public void moveCharacter(Character character, Point point) {
-        game.getBoard().moveElement(character.position, point);
-        character.updatePosition(point);
+    public void moveObject(WarObject object, Point point) {
+        game.getBoard().moveObject(object.position, point);
+        object.updatePosition(point);
     }
 
     public void loseCharacter(Character character) {
-        getBoard().removeCharacter(character);
+        getBoard().removeObject(character);
     }
 
     public void loseLeader() throws GameLosingException {

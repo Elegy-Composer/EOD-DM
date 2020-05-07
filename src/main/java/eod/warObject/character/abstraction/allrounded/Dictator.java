@@ -1,6 +1,6 @@
-package eod.characters.abstraction.allrounded;
+package eod.warObject.character.abstraction.allrounded;
 
-import eod.characters.Character;
+import eod.warObject.character.Character;
 import eod.Party;
 import eod.Player;
 

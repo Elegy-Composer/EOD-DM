@@ -4,12 +4,13 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.characters.abstraction.disturber.Sniper;
+import eod.specifier.condition.BelongCondition;
+import eod.warObject.Touchable;
+import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.disturber.Sniper;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
-import eod.characters.Character;
-
-import java.util.Random;
+import eod.warObject.character.Character;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.WarObjectSpecifier.*;
@@ -28,25 +29,10 @@ public class Snipe extends AttackCard {
 
     @Override
     public void attack() {
-        Accessing characters = Character(player.getBoard());
-        Character[] ownedSnipers = characters.which(OwnedBy(player)).which(Being(Sniper.class)).get();
+        Accessing objects = WarObject(player.getBoard());
+        WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
-        attack.allowCondition(moreThanTwoSnipers(ownedSnipers))
-                .willConditionSuccess(canSuccess(ownedSnipers))
-                .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
-    }
-
-    private boolean moreThanTwoSnipers(Character[] snipers) {
-        return snipers.length >= 2;
-    }
-
-    private boolean canSuccess(Character[] snipers) {
-        if(moreThanTwoSnipers(snipers)) {
-            return true;
-        } else {
-            Random random = new Random();
-            return random.nextBoolean();
-        }
+        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Touchable.class)).get());
     }
 
     @Override

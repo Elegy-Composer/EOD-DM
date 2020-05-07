@@ -117,6 +117,10 @@ public class Game implements Snapshotted, GameObject {
         }
     }
 
+    public boolean isPlayerA(Player unknown) {
+        return unknown == A;
+    }
+
     private boolean handIsInvalid(Player player) {
         return !player.checkInHand(ActionCard.class);
     }

@@ -1,23 +1,34 @@
-package eod;
+package eod.warObject.leader;
 
+import eod.Player;
+import eod.warObject.WarObject;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Leader implements WarObject, GameObject {
+public abstract class Leader extends WarObject {
     private int max_hp, hp;
-    private Player player;
     private ArrayList<NormalCard> specialOrder;
 
     public Leader(Player player, int hp) {
-        this.player = player;
+        super(player, new Point(-1, -1));
         max_hp = hp;
         this.hp = max_hp;
         specialOrder = generateSpecialOrder();
     }
 
-    abstract ArrayList<NormalCard> generateSpecialOrder();
+    public Leader enterArena() {
+        ArrayList<Point> points = player.getBase();
+        position = player.selectPosition(points);
+        player.summonObject(this);
+        return this;
+    }
+
+    protected abstract ArrayList<NormalCard> generateSpecialOrder();
+
+    public abstract void attack();
 
     public void damage(int hp) {
         this.hp -= hp;

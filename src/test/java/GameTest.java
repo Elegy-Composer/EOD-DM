@@ -1,7 +1,7 @@
 import eod.card.collection.Deck;
 import eod.Game;
-import eod.Leader;
 import eod.Player;
+import eod.warObject.leader.red.Sundar;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,8 +15,8 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player(new Deck(), new Leader());
-        B = new Player(new Deck(), new Leader());
+        A = new Player(new Deck(), new Sundar(A));
+        B = new Player(new Deck(), new Sundar(B));
         game = new Game(A, B);
     }
 
