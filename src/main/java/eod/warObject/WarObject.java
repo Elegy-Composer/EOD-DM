@@ -4,6 +4,7 @@ package eod.warObject;
 import eod.GameObject;
 import eod.Gameboard;
 import eod.Player;
+import eod.event.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,10 +13,11 @@ import java.util.ArrayList;
 public abstract class WarObject implements GameObject {
     public Point position;
     protected Player player;
+    public ArrayList<Class<? extends Event>> canHandle;
 
-    public WarObject(Player player, Point point) {
+    public WarObject(Player player) {
         this.player = player;
-        position = point;
+        canHandle = new ArrayList<>();
     }
 
     public Player getPlayer() {
@@ -70,5 +72,12 @@ public abstract class WarObject implements GameObject {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public abstract String getName();
+
+    @Override
+    public void teardown() {
+        player = null;
     }
 }

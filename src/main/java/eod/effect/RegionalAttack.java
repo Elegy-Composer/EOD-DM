@@ -1,10 +1,9 @@
 package eod.effect;
 
-import eod.warObject.CanAttack;
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.GameObject;
 import eod.Player;
+import eod.warObject.CanAttack;
+import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;

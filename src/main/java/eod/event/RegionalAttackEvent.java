@@ -1,7 +1,7 @@
 package eod.event;
 
-import eod.warObject.character.Character;
 import eod.Player;
+import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 

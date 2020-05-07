@@ -1,23 +1,26 @@
-package eod.warObject.character;
+package eod.warObject.character.abstraction;
 
-import eod.*;
+import eod.Gameboard;
+import eod.Party;
+import eod.Player;
 import eod.warObject.CanAttack;
-import eod.warObject.Touchable;
+import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Character extends WarObject implements Touchable, CanAttack {
+public abstract class Character extends WarObject implements Damageable, CanAttack {
     private ArrayList<Status> status = new ArrayList<>();
     protected int max_hp;
     protected int hp;
     public int attackRange;
     protected final Party party;
 
-    public Character(Player player, int x, int y, int hp, int range, Party party) {
-        super(player,new Point(x, y));
+    public Character(Player player, int hp, int range, Party party) {
+        super(player);
         this.attackRange = range;
         this.player = player;
         max_hp = hp;
@@ -61,7 +64,7 @@ public abstract class Character extends WarObject implements Touchable, CanAttac
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
-                Character target = gameboard.getObjectOn(p.x, p.y);
+                Damageable target = gameboard.getObjectOn(p.x, p.y);
                 target.damage(hp);
                 target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {}
@@ -69,12 +72,12 @@ public abstract class Character extends WarObject implements Touchable, CanAttac
     }
 
     @Override
-    public void attack(Touchable target, int hp) {
-        attack(new Touchable[] {target}, hp);
+    public void attack(Damageable target, int hp) {
+        attack(new Damageable[] {target}, hp);
     }
 
     @Override
-    public void attack(Touchable[] targets, int hp) {
+    public void attack(Damageable[] targets, int hp) {
         Arrays.stream(targets)
                 .forEach(target -> {
                     target.damage(hp);
@@ -90,14 +93,10 @@ public abstract class Character extends WarObject implements Touchable, CanAttac
         }
     }
 
-    private void die() {
-        player.loseCharacter(this);
-        teardown();
-    }
-
     @Override
-    public void teardown() {
-        player = null;
+    public void die() {
+        player.loseObject(this);
+        teardown();
     }
 
     public Party getParty() {

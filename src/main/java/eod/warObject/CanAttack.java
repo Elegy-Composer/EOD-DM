@@ -1,14 +1,28 @@
 package eod.warObject;
 
-import eod.warObject.Touchable;
+import eod.exceptions.NotSupportedException;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public interface CanAttack {
-    void attack();
-    void attack(ArrayList<Point> targets, int hp);
-    void attack(Touchable target, int hp);
-    void attack(Touchable[] targets, int hp);
-    int getAttackRange();
+
+    default void attack() throws NotSupportedException {
+        throw new NotSupportedException("This method isn't supported by the object.");
+    }
+
+    default void attack(ArrayList<Point> targets, int hp) throws NotSupportedException {
+        throw new NotSupportedException("This method isn't supported by the object.");
+    }
+
+    default void attack(Damageable target, int hp) throws NotSupportedException {
+        throw new NotSupportedException("This method isn't supported by the object.");
+    }
+    default void attack(Damageable[] targets, int hp) throws NotSupportedException {
+        throw new NotSupportedException("This method isn't supported by the object.");
+    }
+
+    default int getAttackRange() throws NotSupportedException {
+        throw new NotSupportedException("This method isn't supported by the object.");
+    }
 }

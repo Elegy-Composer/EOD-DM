@@ -5,10 +5,11 @@ import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
+import eod.event.ObjectDeadEvent;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
+import eod.warObject.Damageable;
 import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
@@ -163,8 +164,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         object.updatePosition(point);
     }
 
-    public void loseCharacter(Character character) {
-        getBoard().removeObject(character);
+    public void loseObject(WarObject object) {
+        getBoard().removeObject(object);
+        if(object instanceof Damageable) {
+            game.sendEvent(this, new ObjectDeadEvent((Damageable) object));
+        }
     }
 
     public void loseLeader() throws GameLosingException {

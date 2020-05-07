@@ -2,21 +2,52 @@ package eod.warObject.leader;
 
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.action.NormalCard;
+import eod.warObject.CanAttack;
+import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Leader extends WarObject {
+public abstract class Leader extends WarObject implements Damageable, CanAttack {
     private int max_hp, hp;
-    private ArrayList<NormalCard> specialOrder;
+    private ArrayList<Card> specialOrder;
+    protected ArrayList<Status> status;
 
     public Leader(Player player, int hp) {
-        super(player, new Point(-1, -1));
+        super(player);
         max_hp = hp;
         this.hp = max_hp;
+
         specialOrder = generateSpecialOrder();
+    }
+
+    @Override
+    public void addStatus(Status s) {
+        if(!hasStatus(s)) {
+            status.add(s);
+        }
+    }
+
+    @Override
+    public boolean hasStatus(Status s) {
+        return status.contains(s);
+    }
+
+    @Override
+    public void removeStatus(Status s) {
+        status.remove(s);
+    }
+
+    @Override
+    public void heal(int hp) {
+        if(this.hp + hp >= max_hp) {
+            this.hp = max_hp;
+        }
+        else {
+            this.hp += hp;
+        }
     }
 
     public Leader enterArena() {
@@ -26,16 +57,20 @@ public abstract class Leader extends WarObject {
         return this;
     }
 
-    protected abstract ArrayList<NormalCard> generateSpecialOrder();
+    protected abstract ArrayList<Card> generateSpecialOrder();
 
-    public abstract void attack();
-
+    @Override
     public void damage(int hp) {
         this.hp -= hp;
         if(this.hp < 0) {
-            teardown();
-            player.loseLeader();
+            die();
         }
+    }
+
+    @Override
+    public void die() {
+        teardown();
+        player.loseLeader();
     }
 
     public Card getSpecialOrder() {

@@ -1,15 +1,15 @@
-package eod.card.concrete.attack;
+package eod.card.concrete.attack.transparent;
 
+import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.warObject.character.abstraction.assaulter.Shooter;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
+import eod.warObject.character.abstraction.assaulter.Shooter;
 
-import static eod.specifier.WarObjectSpecifier.*;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
+import static eod.specifier.WarObjectSpecifier.Character;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {

@@ -5,12 +5,12 @@ import eod.Player;
 import eod.warObject.character.abstraction.allrounded.Dictator;
 
 import static eod.effect.EffectFunctions.RequestDirectAttack;
-import static eod.specifier.WarObjectSpecifier.*;
+import static eod.specifier.WarObjectSpecifier.Touchable;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class Spacezipper extends Dictator {
     public Spacezipper(Player player, int x, int y) {
-        super(player, x, y, 20, -1, Party.TRANSPARENT);
+        super(player, 20, -1, Party.TRANSPARENT);
     }
 
     @Override

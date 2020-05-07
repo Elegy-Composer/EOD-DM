@@ -2,6 +2,7 @@ package eod;
 
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
+import eod.event.Event;
 import eod.event.EventManager;
 import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
@@ -134,11 +135,15 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     private void gameLoop() throws GameLosingException {
     }
 
+    public void sendEvent(GameObject sender, Event event) {
+        eventManager.send(sender, event);
+    }
+
     public void registerListener(EventListener listener) {
-        eventManager.registerAttackEvent(listener);
+        eventManager.registerListener(listener);
     }
     public void unregisterListener(EventListener listener) {
-        eventManager.unregisterAttackEvent(listener);
+        eventManager.unregisterListener(listener);
     }
 
     @Override
