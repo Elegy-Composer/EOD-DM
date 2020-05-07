@@ -7,16 +7,15 @@ import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
-import eod.snapshots.BoardSnapshot;
-import eod.snapshots.GameSnapshot;
 import eod.snapshots.Snapshotted;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 //represent a game instance
 //each manages a ongoing game
-public class Game implements Snapshotted, GameObject {
+public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
     private Player A;
     private Player B;
@@ -24,6 +23,8 @@ public class Game implements Snapshotted, GameObject {
     private Player[] playerOrder;
     private EventManager eventManager = new EventManager();
     private Round currentRound;
+    private LinkedHashMap<Round, Snapshot> history = new LinkedHashMap<>();
+    private int maxHistoryLength = 7;
 
     public Game(Player A, Player B) {
         this.A = A;
@@ -80,6 +81,11 @@ public class Game implements Snapshotted, GameObject {
                     currentRound = new Round(playerOrder[1], currentRound.getNumber());
                 } else {
                     currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
+                }
+                history.put(currentRound, takeSnapshot());
+                if(history.size() > maxHistoryLength) {
+                    Round first = history.keySet().toArray(new Round[0])[0];
+                    history.remove(first);
                 }
 
             } catch (GameLosingException e) {
@@ -148,6 +154,9 @@ public class Game implements Snapshotted, GameObject {
 
         eventManager.teardown();
         eventManager = null;
+
+        currentRound.teardown();
+        currentRound = null;
     }//TODO: finish teardown
 
     public Gameboard getBoard() {
@@ -155,11 +164,47 @@ public class Game implements Snapshotted, GameObject {
     }
 
     @Override
-    public GameSnapshot snapshot() {
-        Player Aclone = A.snapshot();
-        Player Bclone = B.snapshot();
-        BoardSnapshot boardSnapshot = gameboard.snapshot();
+    public Snapshot takeSnapshot() {
+        return new Snapshot();
+    }
 
-        return new GameSnapshot(Aclone, Bclone, boardSnapshot);
+    //This method will return null if round given is not found in history
+    public Snapshot getSnapshotOf(Round r) {
+        return history.getOrDefault(r, null);
+    }
+
+    public Snapshot getSnapshotOf(Player player, int roundNumber) {
+        return history.keySet()
+                    .stream()
+                    .filter(round ->
+                        round.getPlayer().equals(player) && round.getNumber() == roundNumber
+                    )
+                    .findFirst()
+                    .map(key -> history.get(key))
+                    .orElse(null);
+
+    }
+
+    public class Snapshot implements eod.snapshots.Snapshot {
+        private Player.Snapshot thenPlayer = currentRound.getPlayer().takeSnapshot();
+        private Player.Snapshot thenRivalPlayer = getRivalPlayer(currentRound.getPlayer()).takeSnapshot();
+        private Gameboard.Snapshot board = gameboard.takeSnapshot();
+        private int roundNumber = currentRound.getNumber();
+
+        public Player.Snapshot getThenPlayer() {
+            return thenPlayer;
+        }
+
+        public Player.Snapshot getThenRivalPlayer() {
+            return thenRivalPlayer;
+        }
+
+        public Gameboard.Snapshot getBoard() {
+            return board;
+        }
+
+        public int getRoundNumber() {
+            return roundNumber;
+        }
     }
 }

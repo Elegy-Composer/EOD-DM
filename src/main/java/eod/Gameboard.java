@@ -2,14 +2,13 @@ package eod;
 
 import eod.warObject.character.Character;
 import eod.exceptions.MoveInvalidException;
-import eod.snapshots.BoardSnapshot;
 import eod.snapshots.Snapshotted;
 import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Gameboard implements Snapshotted, GameObject {
+public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     // Player A's base is (0,x) ~ (firstLine-1, x)
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
@@ -141,7 +140,15 @@ public class Gameboard implements Snapshotted, GameObject {
     }
 
     @Override
-    public BoardSnapshot snapshot() {
-        return new BoardSnapshot(board);
+    public Snapshot takeSnapshot() {
+        return new Snapshot();
+    }
+
+    public class Snapshot implements eod.snapshots.Snapshot {
+        private WarObject[][] allObjects = board;
+
+        public WarObject[][] getAllObjects() {
+            return allObjects;
+        }
     }
 }

@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class WarObjectSpecifier {
     public static Accessing Character(Gameboard gameboard) {
-        WarObject[][] objects = gameboard.snapshot().getAllObjects();
+        WarObject[][] objects = gameboard.takeSnapshot().getAllObjects();
 
         return new Accessing(Arrays.stream(objects)
                 .flatMap(Arrays::stream)
@@ -19,7 +19,7 @@ public class WarObjectSpecifier {
     }
 
     public static Accessing WarObject(Gameboard gameboard) {
-        WarObject[][] objects = gameboard.snapshot().getAllObjects();
+        WarObject[][] objects = gameboard.takeSnapshot().getAllObjects();
 
         return new Accessing(Arrays.stream(objects)
                 .flatMap(Arrays::stream)
@@ -27,7 +27,7 @@ public class WarObjectSpecifier {
     }
 
     public static Accessing Touchable(Gameboard gameboard) {
-        WarObject[][] objects = gameboard.snapshot().getAllObjects();
+        WarObject[][] objects = gameboard.takeSnapshot().getAllObjects();
 
         return new Accessing(Arrays.stream(objects)
                 .flatMap(Arrays::stream)
