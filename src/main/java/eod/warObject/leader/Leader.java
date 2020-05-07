@@ -1,9 +1,9 @@
 package eod.warObject.leader;
 
 import eod.Player;
-import eod.warObject.WarObject;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public abstract class Leader extends WarObject {
     public Leader enterArena() {
         ArrayList<Point> points = player.getBase();
         position = player.selectPosition(points);
-        player.summonObject(this);
+        player.summonObject(this, position.x, position.y);
         return this;
     }
 
