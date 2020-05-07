@@ -7,7 +7,7 @@ import eod.snapshots.Snapshotted;
 
 import java.util.*;
 
-public class Deck implements Snapshotted, GameObject {
+public class Deck implements Snapshotted<Deck.Snapshot>, GameObject {
 
     public List<Card> cards;
 
@@ -66,13 +66,23 @@ public class Deck implements Snapshotted, GameObject {
         return Objects.hash(cards);
     }
 
-    public Deck snapshot() {
-        ArrayList<Card> newCards = new ArrayList<>();
-        for(Card card : cards) {
-            Card copy = card.copy();
-            newCards.add(copy);
+    @Override
+    public Snapshot takeSnapshot() {
+        return new Snapshot();
+    }
+
+    public class Snapshot implements eod.snapshots.Snapshot {
+        private ArrayList<Card> cardsSnapshot = new ArrayList<>();
+
+        public Snapshot() {
+            for(Card card : cards) {
+                Card copy = card.copy();
+                cardsSnapshot.add(copy);
+            }
         }
 
-        return new Deck(newCards, false);
+        public ArrayList<Card> getCards() {
+            return cardsSnapshot;
+        }
     }
 }

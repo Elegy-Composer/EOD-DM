@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class WarObjectSpecifier {
     public static Accessing Character(Gameboard gameboard) {
-        Character[][] characters = gameboard.snapshot().getAllCharacter();
+        Character[][] characters = gameboard.takeSnapshot().getAllCharacter();
 
         return new Accessing(Arrays.stream(characters)
                 .flatMap(Arrays::stream)
