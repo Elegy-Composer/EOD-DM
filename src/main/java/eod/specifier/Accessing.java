@@ -1,14 +1,15 @@
 package eod.specifier;
 
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.specifier.condition.Condition;
 import eod.specifier.timing.Timing;
 
 public class Accessing {
 
-    private Character[] objects;
+    private WarObject[] objects;
 
-    public Accessing(Character[] objects) {
+    public Accessing(WarObject[] objects) {
         this.objects = objects;
     }
 
@@ -22,7 +23,7 @@ public class Accessing {
         return this;
     }
 
-    public Character[] get() {
+    public WarObject[] get() {
         return objects;
     }
 }

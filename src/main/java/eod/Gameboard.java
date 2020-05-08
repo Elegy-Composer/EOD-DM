@@ -1,28 +1,33 @@
 package eod;
 
-import eod.characters.Character;
 import eod.exceptions.MoveInvalidException;
 import eod.snapshots.Snapshotted;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
-
+    // Player A's base is (0,x) ~ (firstLine-1, x)
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
     private Game game;
-    private Character[][] board = new Character[boardSize][boardSize];
+    private WarObject[][] board = new Character[boardSize][boardSize];
 
     public Gameboard(Game game) {
         this.game = game;
     }
 
-    public Character getObjectOn(int x, int y) throws IllegalArgumentException {
+    public <T extends WarObject>T getObjectOn(int x, int y) throws IllegalArgumentException {
         if(!hasObjectOn(x, y)) {
-            throw new IllegalArgumentException("There's no character on ("+x+", "+y+").");
+            throw new IllegalArgumentException("There's no object on ("+x+", "+y+").");
         }
-        return board[x][y];
+        try {
+            return (T) board[x][y];
+        } catch (Exception e) {
+            throw new IllegalArgumentException("the object on ("+x+", "+y+") doesn't match the type you want.");
+        }
     }
 
     public boolean hasObjectOn(int x, int y) throws ArrayIndexOutOfBoundsException {
@@ -32,7 +37,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return board[x][y]!=null;
     }
 
-    public void moveElement(Point from, Point to) throws MoveInvalidException, ArrayIndexOutOfBoundsException {
+    public void moveObject(Point from, Point to) throws MoveInvalidException, ArrayIndexOutOfBoundsException {
         if(to.x < 0 || to.x >= boardSize || to.y < 0 || to.y >= boardSize) {
             throw new ArrayIndexOutOfBoundsException("Trying to move a character to ("+to.x+", "+to.y+").");
         }
@@ -45,8 +50,8 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         board[from.x][from.y] = null;
     }
 
-    public void removeCharacter(Character character) throws IllegalArgumentException {
-        Point position = character.position;
+    public void removeObject(WarObject object) throws IllegalArgumentException {
+        Point position = object.getPosition();
         int x = position.x;
         int y = position.y;
         removeObject(x, y);
@@ -98,13 +103,38 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return points;
     }
 
+    public ArrayList<Point> getSurroundingEmpty(Point p, int range) {
+        ArrayList<Point> points = new ArrayList<>();
+        for(int x = p.x - range;x <= p.x + range;x++) {
+            if(x < 0 || x >= boardSize) {
+                continue;
+            }
+            for(int y = p.y-range; y <= p.y+range;y++) {
+                if(y < 0 || y >= boardSize) {
+                    continue;
+                }
+                if(!hasObjectOn(x, y)) {
+                    points.add(new Point(x, y));
+                }
+            }
+        }
+        return points;
+    }
+
+    public void summonObject(WarObject object, int x, int y) throws IllegalArgumentException {
+        if(hasObjectOn(x, y)) {
+            throw new IllegalArgumentException("There's already an object on ("+x+", "+y+").");
+        }
+        board[x][y] = object;
+    }
+
     @Override
     public void teardown() {
         game = null;
 
-        for(Character[] line:board) {
-            for(Character character:line) {
-                character.teardown();
+        for(GameObject[] line:board) {
+            for(GameObject object:line) {
+                object.teardown();
             }
         }
         board = null;
@@ -116,10 +146,10 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {
-        private Character[][] allCharacter = board;
+        private WarObject[][] allObjects = board;
 
-        public Character[][] getAllCharacter() {
-            return allCharacter;
+        public WarObject[][] getAllObjects() {
+            return allObjects;
         }
     }
 }

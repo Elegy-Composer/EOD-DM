@@ -1,6 +1,6 @@
 package eod.event;
 
-import eod.characters.Character;
+import eod.warObject.character.Character;
 import eod.Player;
 
 public class DirectAttackEvent extends AttackEvent {

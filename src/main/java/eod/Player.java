@@ -5,11 +5,17 @@ import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
-import eod.characters.Character;
+import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
+import eod.warObject.leader.Leader;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject {
@@ -64,9 +70,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         
     }
 
-    //TODO: implement validateDeck, we didn't do it know because the types of card aren't enough
+    //TODO: implement validateDeck, just by checking the number of cards and other things.
+    // There's no need to look into the deck.
     public boolean validateDeck() {
         return true;
+    }
+
+    public Leader getLeader() {
+        return leader;
     }
 
     public Gameboard getBoard() {
@@ -75,6 +86,21 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public boolean isLeaderAlive() {
         return leader.isAlive();
+    }
+
+    public ArrayList<Point> getBaseEmpty() {
+        Gameboard gameboard = game.getBoard();
+        int boardEdge = Gameboard.boardSize-1;
+        if(game.isPlayerA(this)) {
+            return gameboard.allEmptySpaces(new Point(0, 0));
+        }
+        else {
+            return gameboard.allEmptySpaces(new Point(boardEdge, boardEdge));
+        }
+    }
+
+    public void summonObject(WarObject object, int x, int y) {
+        getBoard().summonObject(object, x, y);
     }
 
     @Override
@@ -114,10 +140,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return game.getRivalPlayer(this);
     }
 
-    public Character selectCharacter(Character[] characters) {
+    public WarObject selectObject(WarObject[] objects) {
         //TODO: asks the player to select a character
         Random random = new Random();
-        return characters[random.nextInt(characters.length)];
+        return objects[random.nextInt(objects.length)];
     }
 
     public Point selectPosition(ArrayList<Point> points) {
@@ -132,13 +158,17 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return cards[random.nextInt(cards.length)];
     }
 
-    public void moveCharacter(Character character, Point point) {
-        game.getBoard().moveElement(character.position, point);
-        character.updatePosition(point);
+    public void moveObject(WarObject object, Point point) {
+        game.getBoard().moveObject(object.position, point);
+        object.updatePosition(point);
     }
 
     public void loseCharacter(Character character) {
-        getBoard().removeCharacter(character);
+        getBoard().removeObject(character);
+    }
+
+    public void loseLeader() throws GameLosingException {
+        throw new GameLosingException("Player "+this+" loses.");
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

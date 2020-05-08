@@ -4,7 +4,7 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.characters.abstraction.assaulter.Shooter;
+import eod.warObject.character.abstraction.assaulter.Shooter;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
 
@@ -13,7 +13,6 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {
-    // TODO: fix the direct attack issues
     public PreciseShot(Player p) {
         super(p);
     }
@@ -22,8 +21,7 @@ public class PreciseShot extends AttackCard {
     public void attack() {
         Accessing characters = Character(player.getBoard());
         RegionalAttack attack = RequestRegionalAttack(player, 3).from(characters.which(OwnedBy(player)).which(Being(Shooter.class)).get());
-        attack.allowCondition(false)
-                .to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
+        attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
     }
 
     @Override

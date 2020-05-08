@@ -1,26 +1,29 @@
 package eod.specifier.condition;
 
-import eod.characters.Character;
+import eod.warObject.CanAttack;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 import java.util.Arrays;
 
 public class InAttackRangeCondition implements Condition{
-    Character center;
-    public InAttackRangeCondition(Character center) {
-        this.center = center;
+    WarObject center;
+    public InAttackRangeCondition(CanAttack center) {
+        this.center = (WarObject) center;
     }
 
     @Override
-    public Character[] filter(Character[] characters) {
-        return Arrays.stream(characters)
+    public WarObject[] filter(WarObject[] objects) {
+        return Arrays.stream(objects)
                 .filter(this::inRange)
-                .toArray(Character[]::new);
+                .toArray(WarObject[]::new);
     }
 
-    private boolean inRange(Character target) {
+    private boolean inRange(WarObject target) {
         int dx = Math.abs(target.position.x - center.position.x);
         int dy = Math.abs(target.position.y - center.position.y);
 
-        return dx <= center.attackRange && dy <= center.attackRange;
+        CanAttack c = (CanAttack) center;
+        return dx <= c.getAttackRange() && dy <= c.getAttackRange();
     }
 }

@@ -8,5 +8,10 @@ public abstract class ActionCard extends Card {
         super(p);
     }
 
+    @Override
+    public void effect() {
+        applyEffect();
+    }
+
     public abstract void applyEffect();
 }

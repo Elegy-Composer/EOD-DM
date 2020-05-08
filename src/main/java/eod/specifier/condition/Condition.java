@@ -1,7 +1,8 @@
 package eod.specifier.condition;
 
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 public interface Condition {
-    Character[] filter(Character[] characters);
+    WarObject[] filter(WarObject[] objects);
 }

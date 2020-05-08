@@ -1,7 +1,7 @@
 package eod.effect;
 
 import eod.Player;
-import eod.characters.Character;
+import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ public interface Effect {
 
     Player getPlayer();
 
-    default Character askToSelectFrom(Character[] from) {
-        return getPlayer().selectCharacter(from);
+    default WarObject askToSelectFrom(WarObject[] from) {
+        return getPlayer().selectObject(from);
     }
 
     default Point askToSelectFrom(ArrayList<Point> candidates) {

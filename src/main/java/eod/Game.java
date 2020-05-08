@@ -95,9 +95,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
         // TODO: things to do when a person wins
         if(A.isLeaderAlive()) {
-            //A wins
+            A.announceWon();
+            B.announceLost();
         } else if(B.isLeaderAlive()) {
-            //B wins
+            B.announceWon();
+            A.announceLost();
         }
 
         teardown();
@@ -119,6 +121,10 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         } else {
             return playerOrder[0];
         }
+    }
+
+    public boolean isPlayerA(Player unknown) {
+        return unknown.equals(A);
     }
 
     private boolean handIsInvalid(Player player) {

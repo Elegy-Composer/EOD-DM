@@ -8,5 +8,10 @@ public abstract class SummonCard extends Card {
         super(p);
     }
 
+    @Override
+    public void effect() {
+        summon();
+    }
+
     public abstract void summon();
 }

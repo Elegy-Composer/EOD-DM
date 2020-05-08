@@ -1,19 +1,21 @@
 package eod.specifier.condition;
 
-import eod.characters.Character;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 
 import java.util.Arrays;
 
 public class BelongCondition implements Condition{
-    private Class<? extends Character> type;
+    private Class type;
 
-    public BelongCondition(Class<? extends Character> type) {
+    public BelongCondition(Class type) {
         this.type = type;
     }
+
     @Override
-    public Character[] filter(Character[] characters) {
-        return Arrays.stream(characters)
+    public WarObject[] filter(WarObject[] objects) {
+        return Arrays.stream(objects)
                 .filter(character -> type.isInstance(character))
-                .toArray(Character[]::new);
+                .toArray(WarObject[]::new);
     }
 }

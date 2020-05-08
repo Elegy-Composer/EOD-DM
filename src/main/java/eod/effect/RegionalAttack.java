@@ -1,6 +1,8 @@
 package eod.effect;
 
-import eod.characters.Character;
+import eod.warObject.CanAttack;
+import eod.warObject.WarObject;
+import eod.warObject.character.Character;
 import eod.GameObject;
 import eod.Player;
 
@@ -12,36 +14,29 @@ public class RegionalAttack implements Effect, GameObject {
     // If there's a direct attack, use Attack.
     private int hp;
     private Player player;
-    private Character attacker;
-    private boolean allowConditional = true;
-    private boolean willSuccess = true;
+    private CanAttack attacker;
 
     public RegionalAttack(Player player, int hp) {
         this.player = player;
         this.hp = hp;
     }
 
-    public Character attacker() {
+    public CanAttack attacker() {
         return attacker;
     }
 
-    public RegionalAttack from(Character[] characters) {
-        attacker = askToSelectFrom(characters);
+    public RegionalAttack from(WarObject[] objects) {
+        attacker = (CanAttack) askToSelectFrom(objects);
         return this;
     }
 
-    public RegionalAttack allowCondition(boolean allow) {
-        allowConditional = allow;
-        return  this;
-    }
-
-    public RegionalAttack willConditionSuccess(boolean success) {
-        willSuccess = success;
+    public RegionalAttack from(WarObject object) {
+        attacker = (CanAttack) object;
         return this;
     }
 
     public RegionalAttack to(ArrayList<Point> targets) {
-        attacker.attack(targets, hp, allowConditional, willSuccess);
+        attacker.attack(targets, hp);
         return this;
     }
 
@@ -55,12 +50,12 @@ public class RegionalAttack implements Effect, GameObject {
             targets.add(target);
             candidates.remove(target);
         }
-        attacker.attack(targets, hp, allowConditional, willSuccess);
+        attacker.attack(targets, hp);
         return this;
     }
 
-    public RegionalAttack to(Character[] characters) {
-        Character target = askToSelectFrom(characters);
+    public RegionalAttack to(WarObject[] candidates) {
+        WarObject target = askToSelectFrom(candidates);
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(target.position);
         return to(singleTarget);

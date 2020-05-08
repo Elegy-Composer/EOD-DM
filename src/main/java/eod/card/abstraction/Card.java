@@ -20,6 +20,8 @@ public abstract class Card implements GameObject {
         return c.isInstance(this);
     }
 
+    public abstract void effect();
+
     @Override
     public void teardown() {
         this.player = null;
