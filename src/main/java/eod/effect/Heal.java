@@ -1,9 +1,9 @@
 package eod.effect;
 
-import eod.warObject.Touchable;
-import eod.warObject.WarObject;
 import eod.GameObject;
 import eod.Player;
+import eod.warObject.Damageable;
+import eod.warObject.WarObject;
 
 public class Heal implements Effect, GameObject {
     private int hp;
@@ -15,7 +15,7 @@ public class Heal implements Effect, GameObject {
     }
 
     public void from(WarObject[] objects) {
-        Touchable selected = (Touchable) askToSelectFrom(objects);
+        Damageable selected = (Damageable) askToSelectFrom(objects);
         selected.heal(hp);
     }
 

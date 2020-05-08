@@ -2,9 +2,8 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.exceptions.MoveInvalidException;
+import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;

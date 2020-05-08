@@ -1,4 +1,4 @@
-package eod.warObject.character;
+package eod.warObject;
 
 public enum Status {
     ATTACKED,

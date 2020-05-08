@@ -1,10 +1,9 @@
 package eod.specifier;
 
-import eod.Game;
-import eod.warObject.Touchable;
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.Gameboard;
+import eod.warObject.Damageable;
+import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.util.Arrays;
 
@@ -31,7 +30,7 @@ public class WarObjectSpecifier {
 
         return new Accessing(Arrays.stream(objects)
                 .flatMap(Arrays::stream)
-                .filter(object -> object instanceof Touchable)
+                .filter(object -> object instanceof Damageable)
                 .toArray(WarObject[]::new));
     }
 }
