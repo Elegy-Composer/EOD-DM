@@ -11,7 +11,7 @@ import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
-import eod.warObject.character.concrete.red.Ghost;
+import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
@@ -34,7 +34,7 @@ public class Sundar extends Leader implements EventListener {
     @Override
     public void attack() {
         Point p = player.selectPosition(player.getBoard().getSurroundingEmpty(position, 1));
-        player.summonObject(new Ghost(player), p.x, p.y);
+        player.summonObject(new LittleGhost(player), p.x, p.y);
         canHandle.add(ObjectDeadEvent.class);
     }
 
