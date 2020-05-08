@@ -28,14 +28,17 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private Input input;
     private Output output;
 
-    public Player(Deck deck, Leader leader) {
-        this(deck, leader, new Hand());
+    public Player(Deck deck) {
+        this(deck, new Hand());
     }
 
-    public Player(Deck deck, Leader leader, Hand hand) {
+    public Player(Deck deck, Hand hand) {
         this.deck = deck;
-        this.leader = leader;
         this.hand = hand;
+    }
+
+    public void setLeader(Leader leader) {
+        this.leader = leader;
     }
 
     public void attachToGame(Game game) {
