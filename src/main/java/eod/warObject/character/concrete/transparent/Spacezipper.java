@@ -8,7 +8,7 @@ import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.WarObjectSpecifier.Touchable;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
-public class Spacezipper extends Dictator {
+public class Spacezipper extends Character {
     public Spacezipper(Player player) {
         super(player, 20, -1, Party.TRANSPARENT);
     }
