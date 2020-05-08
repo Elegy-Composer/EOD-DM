@@ -77,17 +77,8 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                 gameLoop();
 
                 eventManager.send(this, new RoundEndEvent(currentRound));
-                if(currentRound.getPlayer().equals(playerOrder[0])) {
-                    currentRound = new Round(playerOrder[1], currentRound.getNumber());
-                } else {
-                    currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
-                }
-                history.put(currentRound, takeSnapshot());
-                if(history.size() > maxHistoryLength) {
-                    Round first = history.keySet().toArray(new Round[0])[0];
-                    history.remove(first);
-                }
-
+                updateHistory();
+                currentRound = nextRound();
             } catch (GameLosingException e) {
                 break;
             }
@@ -112,6 +103,22 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
             return new Player[]{A, B};
         } else {
             return new Player[]{B, A};
+        }
+    }
+
+    private Round nextRound() {
+        if(currentRound.getPlayer().equals(playerOrder[0])) {
+            return new Round(playerOrder[1], currentRound.getNumber());
+        } else {
+            return new Round(playerOrder[0], currentRound.getNumber() + 1);
+        }
+    }
+
+    private void updateHistory() {
+        history.put(currentRound, takeSnapshot());
+        if(history.size() > maxHistoryLength) {
+            Round first = history.keySet().toArray(new Round[0])[0];
+            history.remove(first);
         }
     }
 
