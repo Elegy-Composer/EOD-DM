@@ -142,10 +142,10 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     }
 
     public void registerListener(EventListener listener) {
-        eventManager.registerAttackEvent(listener);
+        eventManager.registerEventListener(listener);
     }
     public void unregisterListener(EventListener listener) {
-        eventManager.unregisterAttackEvent(listener);
+        eventManager.unregisterEventListener(listener);
     }
 
     @Override
@@ -164,7 +164,10 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
         currentRound.teardown();
         currentRound = null;
-    }//TODO: finish teardown
+
+        history.clear();
+        history = null;
+    }
 
     public Gameboard getBoard() {
         return gameboard;
@@ -191,6 +194,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                     .orElse(null);
 
     }
+
 
     public class Snapshot implements eod.snapshots.Snapshot {
         private Player.Snapshot thenPlayer = currentRound.getPlayer().takeSnapshot();
