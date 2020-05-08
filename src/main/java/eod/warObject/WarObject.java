@@ -13,9 +13,8 @@ public abstract class WarObject implements GameObject {
     public Point position;
     protected Player player;
 
-    public WarObject(Player player, Point point) {
+    public WarObject(Player player) {
         this.player = player;
-        position = point;
     }
 
     public Player getPlayer() {

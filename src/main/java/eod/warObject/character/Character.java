@@ -16,8 +16,8 @@ public abstract class Character extends WarObject implements Touchable, CanAttac
     public int attackRange;
     protected final Party party;
 
-    public Character(Player player, int x, int y, int hp, int range, Party party) {
-        super(player,new Point(x, y));
+    public Character(Player player, int hp, int range, Party party) {
+        super(player);
         this.attackRange = range;
         this.player = player;
         max_hp = hp;

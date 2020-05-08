@@ -5,7 +5,7 @@ import eod.Party;
 import eod.Player;
 
 public abstract class Dictator extends Character {
-    public Dictator(Player player, int x, int y, int hp, int range, Party party) {
-        super(player, x, y, hp, range, party);
+    public Dictator(Player player, int hp, int range, Party party) {
+        super(player, hp, range, party);
     }
 }

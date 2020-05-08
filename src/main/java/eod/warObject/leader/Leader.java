@@ -13,14 +13,14 @@ public abstract class Leader extends WarObject {
     private ArrayList<NormalCard> specialOrder;
 
     public Leader(Player player, int hp) {
-        super(player, new Point(-1, -1));
+        super(player);
         max_hp = hp;
         this.hp = max_hp;
         specialOrder = generateSpecialOrder();
     }
 
     public Leader enterArena() {
-        ArrayList<Point> points = player.getBase();
+        ArrayList<Point> points = player.getBaseEmpty();
         position = player.selectPosition(points);
         player.summonObject(this, position.x, position.y);
         return this;

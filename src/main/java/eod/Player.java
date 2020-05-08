@@ -88,7 +88,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return leader.isAlive();
     }
 
-    public ArrayList<Point> getBase() {
+    public ArrayList<Point> getBaseEmpty() {
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize-1;
         if(game.isPlayerA(this)) {
