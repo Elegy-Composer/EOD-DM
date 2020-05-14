@@ -3,7 +3,7 @@ package eod;
 import eod.exceptions.MoveInvalidException;
 import eod.snapshots.Snapshotted;
 import eod.warObject.WarObject;
-import eod.warObject.character.Character;
+import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;

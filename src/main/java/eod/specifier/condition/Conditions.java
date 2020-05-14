@@ -1,9 +1,7 @@
 package eod.specifier.condition;
 
-import eod.warObject.CanAttack;
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.Player;
+import eod.warObject.CanAttack;
 
 public class Conditions {
     public static AttackedCondition Injured() {

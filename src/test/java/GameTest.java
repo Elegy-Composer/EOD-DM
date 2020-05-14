@@ -15,9 +15,11 @@ public class GameTest {
 
     @Before
     public void setup() {
-        A = new Player(new Deck(), new Sundar(A));
-        B = new Player(new Deck(), new Sundar(B));
+        A = new Player(new Deck());
+        B = new Player(new Deck());
         game = new Game(A, B);
+        A.setLeader(new Sundar(A));
+        B.setLeader(new Sundar(B));
     }
 
     @Test

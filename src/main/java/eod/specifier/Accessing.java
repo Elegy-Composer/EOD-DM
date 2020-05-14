@@ -1,9 +1,8 @@
 package eod.specifier;
 
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.specifier.condition.Condition;
 import eod.specifier.timing.Timing;
+import eod.warObject.WarObject;
 
 public class Accessing {
 

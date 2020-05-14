@@ -1,7 +1,6 @@
 package eod.specifier.condition;
 
 import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 
 import java.util.Arrays;
 
