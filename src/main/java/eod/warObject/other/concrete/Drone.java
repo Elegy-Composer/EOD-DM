@@ -25,6 +25,10 @@ public class Drone extends Machine implements CanAttack, Damageable {
         return "無人機";
     }
 
+    public void attacked(CanAttack attacker, int hp) {
+        damage(hp);
+    }
+
     @Override
     public void damage(int hp) {
         this.hp -= hp;
@@ -64,6 +68,11 @@ public class Drone extends Machine implements CanAttack, Damageable {
     public void die() {
         player.loseObject(this);
         teardown();
+    }
+
+    @Override
+    public CanAttack getAttacker() {
+        return null;
     }
 
     @Override

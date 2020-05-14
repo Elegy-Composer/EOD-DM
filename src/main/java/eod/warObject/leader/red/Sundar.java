@@ -9,6 +9,7 @@ import eod.card.concrete.normal.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
+import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.other.Ghost;
@@ -60,7 +61,7 @@ public class Sundar extends Leader implements EventListener {
                         ((Ghost) target).attack();
                     }
                 } else {
-                    ((Damageable) target).damage(hp);
+                    ((Damageable) target).attacked(this, hp);
                 }
             } catch (Exception e) {}
         }
@@ -120,13 +121,13 @@ public class Sundar extends Leader implements EventListener {
         if (event instanceof ObjectDeadEvent) {
             Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
             WarObject object = (WarObject) deadObject;
+            CanAttack attacker = deadObject.getAttacker();
             int x = object.position.x, y = object.position.y;
             if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
                 Summon(player, new LittleGhost(player)).on(new Point(x, y));
-            } else {
-                // TODO: add killer check
+            } else if(attacker instanceof Ghost && ((WarObject) attacker).getPlayer().equals(player)){
                 player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }
         }

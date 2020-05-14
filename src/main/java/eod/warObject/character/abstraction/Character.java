@@ -18,6 +18,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     protected int hp;
     public int attackRange;
     protected final Party party;
+    private CanAttack attacker;
 
     public Character(Player player, int hp, int range, Party party) {
         super(player);
@@ -65,7 +66,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
-                target.damage(hp);
+                target.attacked(this, hp);
                 target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {}
         }
@@ -80,7 +81,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public void attack(Damageable[] targets, int hp) {
         Arrays.stream(targets)
                 .forEach(target -> {
-                    target.damage(hp);
+                    target.attacked(this, hp);
                     target.addStatus(Status.ATTACKED);
                 });
     }
@@ -91,6 +92,18 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
         if(hp <= 0) {
             die();
         }
+    }
+
+    @Override
+    public void attacked(CanAttack attacker, int hp) {
+        this.attacker = attacker;
+        damage(hp);
+        this.attacker = null;
+    }
+
+    @Override
+    public CanAttack getAttacker() {
+        return attacker;
     }
 
     @Override
