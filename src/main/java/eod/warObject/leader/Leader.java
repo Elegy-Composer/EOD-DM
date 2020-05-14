@@ -53,7 +53,7 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
     public Leader enterArena() {
         ArrayList<Point> points = player.getBaseEmpty();
         position = player.selectPosition(points);
-        player.summonObject(this, position.x, position.y);
+        player.summonObject(this, position);
         return this;
     }
 

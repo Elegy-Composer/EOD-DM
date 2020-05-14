@@ -1,4 +1,4 @@
-package eod.warObject.other;
+package eod.warObject.other.abstraction;
 
 import eod.Player;
 import eod.warObject.WarObject;

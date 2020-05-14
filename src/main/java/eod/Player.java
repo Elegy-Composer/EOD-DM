@@ -103,8 +103,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
     }
 
-    public void summonObject(WarObject object, int x, int y) {
-        getBoard().summonObject(object, x, y);
+    public void summonObject(WarObject object, Point point) {
+        getBoard().summonObject(object, point);
     }
 
     @Override
