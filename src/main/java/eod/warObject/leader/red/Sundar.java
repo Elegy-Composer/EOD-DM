@@ -21,6 +21,8 @@ import eod.warObject.other.abstraction.Machine;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static eod.effect.EffectFunctions.Summon;
+
 public class Sundar extends Leader implements EventListener {
     public Sundar(Player player) {
         super(player, 20);
@@ -127,9 +129,9 @@ public class Sundar extends Leader implements EventListener {
             if(deadObject instanceof Ghost) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
-                player.getBoard().summonObject(new LittleGhost(player), new Point(x, y));
+                Summon(player, new LittleGhost(player)).on(new Point(x, y));
             } else {
-                player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
+                Summon(player, new GhostOfHatred(player)).on(new Point(x, y));
             }
         }
     }

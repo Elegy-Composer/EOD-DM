@@ -4,9 +4,12 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.transparent.Spacezipper;
 
 import java.awt.*;
+
+import static eod.effect.EffectFunctions.Summon;
 
 public class SpacezipperSummon extends SummonCard {
     public SpacezipperSummon(Player p) {
@@ -15,8 +18,7 @@ public class SpacezipperSummon extends SummonCard {
 
     @Override
     public void summon() {
-        Point p = player.selectPosition(player.getBaseEmpty());
-        player.summonObject(new Spacezipper(player), p);
+        Summon(player, new Spacezipper(player)).from(player.getBaseEmpty());
     }
 
     @Override
