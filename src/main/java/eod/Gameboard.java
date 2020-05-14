@@ -121,11 +121,13 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return points;
     }
 
-    public void summonObject(WarObject object, int x, int y) throws IllegalArgumentException {
+    public void summonObject(WarObject object, Point point) throws IllegalArgumentException {
+        int x = point.x, y = point.y;
         if(hasObjectOn(x, y)) {
             throw new IllegalArgumentException("There's already an object on ("+x+", "+y+").");
         }
         board[x][y] = object;
+        object.updatePosition(point);
     }
 
     @Override

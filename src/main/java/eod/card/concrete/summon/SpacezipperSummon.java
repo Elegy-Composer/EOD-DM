@@ -16,7 +16,7 @@ public class SpacezipperSummon extends SummonCard {
     @Override
     public void summon() {
         Point p = player.selectPosition(player.getBaseEmpty());
-        player.summonObject(new Spacezipper(player), p.x, p.y);
+        player.summonObject(new Spacezipper(player), p);
     }
 
     @Override
