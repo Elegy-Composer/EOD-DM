@@ -1,7 +1,11 @@
 package eod.warObject.character.concrete.red;
 
+import eod.GameObject;
 import eod.Player;
+import eod.event.Event;
 import eod.warObject.character.abstraction.other.Ghost;
+
+import java.util.ArrayList;
 
 public class GhostOfHatred extends Ghost {
     public GhostOfHatred(Player player) {
@@ -14,4 +18,5 @@ public class GhostOfHatred extends Ghost {
     public String getName() {
         return "怨念的亡靈";
     }
+
 }

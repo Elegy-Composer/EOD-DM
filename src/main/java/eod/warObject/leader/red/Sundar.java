@@ -21,9 +21,10 @@ import eod.warObject.other.Machine;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Sundar extends Leader implements EventListener {
+public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20);
+
     }
 
     @Override
@@ -114,21 +115,17 @@ public class Sundar extends Leader implements EventListener {
     }
 
     @Override
-    public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        return canHandle;
-    }
-
-    @Override
     public void onEventOccurred(GameObject sender, Event event) {
         if (event instanceof ObjectDeadEvent) {
             Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
             WarObject object = (WarObject) deadObject;
             int x = object.position.x, y = object.position.y;
-            if(deadObject instanceof Ghost) {
+            if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
                 player.getBoard().summonObject(new LittleGhost(player), x, y);
             } else {
+                // TODO: add killer check
                 player.getBoard().summonObject(new GhostOfHatred(player), x, y);
             }
         }
