@@ -4,7 +4,6 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -66,8 +65,9 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
+        ArrayList<Damageable> affected = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
@@ -77,21 +77,24 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                 } else {
                     target.attacked(this, hp);
                 }
+                affected.add(target);
                 target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
             }
         }
+        return affected;
     }
 
     @Override
-    public void attack(Damageable target, AttackParam param) {
-        attack(new Damageable[] {target}, param);
+    public ArrayList<Damageable> attack(Damageable target, AttackParam param) {
+        return attack(new Damageable[] {target}, param);
     }
 
     @Override
-    public void attack(Damageable[] targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) {
         int hp = param.hp;
+        ArrayList<Damageable> affected = new ArrayList<>();
         Arrays.stream(targets)
                 .forEach(target -> {
                     if(param.realDamage) {
@@ -99,8 +102,10 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                     } else {
                         target.attacked(this, hp);
                     }
+                    affected.add(target);
                     target.addStatus(Status.ATTACKED);
                 });
+        return affected;
     }
 
     @Override
@@ -131,6 +136,11 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
 
     public Party getParty() {
         return party;
+    }
+
+    @Override
+    public int getHp() {
+        return hp;
     }
 
     public abstract SummonCard getSummonCard();

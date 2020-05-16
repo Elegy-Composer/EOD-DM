@@ -8,5 +8,6 @@ public interface Damageable {
     void removeStatus(Status s);
     void heal(int hp);
     void die();
+    int getHp();
     CanAttack getAttacker();
 }

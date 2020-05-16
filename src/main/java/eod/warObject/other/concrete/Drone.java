@@ -93,6 +93,11 @@ public class Drone extends Machine implements CanAttack, Damageable {
     }
 
     @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
     public void teardown() {
         super.teardown();
         status.clear();

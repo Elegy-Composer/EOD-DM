@@ -2,7 +2,6 @@ package eod.warObject.other.concrete;
 
 import eod.Gameboard;
 import eod.Player;
-import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -77,6 +76,11 @@ public class SecureGuardBot extends Machine implements CanAttack, Damageable {
     }
 
     @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
     public CanAttack getAttacker() {
         return attacker;
     }
@@ -87,8 +91,9 @@ public class SecureGuardBot extends Machine implements CanAttack, Damageable {
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
+        ArrayList<Damageable> affected = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
@@ -98,11 +103,13 @@ public class SecureGuardBot extends Machine implements CanAttack, Damageable {
                 } else {
                     target.attacked(this, hp);
                 }
+                affected.add(target);
                 target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
             }
         }
+        return affected;
     }
 
     @Override

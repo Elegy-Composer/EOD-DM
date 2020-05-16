@@ -50,7 +50,8 @@ public class Sundar extends Leader implements EventListener {
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+        ArrayList<Damageable> affected = new ArrayList<>();
         int hp = param.hp;
         this.damage(hp);
         Gameboard gameboard = player.getBoard();
@@ -66,11 +67,13 @@ public class Sundar extends Leader implements EventListener {
                     }
                 } else {
                     ((Damageable) target).attacked(this, hp);
+                    affected.add((Damageable) target);
                 }
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
         }
+        return affected;
     }
 
     @Override

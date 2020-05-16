@@ -13,14 +13,14 @@ public interface CanAttack {
         throw new NotSupportedException(ERR_MSG);
     }
 
-    default void attack(ArrayList<Point> targets, AttackParam param) throws NotSupportedException {
+    default ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 
-    default void attack(Damageable target, AttackParam param) throws NotSupportedException {
+    default ArrayList<Damageable> attack(Damageable target, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
-    default void attack(Damageable[] targets, AttackParam param) throws NotSupportedException {
+    default ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 

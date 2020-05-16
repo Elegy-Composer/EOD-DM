@@ -45,7 +45,6 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         if(board[to.x][to.y] != null) {
             throw new MoveInvalidException("There's already a character on ("+to.x+", "+to.y+").");
         }
-
         board[to.x][to.y] = board[from.x][from.y];
         board[from.x][from.y] = null;
     }
@@ -234,6 +233,14 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     @Override
     public Snapshot takeSnapshot() {
         return new Snapshot();
+    }
+
+    public boolean inBase(Player sender, Point p) {
+        if(game.isPlayerA(sender)) {
+            return p.x < firstLine;
+        } else {
+            return p.x >= secondLine;
+        }
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

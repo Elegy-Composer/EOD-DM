@@ -5,6 +5,7 @@ import eod.Player;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
+import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
 import java.awt.*;
@@ -15,13 +16,14 @@ public class RegionalAttack implements Effect, GameObject {
     // If there's a direct attack, use Attack.
     private Player player;
     private CanAttack attacker;
-    private boolean realDamage = false;
-    AttackParam param;
+    private AttackParam param;
+    private ArrayList<Damageable> affected;
 
     public RegionalAttack(Player player, int hp) {
         this.player = player;
         param = new AttackParam();
         param.hp = hp;
+        affected = new ArrayList<>();
     }
 
     public CanAttack attacker() {
@@ -39,7 +41,7 @@ public class RegionalAttack implements Effect, GameObject {
     }
 
     public RegionalAttack realDamage() {
-        realDamage = true;
+        param.realDamage = true;
         return this;
     }
 
@@ -77,10 +79,16 @@ public class RegionalAttack implements Effect, GameObject {
         return to(singleTarget);
     }
 
+    public ArrayList<Damageable> getAffected() {
+        return affected;
+    }
+
     @Override
     public void teardown() {
         player = null;
         attacker = null;
+        affected.clear();
+        param = null;
     }
 
     @Override

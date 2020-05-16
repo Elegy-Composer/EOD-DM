@@ -96,6 +96,11 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
     }
 
     @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
     public void teardown() {
         player = null;
     }
