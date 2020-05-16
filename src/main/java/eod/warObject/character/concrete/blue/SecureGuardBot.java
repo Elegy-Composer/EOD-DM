@@ -1,12 +1,15 @@
-package eod.warObject.other.concrete;
+package eod.warObject.character.concrete.blue;
 
 import eod.Gameboard;
+import eod.Party;
 import eod.Player;
+import eod.card.abstraction.summon.SummonCard;
+import eod.card.concrete.summon.SecureGuardBotSummon;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
-import eod.warObject.other.abstraction.Machine;
+import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,13 +17,9 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class SecureGuardBot extends Machine implements CanAttack, Damageable {
-    // TODO: add the cost (4) and its summon card.
-    int max_hp = 4, hp = max_hp, attack = 4;
     CanAttack attacker;
-    ArrayList<Status> status;
     public SecureGuardBot(Player player) {
-        super(player);
-        status = new ArrayList<>();
+        super(player, 4, 4, 1, Party.BLUE);
     }
 
     @Override
@@ -29,55 +28,8 @@ public class SecureGuardBot extends Machine implements CanAttack, Damageable {
     }
 
     @Override
-    public void damage(int hp) {
-        this.hp -= hp;
-        if(this.hp <= 0) {
-            die();
-        }
-    }
-
-    @Override
-    public void attacked(CanAttack attacker, int hp) {
-        this.attacker = attacker;
-        damage(hp);
-        this.attacker = null;
-    }
-
-    @Override
-    public void addStatus(Status s) {
-        if(!hasStatus(s)) {
-            status.add(s);
-        }
-    }
-
-    @Override
-    public boolean hasStatus(Status s) {
-        return status.contains(s);
-    }
-
-    @Override
-    public void removeStatus(Status s) {
-        status.remove(s);
-    }
-
-    @Override
-    public void heal(int hp) {
-        if(this.hp + hp >= max_hp) {
-            this.hp = max_hp;
-        } else {
-            this.hp += hp;
-        }
-    }
-
-    @Override
-    public void die() {
-        player.loseObject(this);
-        teardown();
-    }
-
-    @Override
-    public int getHp() {
-        return hp;
+    public SummonCard getSummonCard() {
+        return new SecureGuardBotSummon(player);
     }
 
     @Override

@@ -25,10 +25,9 @@ public class Summon implements Effect, GameObject {
         return on(askToSelectFrom(points));
     }
 
-
     @Override
     public Player getPlayer() {
-        return null;
+        return player;
     }
 
     @Override

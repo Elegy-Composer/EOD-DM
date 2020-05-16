@@ -8,22 +8,13 @@ import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
-public class DirectAttack implements Effect, GameObject {
+public class DirectAttack extends Attack {
     // This class should be used only in direct attacks.
     // If there's a ranged attack, use RegionalAttack.
-    private Player player;
-    private CanAttack attacker;
     private Damageable target;
-    private AttackParam param;
 
     public DirectAttack(Player player, int hp) {
-        param = new AttackParam();
-        param.hp = hp;
-        this.player = player;
-    }
-
-    public CanAttack attacker() {
-        return attacker;
+        super(player, hp);
     }
 
     public DirectAttack from(WarObject[] objects) {
@@ -36,10 +27,15 @@ public class DirectAttack implements Effect, GameObject {
         return this;
     }
 
+    public DirectAttack realDamage() {
+        param.realDamage = true;
+        return this;
+    }
+
     public DirectAttack to(WarObject[] objects) {
         target = (Damageable) askToSelectFrom(objects);
         try {
-            attacker.attack(target, param);
+            affected.addAll(attacker.attack(target, param));
         } catch (NotSupportedException e) {
             System.out.println(e.toString());
         }
@@ -49,19 +45,12 @@ public class DirectAttack implements Effect, GameObject {
     public DirectAttack toAll(Damageable[] targets) {
         for(Damageable target:targets) {
             try {
-                attacker.attack(target, param);
+                affected.addAll(attacker.attack(target, param));
             } catch (NotSupportedException e) {
                 System.out.println(e.toString());
             }
         }
         return this;
-    }
-
-    @Override
-    public void teardown() {
-        player = null;
-        attacker = null;
-        target = null;
     }
 
     @Override

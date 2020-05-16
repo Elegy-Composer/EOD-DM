@@ -6,7 +6,7 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.warObject.character.abstraction.supporter.Sapper;
-import eod.warObject.other.concrete.Drone;
+import eod.warObject.character.concrete.transparent.Drone;
 
 import java.awt.*;
 import java.util.ArrayList;

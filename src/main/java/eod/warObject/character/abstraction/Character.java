@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Character extends WarObject implements Damageable, CanAttack {
-    private ArrayList<Status> status = new ArrayList<>();
+    protected ArrayList<Status> status = new ArrayList<>();
     protected int max_hp;
     protected int hp;
     protected int attack;
@@ -132,6 +132,12 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public void die() {
         player.loseObject(this);
         teardown();
+    }
+
+    @Override
+    public void teardown() {
+        super.teardown();
+        status.clear();
     }
 
     public Party getParty() {

@@ -17,8 +17,8 @@ import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
-import eod.warObject.other.abstraction.Bunker;
-import eod.warObject.other.abstraction.Machine;
+import eod.warObject.character.abstraction.Bunker;
+import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;

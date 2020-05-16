@@ -31,7 +31,7 @@ public abstract class WarObject implements GameObject, EventListener {
 
     protected void move() {
         ArrayList<Point> possibleMoves = player.getBoard().getSurroundingEmpty(position, 1);
-        player.moveObject(this, player.selectPosition(possibleMoves));
+        moveTo(player.selectPosition(possibleMoves));
     }
 
     public void move(int steps) {
@@ -75,5 +75,6 @@ public abstract class WarObject implements GameObject, EventListener {
     @Override
     public void teardown() {
         player = null;
+        canHandle.clear();
     }
 }
