@@ -1,6 +1,5 @@
 package eod.effect;
 
-import eod.GameObject;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
@@ -9,21 +8,11 @@ import eod.warObject.WarObject;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class RegionalAttack implements Effect, GameObject {
+public class RegionalAttack extends Attack {
     // This class should be used only in regional attacks.
     // If there's a direct attack, use Attack.
-    private int hp;
-    private Player player;
-    private CanAttack attacker;
-    private boolean realDamage = false;
-
     public RegionalAttack(Player player, int hp) {
-        this.player = player;
-        this.hp = hp;
-    }
-
-    public CanAttack attacker() {
-        return attacker;
+        super(player, hp);
     }
 
     public RegionalAttack from(WarObject[] objects) {
@@ -37,18 +26,16 @@ public class RegionalAttack implements Effect, GameObject {
     }
 
     public RegionalAttack realDamage() {
-        realDamage = true;
+        param.realDamage = true;
         return this;
     }
 
     public RegionalAttack to(ArrayList<Point> targets) {
         try {
-            if(realDamage ) {
-                attacker.realAttack(targets, hp);
-            } else {
-                attacker.attack(targets, hp);
-            }
-        } catch (NotSupportedException e) {}
+            affected.addAll(attacker.attack(targets, param));
+        } catch (NotSupportedException e) {
+            System.out.println(e.toString());
+        }
         return this;
     }
 
@@ -63,8 +50,10 @@ public class RegionalAttack implements Effect, GameObject {
             candidates.remove(target);
         }
         try {
-            attacker.attack(targets, hp);
-        } catch (NotSupportedException e) {}
+            affected.addAll(attacker.attack(targets, param));
+        } catch (NotSupportedException e) {
+            System.out.println(e.toString());
+        }
         return this;
     }
 
@@ -73,12 +62,6 @@ public class RegionalAttack implements Effect, GameObject {
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(target.position);
         return to(singleTarget);
-    }
-
-    @Override
-    public void teardown() {
-        player = null;
-        attacker = null;
     }
 
     @Override

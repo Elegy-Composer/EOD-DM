@@ -1,6 +1,7 @@
 package eod.warObject;
 
 import eod.exceptions.NotSupportedException;
+import eod.param.AttackParam;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,18 +13,14 @@ public interface CanAttack {
         throw new NotSupportedException(ERR_MSG);
     }
 
-    default void attack(ArrayList<Point> targets, int hp) throws NotSupportedException {
+    default ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 
-    default void attack(Damageable target, int hp) throws NotSupportedException {
+    default ArrayList<Damageable> attack(Damageable target, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
-    default void attack(Damageable[] targets, int hp) throws NotSupportedException {
-        throw new NotSupportedException(ERR_MSG);
-    }
-
-    default void realAttack(ArrayList<Point> targets, int hp) throws NotSupportedException {
+    default ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 
