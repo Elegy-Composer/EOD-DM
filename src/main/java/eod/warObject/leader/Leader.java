@@ -11,7 +11,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Leader extends WarObject implements Damageable, CanAttack {
-    private int max_hp, hp;
+    protected int max_hp, hp;
+    protected int attack;
     private ArrayList<Card> specialOrder;
     protected ArrayList<Status> status;
     private CanAttack attacker;

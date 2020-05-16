@@ -9,6 +9,7 @@ import eod.card.concrete.normal.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
+import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -43,11 +44,14 @@ public class Sundar extends Leader implements EventListener {
 
     public void deathPulse() {
         ArrayList<Point> targets = getEightWays();
-        attack(targets, 4);
+        AttackParam param = new AttackParam();
+        param.hp = 4;
+        attack(targets, param);
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, int hp) {
+    public void attack(ArrayList<Point> targets, AttackParam param) {
+        int hp = param.hp;
         this.damage(hp);
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
@@ -63,7 +67,9 @@ public class Sundar extends Leader implements EventListener {
                 } else {
                     ((Damageable) target).attacked(this, hp);
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
         }
     }
 

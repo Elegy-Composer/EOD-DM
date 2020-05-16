@@ -4,6 +4,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
+import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -64,12 +65,17 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, int hp) {
+    public void attack(ArrayList<Point> targets, AttackParam param) {
+        int hp = param.hp;
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
-                target.attacked(this, hp);
+                if(param.realDamage) {
+                    target.damage(hp);
+                } else {
+                    target.attacked(this, hp);
+                }
                 target.addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
@@ -78,31 +84,22 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void attack(Damageable target, int hp) {
-        attack(new Damageable[] {target}, hp);
+    public void attack(Damageable target, AttackParam param) {
+        attack(new Damageable[] {target}, param);
     }
 
     @Override
-    public void attack(Damageable[] targets, int hp) {
+    public void attack(Damageable[] targets, AttackParam param) {
+        int hp = param.hp;
         Arrays.stream(targets)
                 .forEach(target -> {
-                    target.attacked(this, hp);
+                    if(param.realDamage) {
+                        target.damage(hp);
+                    } else {
+                        target.attacked(this, hp);
+                    }
                     target.addStatus(Status.ATTACKED);
                 });
-    }
-
-    @Override
-    public void realAttack(ArrayList<Point> targets, int hp) {
-        Gameboard gameboard = player.getBoard();
-        for(Point p:targets) {
-            try {
-                Damageable target = gameboard.getObjectOn(p.x, p.y);
-                target.damage(hp);
-                target.addStatus(Status.ATTACKED);
-            } catch(IllegalArgumentException e) {
-                System.out.println(e.toString());
-            }
-        }
     }
 
     @Override

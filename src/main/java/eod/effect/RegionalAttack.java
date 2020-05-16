@@ -3,6 +3,7 @@ package eod.effect;
 import eod.GameObject;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
+import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.WarObject;
 
@@ -12,14 +13,15 @@ import java.util.ArrayList;
 public class RegionalAttack implements Effect, GameObject {
     // This class should be used only in regional attacks.
     // If there's a direct attack, use Attack.
-    private int hp;
     private Player player;
     private CanAttack attacker;
     private boolean realDamage = false;
+    AttackParam param;
 
     public RegionalAttack(Player player, int hp) {
         this.player = player;
-        this.hp = hp;
+        param = new AttackParam();
+        param.hp = hp;
     }
 
     public CanAttack attacker() {
@@ -43,12 +45,10 @@ public class RegionalAttack implements Effect, GameObject {
 
     public RegionalAttack to(ArrayList<Point> targets) {
         try {
-            if(realDamage ) {
-                attacker.realAttack(targets, hp);
-            } else {
-                attacker.attack(targets, hp);
-            }
-        } catch (NotSupportedException e) {}
+            attacker.attack(targets, param);
+        } catch (NotSupportedException e) {
+            System.out.println(e.toString());
+        }
         return this;
     }
 
@@ -63,8 +63,10 @@ public class RegionalAttack implements Effect, GameObject {
             candidates.remove(target);
         }
         try {
-            attacker.attack(targets, hp);
-        } catch (NotSupportedException e) {}
+            attacker.attack(targets, param);
+        } catch (NotSupportedException e) {
+            System.out.println(e.toString());
+        }
         return this;
     }
 
