@@ -43,7 +43,7 @@ public class Sundar extends Leader implements EventListener {
     }
 
     public void deathPulse() {
-        ArrayList<Point> targets = getEightWays();
+        ArrayList<Point> targets = player.getBoard().get8ways(position, Gameboard.boardSize);
         AttackParam param = new AttackParam();
         param.hp = 4;
         attack(targets, param);
@@ -71,47 +71,6 @@ public class Sundar extends Leader implements EventListener {
                 System.out.println(e.toString());
             }
         }
-    }
-
-    public ArrayList<Point> getEightWays() {
-        ArrayList<Point> points = new ArrayList<>();
-        int boardSize = Gameboard.boardSize;
-        int x = position.x-1, y = position.y;
-        while (x >= 0) {
-            points.add(new Point(x, y));
-            x--;
-        }
-        x = position.x+1;
-        while (x < boardSize) {
-            points.add(new Point(x, y));
-            x++;
-        }
-        x = position.x;
-        y = position.y-1;
-        while (y >= 0) {
-            points.add(new Point(x, y));
-            y--;
-        }
-        y = position.y+1;
-        while (y < boardSize) {
-            points.add(new Point(x, y));
-            y++;
-        }
-        x = position.x-1;
-        y = position.y-1;
-        while (x >= 0 && y >= 0) {
-            points.add(new Point(x, y));
-            x--;
-            y--;
-        }
-        x = position.x+1;
-        y = position.y+1;
-        while (x < boardSize && y < boardSize) {
-            points.add(new Point(x, y));
-            x++;
-            y++;
-        }
-        return points;
     }
 
     @Override

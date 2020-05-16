@@ -4,6 +4,8 @@ import eod.GameObject;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
+import eod.card.abstraction.summon.SummonCard;
+import eod.card.concrete.summon.SpacezipperSummon;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.warObject.character.abstraction.Character;
@@ -59,5 +61,10 @@ public class Spacezipper extends Character {
     public void teardown() {
         super.teardown();
         marked.clear();
+    }
+
+    @Override
+    public SummonCard getSummonCard() {
+        return new SpacezipperSummon(player);
     }
 }

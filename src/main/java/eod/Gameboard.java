@@ -137,6 +137,57 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return points;
     }
 
+    public ArrayList<Point> get4Ways(Point p, int range) {
+        ArrayList<Point> points = new ArrayList<>();
+        int x = p.x - range, y = p.y;
+        while(x <= p.x + range) {
+            if(x < 0) {
+                continue;
+            }
+            if(x >= boardSize) {
+                break;
+            }
+            points.add(new Point(x, y));
+            x++;
+        }
+        x = p.x;
+        y = p.y - range;
+        while(y <= p.y + range) {
+            if(y < 0) {
+                continue;
+            }
+            if(y >= boardSize) {
+                break;
+            }
+            points.add(new Point(x, y));
+            y++;
+        }
+        return points;
+    }
+
+    public ArrayList<Point> get8ways(Point p, int range) {
+        ArrayList<Point> points = get4Ways(p, range);
+        int x = p.x - range, y = p.y - range, y2 = p.y + range;
+        while(x <= p.x + range) {
+            if(x <0) {
+                continue;
+            }
+            if(x >= boardSize) {
+                break;
+            }
+            if(y >= 0 && y < boardSize) {
+                points.add(new Point(x, y));
+            }
+            if(y2 >= 0 && y2 < boardSize) {
+                points.add(new Point(x, y2));
+            }
+            x++;
+            y++;
+            y2--;
+        }
+        return points;
+    }
+
     public void summonObject(WarObject object, Point point) throws IllegalArgumentException {
         int x = point.x, y = point.y;
         if(hasObjectOn(x, y)) {

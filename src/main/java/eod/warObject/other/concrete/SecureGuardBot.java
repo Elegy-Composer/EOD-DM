@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class SecureGuardBot extends Machine implements CanAttack, Damageable {
+    // TODO: add the cost (4) and its summon card.
     int max_hp = 4, hp = max_hp, attack = 4;
     CanAttack attacker;
     ArrayList<Status> status;

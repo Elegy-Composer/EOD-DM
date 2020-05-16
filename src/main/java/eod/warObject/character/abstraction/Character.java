@@ -3,6 +3,7 @@ package eod.warObject.character.abstraction;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
+import eod.card.abstraction.summon.SummonCard;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
@@ -131,4 +132,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public Party getParty() {
         return party;
     }
+
+    public abstract SummonCard getSummonCard();
 }
