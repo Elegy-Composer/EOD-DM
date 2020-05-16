@@ -15,6 +15,7 @@ public class RegionalAttack implements Effect, GameObject {
     private int hp;
     private Player player;
     private CanAttack attacker;
+    private boolean realDamage = false;
 
     public RegionalAttack(Player player, int hp) {
         this.player = player;
@@ -35,9 +36,18 @@ public class RegionalAttack implements Effect, GameObject {
         return this;
     }
 
+    public RegionalAttack realDamage() {
+        realDamage = true;
+        return this;
+    }
+
     public RegionalAttack to(ArrayList<Point> targets) {
         try {
-            attacker.attack(targets, hp);
+            if(realDamage ) {
+                attacker.realAttack(targets, hp);
+            } else {
+                attacker.attack(targets, hp);
+            }
         } catch (NotSupportedException e) {}
         return this;
     }

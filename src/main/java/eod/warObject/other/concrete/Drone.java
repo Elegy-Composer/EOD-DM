@@ -6,6 +6,7 @@ import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.other.abstraction.Machine;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
@@ -87,8 +88,8 @@ public class Drone extends Machine implements CanAttack, Damageable {
     }
 
     @Override
-    public int getAttackRange() {
-        return 1;
+    public ArrayList<Point> getAttackRange() {
+        return player.getBoard().getSurrounding(this.position, 1);
     }
 
     @Override

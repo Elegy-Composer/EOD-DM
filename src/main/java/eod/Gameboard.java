@@ -121,6 +121,22 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return points;
     }
 
+    public ArrayList<Point> getSurrounding(Point p, int range) {
+        ArrayList<Point> points = new ArrayList<>();
+        for(int x = p.x - range;x <= p.x + range;x++) {
+            if(x < 0 || x >= boardSize) {
+                continue;
+            }
+            for(int y = p.y - range; y <= p.y + range; y++) {
+                if(y < 0 || y >= boardSize) {
+                    continue;
+                }
+                points.add(new Point(x, y));
+            }
+        }
+        return points;
+    }
+
     public void summonObject(WarObject object, Point point) throws IllegalArgumentException {
         int x = point.x, y = point.y;
         if(hasObjectOn(x, y)) {
