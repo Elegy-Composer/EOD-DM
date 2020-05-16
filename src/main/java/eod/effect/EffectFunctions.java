@@ -1,6 +1,7 @@
 package eod.effect;
 
 import eod.Player;
+import eod.warObject.WarObject;
 
 //Effect functions should only be used by effect and its subclass
 public class EffectFunctions {
@@ -22,5 +23,9 @@ public class EffectFunctions {
 
     public static RegionalAttack RequestRegionalAttack(Player player, int hp) {
         return new RegionalAttack(player, hp);
+    }
+
+    public static Summon Summon(Player player, WarObject object) {
+        return new Summon(player, object);
     }
 }

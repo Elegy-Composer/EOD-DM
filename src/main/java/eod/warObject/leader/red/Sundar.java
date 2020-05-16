@@ -9,22 +9,24 @@ import eod.card.concrete.normal.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
+import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
-import eod.warObject.other.Bunker;
-import eod.warObject.other.Machine;
+import eod.warObject.other.abstraction.Bunker;
+import eod.warObject.other.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Sundar extends Leader {
+import static eod.effect.EffectFunctions.Summon;
+
+public class Sundar extends Leader implements EventListener {
     public Sundar(Player player) {
         super(player, 20);
-
     }
 
     @Override
@@ -35,7 +37,7 @@ public class Sundar extends Leader {
     @Override
     public void attack() {
         Point p = player.selectPosition(player.getBoard().getSurroundingEmpty(position, 1));
-        player.summonObject(new LittleGhost(player), p.x, p.y);
+        player.summonObject(new LittleGhost(player), p);
         canHandle.add(ObjectDeadEvent.class);
     }
 
@@ -59,7 +61,7 @@ public class Sundar extends Leader {
                         ((Ghost) target).attack();
                     }
                 } else {
-                    ((Damageable) target).damage(hp);
+                    ((Damageable) target).attacked(this, hp);
                 }
             } catch (Exception e) {}
         }
@@ -119,14 +121,14 @@ public class Sundar extends Leader {
         if (event instanceof ObjectDeadEvent) {
             Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
             WarObject object = (WarObject) deadObject;
+            CanAttack attacker = deadObject.getAttacker();
             int x = object.position.x, y = object.position.y;
             if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
-                player.getBoard().summonObject(new LittleGhost(player), x, y);
-            } else {
-                // TODO: add killer check
-                player.getBoard().summonObject(new GhostOfHatred(player), x, y);
+                Summon(player, new LittleGhost(player)).on(new Point(x, y));
+            } else if(attacker instanceof Ghost && ((WarObject) attacker).getPlayer().equals(player)){
+                player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }
         }
     }

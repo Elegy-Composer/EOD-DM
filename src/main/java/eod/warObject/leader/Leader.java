@@ -14,6 +14,7 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
     private int max_hp, hp;
     private ArrayList<Card> specialOrder;
     protected ArrayList<Status> status;
+    private CanAttack attacker;
 
     public Leader(Player player, int hp) {
         super(player);
@@ -53,16 +54,28 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
     public Leader enterArena() {
         ArrayList<Point> points = player.getBaseEmpty();
         position = player.selectPosition(points);
-        player.summonObject(this, position.x, position.y);
+        player.summonObject(this, position);
         return this;
     }
 
     protected abstract ArrayList<Card> generateSpecialOrder();
 
     @Override
+    public void attacked(CanAttack attacker, int hp) {
+        this.attacker = attacker;
+        damage(hp);
+        this.attacker = null;
+    }
+
+    @Override
+    public CanAttack getAttacker() {
+        return attacker;
+    }
+
+    @Override
     public void damage(int hp) {
         this.hp -= hp;
-        if(this.hp < 0) {
+        if(this.hp <= 0) {
             die();
         }
     }
