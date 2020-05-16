@@ -103,6 +103,16 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
     }
 
+    public ArrayList<Point> getBase() {
+        Gameboard gameboard = game.getBoard();
+        int boardEdge = Gameboard.boardSize-1;
+        if(game.isPlayerA(this)) {
+            return gameboard.allSpaces(new Point(0,0));
+        } else {
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge));
+        }
+    }
+
     public void summonObject(WarObject object, Point point) {
         getBoard().summonObject(object, point);
     }

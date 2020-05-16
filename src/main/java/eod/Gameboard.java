@@ -103,6 +103,28 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         return points;
     }
 
+    public ArrayList<Point> allSpaces(Point at) {
+        int iMin, iMax;
+        if(at.x < firstLine) {
+            iMin = 0;
+            iMax = firstLine;
+        } else if(at.x < secondLine) {
+            iMin = firstLine;
+            iMax = secondLine;
+        } else {
+            iMin = secondLine;
+            iMax = boardSize;
+        }
+
+        ArrayList<Point> points = new ArrayList<>();
+        for(int i = iMin;i < iMax;i++) {
+            for(int j =0;j < boardSize;j++) {
+                points.add(new Point(i, j));
+            }
+        }
+        return points;
+    }
+
     public ArrayList<Point> getSurroundingEmpty(Point p, int range) {
         ArrayList<Point> points = new ArrayList<>();
         for(int x = p.x - range;x <= p.x + range;x++) {
