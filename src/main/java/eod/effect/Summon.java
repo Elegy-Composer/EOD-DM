@@ -33,6 +33,7 @@ public class Summon implements Effect, GameObject {
 
     @Override
     public void teardown() {
-
+        player = null;
+        object = null;
     }
 }

@@ -77,8 +77,9 @@ public class Drone extends Machine implements CanAttack, Damageable {
 
     @Override
     public void attack() {
-        int plusAttack = WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length*2;
-        attack += plusAttack;
+        if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
+            attack += 2;
+        }
         RequestRegionalAttack(player, attack).from(this).to(WarObject(player.getBoard())
                 .which(OwnedBy(player.rival()))
                 .which(Being(Damageable.class))
@@ -93,6 +94,7 @@ public class Drone extends Machine implements CanAttack, Damageable {
     @Override
     public void teardown() {
         super.teardown();
+        status.clear();
         status = null;
     }
 }
