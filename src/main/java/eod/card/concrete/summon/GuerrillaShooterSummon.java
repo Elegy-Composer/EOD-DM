@@ -40,6 +40,6 @@ public class GuerrillaShooterSummon extends SummonCard {
 
     @Override
     public Party getParty() {
-        return null;
+        return Party.RED;
     }
 }

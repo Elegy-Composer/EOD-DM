@@ -4,18 +4,15 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GuerrillaShooterSummon;
-import eod.effect.RegionalAttack;
-import eod.exceptions.NotSupportedException;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class GuerrillaShooter extends Shooter {
-    int specialEffectTimes = 0;
+    private int specialEffectTimes = 0;
     public GuerrillaShooter(Player player) {
         super(player, 1, 2, 1, Party.RED);
     }

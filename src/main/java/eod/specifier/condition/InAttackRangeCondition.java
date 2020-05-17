@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class InAttackRangeCondition implements Condition{
-    WarObject center;
-    ArrayList<Point> attackRange;
+    private WarObject center;
+    private ArrayList<Point> attackRange;
     public InAttackRangeCondition(CanAttack center) {
         this.center = (WarObject) center;
         try {

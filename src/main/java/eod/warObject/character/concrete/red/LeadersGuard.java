@@ -4,7 +4,6 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.LeadersGuardSummon;
-import eod.effect.Attack;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.character.abstraction.assaulter.Shooter;

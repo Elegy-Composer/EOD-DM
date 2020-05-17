@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class ObjectMovingEvent implements Event {
     private WarObject object;
-    Point origPos, newPos;
+    private Point origPos, newPos;
 
     public ObjectMovingEvent(WarObject object, Point newPos) {
         this.object = object;
