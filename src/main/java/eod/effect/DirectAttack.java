@@ -1,11 +1,11 @@
 package eod.effect;
 
-import eod.warObject.CanAttack;
-import eod.warObject.Touchable;
-import eod.warObject.WarObject;
-import eod.warObject.character.Character;
 import eod.GameObject;
 import eod.Player;
+import eod.exceptions.NotSupportedException;
+import eod.warObject.CanAttack;
+import eod.warObject.Damageable;
+import eod.warObject.WarObject;
 
 public class DirectAttack implements Effect, GameObject {
     // This class should be used only in direct attacks.
@@ -13,7 +13,7 @@ public class DirectAttack implements Effect, GameObject {
     private int hp;
     private Player player;
     private CanAttack attacker;
-    private Touchable target;
+    private Damageable target;
 
     public DirectAttack(Player player, int hp) {
         this.hp = hp;
@@ -35,15 +35,18 @@ public class DirectAttack implements Effect, GameObject {
     }
 
     public DirectAttack to(WarObject[] objects) {
-        target = (Touchable) askToSelectFrom(objects);
-
-        attacker.attack(target, hp);
+        target = (Damageable) askToSelectFrom(objects);
+        try {
+            attacker.attack(target, hp);
+        } catch (NotSupportedException e) { }
         return this;
     }
 
-    public DirectAttack toAll(Touchable[] targets) {
-        for(Touchable target:targets) {
-            attacker.attack(target, hp);
+    public DirectAttack toAll(Damageable[] targets) {
+        for(Damageable target:targets) {
+            try {
+                attacker.attack(target, hp);
+            } catch (NotSupportedException e) {}
         }
         return this;
     }

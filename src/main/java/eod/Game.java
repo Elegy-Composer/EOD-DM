@@ -1,7 +1,12 @@
 package eod;
 
+import eod.IO.Input;
+import eod.IO.LocalInput;
+import eod.IO.LocalOutput;
+import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
+import eod.event.Event;
 import eod.event.EventManager;
 import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
@@ -40,6 +45,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         B.validateDeck();
 
         playerOrder = decidePlayerOrder();
+
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
@@ -77,8 +83,17 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                 gameLoop();
 
                 eventManager.send(this, new RoundEndEvent(currentRound));
-                updateHistory();
-                currentRound = nextRound();
+                if(currentRound.getPlayer().equals(playerOrder[0])) {
+                    currentRound = new Round(playerOrder[1], currentRound.getNumber());
+                } else {
+                    currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
+                }
+                history.put(currentRound, takeSnapshot());
+                if(history.size() > maxHistoryLength) {
+                    Round first = history.keySet().toArray(new Round[0])[0];
+                    history.remove(first);
+                }
+
             } catch (GameLosingException e) {
                 break;
             }
@@ -106,22 +121,6 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         }
     }
 
-    private Round nextRound() {
-        if(currentRound.getPlayer().equals(playerOrder[0])) {
-            return new Round(playerOrder[1], currentRound.getNumber());
-        } else {
-            return new Round(playerOrder[0], currentRound.getNumber() + 1);
-        }
-    }
-
-    private void updateHistory() {
-        history.put(currentRound, takeSnapshot());
-        if(history.size() > maxHistoryLength) {
-            Round first = history.keySet().toArray(new Round[0])[0];
-            history.remove(first);
-        }
-    }
-
     public Player getRivalPlayer(Player player) {
         if(player == playerOrder[0]) {
             return playerOrder[1];
@@ -141,11 +140,15 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     private void gameLoop() throws GameLosingException {
     }
 
+    public void sendEvent(GameObject sender, Event event) {
+        eventManager.send(sender, event);
+    }
+
     public void registerListener(EventListener listener) {
-        eventManager.registerEventListener(listener);
+        eventManager.registerListener(listener);
     }
     public void unregisterListener(EventListener listener) {
-        eventManager.unregisterEventListener(listener);
+        eventManager.unregisterListener(listener);
     }
 
     @Override
@@ -164,10 +167,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
         currentRound.teardown();
         currentRound = null;
-
-        history.clear();
-        history = null;
-    }
+    }//TODO: finish teardown
 
     public Gameboard getBoard() {
         return gameboard;
@@ -194,7 +194,6 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                     .orElse(null);
 
     }
-
 
     public class Snapshot implements eod.snapshots.Snapshot {
         private Player.Snapshot thenPlayer = currentRound.getPlayer().takeSnapshot();

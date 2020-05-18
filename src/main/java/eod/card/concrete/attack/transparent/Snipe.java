@@ -1,23 +1,20 @@
-package eod.card.concrete.attack;
+package eod.card.concrete.attack.transparent;
 
+import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.Party;
 import eod.card.abstraction.action.AttackCard;
-import eod.specifier.condition.BelongCondition;
-import eod.warObject.Touchable;
-import eod.warObject.WarObject;
-import eod.warObject.character.abstraction.disturber.Sniper;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
-import eod.warObject.character.Character;
+import eod.warObject.Damageable;
+import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.disturber.Sniper;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
-import static eod.specifier.WarObjectSpecifier.*;
+import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.*;
 
 public class Snipe extends AttackCard {
-    // TODO: fix the direct attack issues
     public Snipe(Player p) {
         super(p);
     }
@@ -32,7 +29,7 @@ public class Snipe extends AttackCard {
         Accessing objects = WarObject(player.getBoard());
         WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
-        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Touchable.class)).get());
+        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).get());
     }
 
     @Override

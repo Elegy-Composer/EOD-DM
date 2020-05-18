@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class EventManager implements GameObject {
     private ArrayList<EventListener> listeners = new ArrayList<>();
 
-    public void registerEventListener(EventListener listener) {
+    public void registerListener(EventListener listener) {
         listeners.add(listener);
     }
 
-    public void unregisterEventListener(EventListener listener) {
+    public void unregisterListener(EventListener listener) {
         listeners.remove(listener);
     }
 

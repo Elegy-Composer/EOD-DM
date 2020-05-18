@@ -4,17 +4,21 @@ package eod.warObject;
 import eod.GameObject;
 import eod.Gameboard;
 import eod.Player;
+import eod.event.Event;
+import eod.event.listener.EventListener;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 //WarObject represented anything on the gameboard
-public abstract class WarObject implements GameObject {
+public abstract class WarObject implements GameObject, EventListener {
     public Point position;
     protected Player player;
+    protected ArrayList<Class<? extends Event>> canHandle;
 
     public WarObject(Player player) {
         this.player = player;
+        canHandle = new ArrayList<>();
     }
 
     public Player getPlayer() {
@@ -69,5 +73,26 @@ public abstract class WarObject implements GameObject {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void addSupportedEventType(Class<? extends Event> eventType) {
+        canHandle.add(eventType);
+    }
+
+    @Override
+    public ArrayList<Class<? extends Event>> supportedEventTypes() {
+        return canHandle;
+    }
+
+    @Override
+    public void onEventOccurred(GameObject sender, Event event) {
+        //intended left blank
+    }
+
+    public abstract String getName();
+
+    @Override
+    public void teardown() {
+        player = null;
     }
 }
