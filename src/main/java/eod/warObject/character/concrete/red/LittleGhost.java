@@ -1,6 +1,8 @@
 package eod.warObject.character.concrete.red;
 
 import eod.Player;
+import eod.card.abstraction.summon.SummonCard;
+import eod.card.concrete.summon.LittleGhostSummon;
 import eod.warObject.character.abstraction.other.Ghost;
 
 public class LittleGhost extends Ghost {
@@ -12,5 +14,10 @@ public class LittleGhost extends Ghost {
     @Override
     public String getName() {
         return "小亡靈";
+    }
+
+    @Override
+    public SummonCard getSummonCard() {
+        return new LittleGhostSummon(player);
     }
 }

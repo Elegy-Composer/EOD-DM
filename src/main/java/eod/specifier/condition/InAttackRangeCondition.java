@@ -4,12 +4,20 @@ import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
 import eod.warObject.WarObject;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class InAttackRangeCondition implements Condition{
-    WarObject center;
+    private WarObject center;
+    private ArrayList<Point> attackRange;
     public InAttackRangeCondition(CanAttack center) {
         this.center = (WarObject) center;
+        try {
+            attackRange = center.getAttackRange();
+        } catch (NotSupportedException e) {
+            attackRange = new ArrayList<>();
+        }
     }
 
     @Override
@@ -20,14 +28,6 @@ public class InAttackRangeCondition implements Condition{
     }
 
     private boolean inRange(WarObject target) {
-        int dx = Math.abs(target.position.x - center.position.x);
-        int dy = Math.abs(target.position.y - center.position.y);
-
-        CanAttack c = (CanAttack) center;
-        try {
-            return dx <= c.getAttackRange() && dy <= c.getAttackRange();
-        } catch (NotSupportedException e) {
-            return false;
-        }
+        return attackRange.contains(target.position);
     }
 }

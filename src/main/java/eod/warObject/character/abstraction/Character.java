@@ -3,6 +3,8 @@ package eod.warObject.character.abstraction;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
+import eod.card.abstraction.summon.SummonCard;
+import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -13,19 +15,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Character extends WarObject implements Damageable, CanAttack {
-    private ArrayList<Status> status = new ArrayList<>();
+    protected ArrayList<Status> status = new ArrayList<>();
     protected int max_hp;
     protected int hp;
+    protected int attack;
     public int attackRange;
     protected final Party party;
     private CanAttack attacker;
 
-    public Character(Player player, int hp, int range, Party party) {
+    public Character(Player player, int hp, int attack, int range, Party party) {
         super(player);
         this.attackRange = range;
         this.player = player;
         max_hp = hp;
         this.hp = max_hp;
+        this.attack = attack;
         this.party = party;
     }
 
@@ -35,8 +39,8 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public int getAttackRange() {
-        return attackRange;
+    public ArrayList<Point> getAttackRange() {
+        return player.getBoard().getSurroundingEmpty(position, attackRange);
     }
 
     @Override
@@ -61,29 +65,47 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, int hp) {
+    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+        int hp = param.hp;
+        ArrayList<Damageable> affected = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
-                target.attacked(this, hp);
+                if(param.realDamage) {
+                    target.damage(hp);
+                } else {
+                    target.attacked(this, hp);
+                }
+                affected.add(target);
                 target.addStatus(Status.ATTACKED);
-            } catch (IllegalArgumentException e) {}
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.toString());
+            }
         }
+        return affected;
     }
 
     @Override
-    public void attack(Damageable target, int hp) {
-        attack(new Damageable[] {target}, hp);
+    public ArrayList<Damageable> attack(Damageable target, AttackParam param) {
+        return attack(new Damageable[] {target}, param);
     }
 
     @Override
-    public void attack(Damageable[] targets, int hp) {
+    public ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) {
+        int hp = param.hp;
+        ArrayList<Damageable> affected = new ArrayList<>();
         Arrays.stream(targets)
                 .forEach(target -> {
-                    target.attacked(this, hp);
+                    if(param.realDamage) {
+                        target.damage(hp);
+                    } else {
+                        target.attacked(this, hp);
+                    }
+                    affected.add(target);
                     target.addStatus(Status.ATTACKED);
                 });
+        return affected;
     }
 
     @Override
@@ -112,7 +134,20 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
         teardown();
     }
 
+    @Override
+    public void teardown() {
+        super.teardown();
+        status.clear();
+    }
+
     public Party getParty() {
         return party;
     }
+
+    @Override
+    public int getHp() {
+        return hp;
+    }
+
+    public abstract SummonCard getSummonCard();
 }

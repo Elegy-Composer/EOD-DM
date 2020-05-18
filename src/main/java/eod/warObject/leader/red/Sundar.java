@@ -9,6 +9,7 @@ import eod.card.concrete.normal.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
+import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -16,8 +17,8 @@ import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
-import eod.warObject.other.abstraction.Bunker;
-import eod.warObject.other.abstraction.Machine;
+import eod.warObject.character.abstraction.Bunker;
+import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -42,12 +43,16 @@ public class Sundar extends Leader implements EventListener {
     }
 
     public void deathPulse() {
-        ArrayList<Point> targets = getEightWays();
-        attack(targets, 4);
+        ArrayList<Point> targets = player.getBoard().get8ways(position, Gameboard.boardSize);
+        AttackParam param = new AttackParam();
+        param.hp = 4;
+        attack(targets, param);
     }
 
     @Override
-    public void attack(ArrayList<Point> targets, int hp) {
+    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+        ArrayList<Damageable> affected = new ArrayList<>();
+        int hp = param.hp;
         this.damage(hp);
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
@@ -62,50 +67,13 @@ public class Sundar extends Leader implements EventListener {
                     }
                 } else {
                     ((Damageable) target).attacked(this, hp);
+                    affected.add((Damageable) target);
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
         }
-    }
-
-    public ArrayList<Point> getEightWays() {
-        ArrayList<Point> points = new ArrayList<>();
-        int boardSize = Gameboard.boardSize;
-        int x = position.x-1, y = position.y;
-        while (x >= 0) {
-            points.add(new Point(x, y));
-            x--;
-        }
-        x = position.x+1;
-        while (x < boardSize) {
-            points.add(new Point(x, y));
-            x++;
-        }
-        x = position.x;
-        y = position.y-1;
-        while (y >= 0) {
-            points.add(new Point(x, y));
-            y--;
-        }
-        y = position.y+1;
-        while (y < boardSize) {
-            points.add(new Point(x, y));
-            y++;
-        }
-        x = position.x-1;
-        y = position.y-1;
-        while (x >= 0 && y >= 0) {
-            points.add(new Point(x, y));
-            x--;
-            y--;
-        }
-        x = position.x+1;
-        y = position.y+1;
-        while (x < boardSize && y < boardSize) {
-            points.add(new Point(x, y));
-            x++;
-            y++;
-        }
-        return points;
+        return affected;
     }
 
     @Override
