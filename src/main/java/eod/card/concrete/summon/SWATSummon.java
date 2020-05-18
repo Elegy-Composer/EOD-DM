@@ -4,13 +4,14 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
+import eod.card.abstraction.summon.SummonCardType;
 import eod.warObject.character.concrete.blue.SWAT;
 
 import static eod.effect.EffectFunctions.Summon;
 
 public class SWATSummon extends SummonCard {
     public SWATSummon(Player p) {
-        super(p);
+        super(p, SummonCardType.NORMAL);
     }
 
     @Override
