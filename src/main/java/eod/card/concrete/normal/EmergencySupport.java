@@ -1,0 +1,74 @@
+package eod.card.concrete.normal;
+
+import eod.Game;
+import eod.Gameboard;
+import eod.Party;
+import eod.Player;
+import eod.card.abstraction.Card;
+import eod.card.abstraction.action.NormalCard;
+import eod.effect.Summon;
+import eod.warObject.character.concrete.blue.SWAT;
+import eod.warObject.character.concrete.blue.SecureGuardBot;
+import eod.warObject.character.concrete.transparent.Drone;
+
+import java.awt.*;
+import java.util.ArrayList;
+
+import static eod.effect.EffectFunctions.Summon;
+
+public class EmergencySupport extends NormalCard {
+    private boolean followingActions;
+    public EmergencySupport(Player p) {
+        super(p);
+    }
+
+    @Override
+    public void applyEffect() {
+        setFollowingActions();
+        Gameboard board = player.getBoard();
+
+        SWAT swat = new SWAT(player);
+        Drone drone = new Drone(player);
+        SecureGuardBot bot = new SecureGuardBot(player);
+
+        Summon(player, swat).from(baseOrConflictEmpty());
+        Summon(player, drone).from(baseOrConflictEmpty());
+        Summon(player, bot).from(baseOrConflictEmpty());
+
+        if(followingActions) {
+            swat.attack();
+            drone.attack();
+            bot.attack();
+        }
+    }
+
+    private void setFollowingActions() {
+        followingActions = player.getLeader().getHp() < 7;
+    }
+
+    private ArrayList<Point> baseOrConflictEmpty() {
+        ArrayList<Point> points = player.getBaseEmpty();
+        points.addAll(player.getConflictEmpty());
+        return points;
+    }
+
+    @Override
+    public Card copy() {
+        return new EmergencySupport(player);
+    }
+
+    @Override
+    public int getCost() {
+        return 7;
+    }
+
+    @Override
+    public String getName() {
+        return "緊急增援";
+    }
+
+    @Override
+    public Party getParty() {
+        return Party.BLUE;
+    }
+}

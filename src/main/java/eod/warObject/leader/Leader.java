@@ -52,6 +52,12 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
         }
     }
 
+    @Override
+    public void addHealth(int hp) {
+        this. max_hp += max_hp;
+        this.hp += hp;
+    }
+
     public Leader enterArena() {
         ArrayList<Point> points = player.getBaseEmpty();
         position = player.selectPosition(points);
