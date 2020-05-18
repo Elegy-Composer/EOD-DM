@@ -6,6 +6,7 @@ import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.event.ObjectDeadEvent;
+import eod.event.ObjectMovingEvent;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
 import eod.warObject.Damageable;
@@ -98,6 +99,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return leader.isAlive();
     }
 
+    public boolean inBase(Point p) {
+        return game.getBoard().inBase(this, p);
+    }
+
     public ArrayList<Point> getBaseEmpty() {
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize-1;
@@ -107,6 +112,20 @@ public class Player implements Snapshotted<Player.Snapshot>,
         else {
             return gameboard.allEmptySpaces(new Point(boardEdge, boardEdge));
         }
+    }
+
+    public ArrayList<Point> getBase() {
+        Gameboard gameboard = game.getBoard();
+        int boardEdge = Gameboard.boardSize - 1;
+        if(game.isPlayerA(this)) {
+            return gameboard.allSpaces(new Point(0,0));
+        } else {
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge));
+        }
+    }
+
+    public ArrayList<Point> getConflictEmpty() {
+        return game.getBoard().allEmptySpaces(new Point(Gameboard.firstLine, Gameboard.firstLine));
     }
 
     public void summonObject(WarObject object, Point point) {
@@ -170,6 +189,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void moveObject(WarObject object, Point point) {
         game.getBoard().moveObject(object.position, point);
+        game.sendEvent(this, new ObjectMovingEvent(object, point));
         object.updatePosition(point);
     }
 

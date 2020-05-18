@@ -30,22 +30,8 @@ public abstract class WarObject implements GameObject, EventListener {
     }
 
     protected void move() {
-        ArrayList<Point> possibleMoves = new ArrayList<>();
-        int x = position.x, y = position.y;
-        Gameboard gameboard = player.getBoard();
-
-        int toX = x-1;
-        int toY = y;
-        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
-        toX = x+1;
-        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
-        toX = x;
-        toY = y-1;
-        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
-        toY = y+1;
-        addPointIfEmpty(possibleMoves, toX, toY, gameboard);
-
-        player.moveObject(this, player.selectPosition(possibleMoves));
+        ArrayList<Point> possibleMoves = player.getBoard().getSurroundingEmpty(position, 1);
+        moveTo(player.selectPosition(possibleMoves));
     }
 
     public void move(int steps) {
@@ -94,5 +80,6 @@ public abstract class WarObject implements GameObject, EventListener {
     @Override
     public void teardown() {
         player = null;
+        canHandle.clear();
     }
 }
