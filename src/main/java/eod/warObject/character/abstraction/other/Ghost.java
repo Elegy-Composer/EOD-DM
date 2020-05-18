@@ -6,8 +6,8 @@ import eod.warObject.character.abstraction.Character;
 
 public abstract class Ghost extends Character {
 
-    public Ghost(Player player, int hp, int range) {
-        super(player, hp, 0, range, Party.RED);
+    public Ghost(Player player, int hp) {
+        super(player, hp, 0, Party.RED);
         // TODO: ask Spacezipper about the details of Ghost
     }
 

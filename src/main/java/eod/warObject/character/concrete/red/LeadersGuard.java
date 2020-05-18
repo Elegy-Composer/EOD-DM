@@ -15,7 +15,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
-        super(player, 5, 2, -1, Party.RED);
+        super(player, 5, 2, Party.RED);
     }
 
     @Override

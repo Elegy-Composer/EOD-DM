@@ -2,6 +2,7 @@ package eod.warObject.leader.red;
 
 import eod.GameObject;
 import eod.Gameboard;
+import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.concrete.attack.red.DeathPulse;
@@ -27,7 +28,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class Sundar extends Leader implements EventListener {
     public Sundar(Player player) {
-        super(player, 20);
+        super(player, 20, 0, Party.RED);
     }
 
     @Override

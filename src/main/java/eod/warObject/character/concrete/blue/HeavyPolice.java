@@ -9,7 +9,7 @@ import eod.warObject.character.abstraction.Character;
 
 public class HeavyPolice extends Character {
     public HeavyPolice(Player player) {
-        super(player, 5,5,-1, Party.BLUE);
+        super(player, 5,5, Party.BLUE);
     }
 
     @Override

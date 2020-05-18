@@ -14,7 +14,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class SWAT extends Character {
     public SWAT(Player player) {
-        super(player, 3, 1, -1, Party.BLUE);
+        super(player, 3, 1, Party.BLUE);
     }
 
     @Override

@@ -1,24 +1,27 @@
 package eod.warObject.leader;
 
+import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
+import eod.card.abstraction.summon.SummonCard;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Leader extends WarObject implements Damageable, CanAttack {
+public abstract class Leader extends Character implements Damageable, CanAttack {
     protected int max_hp, hp;
     protected int attack;
     private ArrayList<Card> specialOrder;
     protected ArrayList<Status> status;
     private CanAttack attacker;
 
-    public Leader(Player player, int hp) {
-        super(player);
+    public Leader(Player player, int hp, int attack, Party party) {
+        super(player, hp, attack, party);
         max_hp = hp;
         this.hp = max_hp;
 
@@ -109,6 +112,11 @@ public abstract class Leader extends WarObject implements Damageable, CanAttack 
     @Override
     public int getHp() {
         return hp;
+    }
+
+    @Override
+    public SummonCard getSummonCard() {
+        return null;
     }
 
     @Override

@@ -8,6 +8,8 @@ import eod.exceptions.NotSupportedException;
 import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.supporter.Sapper;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
@@ -16,7 +18,7 @@ import static eod.specifier.condition.Conditions.*;
 
 public class Repairman extends Sapper {
     public Repairman(Player player) {
-        super(player, 2,1, 1, Party.BLUE);
+        super(player, 2,1, Party.BLUE);
     }
 
     @Override
@@ -41,5 +43,10 @@ public class Repairman extends Sapper {
         });
 
         RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+    }
+
+    @Override
+    public ArrayList<Point> getAttackRange() {
+        return player.getBoard().getSurrounding(position, 1);
     }
 }

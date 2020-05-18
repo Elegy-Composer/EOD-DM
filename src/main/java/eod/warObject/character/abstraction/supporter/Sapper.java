@@ -5,7 +5,7 @@ import eod.Player;
 import eod.warObject.character.abstraction.Character;
 
 public abstract class Sapper extends Character {
-    public Sapper(Player player, int hp, int attack, int range, Party party) {
-        super(player, hp, attack, range, party);
+    public Sapper(Player player, int hp, int attack, Party party) {
+        super(player, hp, attack, party);
     }
 }
