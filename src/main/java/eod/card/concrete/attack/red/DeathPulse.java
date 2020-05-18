@@ -10,9 +10,6 @@ import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 
 public class DeathPulse extends AttackCard {
-    public DeathPulse(Player p) {
-        super(p);
-    }
 
     @Override
     public void attack() {
@@ -22,7 +19,9 @@ public class DeathPulse extends AttackCard {
 
     @Override
     public Card copy() {
-        return new DeathPulse(player);
+        Card c = new DeathPulse();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

@@ -11,10 +11,6 @@ import static eod.effect.EffectFunctions.*;
 
 public class EmergencyHeal extends NormalCard {
 
-    public EmergencyHeal(Player p) {
-        super(p);
-    }
-
     @Override
     public int getCost() {
         return 1;
@@ -33,13 +29,15 @@ public class EmergencyHeal extends NormalCard {
     @Override
     public void applyEffect() {
         RequestHeal(player, 3)
-                .from(
+                .to(
                     Character(player.getBoard()).which(Injured()).in(LastEnemyTurn()).get()
                 );
     }
 
     @Override
     public EmergencyHeal copy() {
-        return new EmergencyHeal(player);
+        EmergencyHeal card = new EmergencyHeal();
+        card.setPlayer(player);
+        return card;
     }
 }

@@ -12,9 +12,6 @@ import java.awt.*;
 import static eod.effect.EffectFunctions.Summon;
 
 public class SpacezipperSummon extends SummonCard {
-    public SpacezipperSummon(Player p) {
-        super(p);
-    }
 
     @Override
     public void summon() {
@@ -23,7 +20,9 @@ public class SpacezipperSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new SpacezipperSummon(player);
+        Card c = new SpacezipperSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

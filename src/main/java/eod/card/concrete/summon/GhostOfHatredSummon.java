@@ -10,10 +10,6 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class GhostOfHatredSummon extends SummonCard {
 
-    public GhostOfHatredSummon(Player p) {
-        super(p);
-    }
-
     @Override
     public void summon() {
         Summon(player, new GhostOfHatred(player)).from(player.getBaseEmpty());
@@ -21,7 +17,9 @@ public class GhostOfHatredSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new GhostOfHatredSummon(player);
+        Card c = new GhostOfHatredSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.Summon;
 
 public class GuerrillaShooterSummon extends SummonCard {
-    public GuerrillaShooterSummon(Player p) {
-        super(p);
-    }
 
     @Override
     public void summon() {
@@ -25,7 +22,9 @@ public class GuerrillaShooterSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new GuerrillaShooterSummon(player);
+        Card c = new GuerrillaShooterSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

@@ -12,12 +12,15 @@ public abstract class Card implements GameObject {
     public abstract Party getParty();
 
     protected Player player;
-    public Card(Player p) {
+    public void setPlayer(Player p) {
         player = p;
     }
 
     public boolean cardTypeEquals(Class<? extends Card> c) {
         return c.isInstance(this);
+    }
+    public String getStringDescription() {
+        return getName() + "(" + getParty().toString() + ")";
     }
 
     public abstract void effect();

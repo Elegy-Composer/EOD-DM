@@ -13,9 +13,6 @@ import static eod.specifier.WarObjectSpecifier.Character;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {
-    public PreciseShot(Player p) {
-        super(p);
-    }
 
     @Override
     public void attack() {
@@ -29,7 +26,9 @@ public class PreciseShot extends AttackCard {
 
     @Override
     public Card copy() {
-        return new PreciseShot(player);
+        Card c = new PreciseShot();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

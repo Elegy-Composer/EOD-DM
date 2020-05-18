@@ -14,10 +14,10 @@ public interface Output {
     public void sendPlayerOrder(Player player, boolean isFirst);
     public void sendRoundStarted(Round round);
     public void sendRoundStartEffectActivate();
-    public void sendDrawingCards();
-    public void sendReceivedCards(Card[] cards);
+    public void sendDrawingCards(Player player);
+    public void sendReceivedCards(Player player, Card[] cards);
     public void sendPlayerPlayedCard(Player player, Card card);
-    public void sendRoundEnded();
+    public void sendRoundEnded(Round round);
 
     public void sendWarObjectHpChanged(WarObject object, int hp);
     public void sendWarObjectApChanged(WarObject object, int ap);

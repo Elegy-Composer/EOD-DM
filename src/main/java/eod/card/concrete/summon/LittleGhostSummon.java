@@ -9,9 +9,6 @@ import eod.warObject.character.concrete.red.LittleGhost;
 import static eod.effect.EffectFunctions.Summon;
 
 public class LittleGhostSummon extends SummonCard {
-    public LittleGhostSummon(Player p) {
-        super(p);
-    }
 
     @Override
     public void summon() {
@@ -20,7 +17,9 @@ public class LittleGhostSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new LittleGhostSummon(player);
+        Card c = new LittleGhostSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

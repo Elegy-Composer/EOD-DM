@@ -18,8 +18,10 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DroneSupport extends NormalCard {
     private Gameboard board;
-    public DroneSupport(Player p) {
-        super(p);
+
+    @Override
+    public void setPlayer(Player p) {
+        super.setPlayer(p);
         board = p.getBoard();
     }
 
@@ -43,7 +45,9 @@ public class DroneSupport extends NormalCard {
 
     @Override
     public Card copy() {
-        return new DroneSupport(player);
+        Card c = new DroneSupport();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

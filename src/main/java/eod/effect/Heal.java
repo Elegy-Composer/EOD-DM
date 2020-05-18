@@ -14,7 +14,7 @@ public class Heal implements Effect, GameObject {
         this.player = player;
     }
 
-    public void from(WarObject[] objects) {
+    public void to(WarObject[] objects) {
         Damageable selected = (Damageable) askToSelectFrom(objects);
         selected.heal(hp);
     }

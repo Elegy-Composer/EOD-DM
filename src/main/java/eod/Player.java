@@ -40,6 +40,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setLeader(Leader leader) {
         this.leader = leader;
     }
