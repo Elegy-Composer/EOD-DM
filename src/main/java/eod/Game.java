@@ -127,10 +127,10 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     }
 
     public Player getRivalPlayer(Player player) {
-        if(player == playerOrder[0]) {
-            return playerOrder[1];
+        if(player.equals(A)) {
+            return B;
         } else {
-            return playerOrder[0];
+            return A;
         }
     }
 
