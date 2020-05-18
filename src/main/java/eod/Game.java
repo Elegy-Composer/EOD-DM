@@ -49,6 +49,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
+        //TODO: rewrite, the imagineer changed the rule.
         boolean hasInvalid;
         int drawRound = 0;
         do {
@@ -83,12 +84,14 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                 gameLoop();
 
                 eventManager.send(this, new RoundEndEvent(currentRound));
+                history.put(currentRound, takeSnapshot());
+
                 if(currentRound.getPlayer().equals(playerOrder[0])) {
                     currentRound = new Round(playerOrder[1], currentRound.getNumber());
                 } else {
                     currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
                 }
-                history.put(currentRound, takeSnapshot());
+
                 if(history.size() > maxHistoryLength) {
                     Round first = history.keySet().toArray(new Round[0])[0];
                     history.remove(first);

@@ -11,9 +11,9 @@ import eod.warObject.WarObject;
 import java.awt.*;
 
 public interface Output {
-    public void sendPlayerOrder(boolean isFirst);
+    public void sendPlayerOrder(Player player, boolean isFirst);
     public void sendRoundStarted(Round round);
-    public void sendRoundStartEffectAvtivate();
+    public void sendRoundStartEffectActivate();
     public void sendDrawingCards();
     public void sendReceivedCards(Card[] cards);
     public void sendPlayerPlayedCard(Player player, Card card);

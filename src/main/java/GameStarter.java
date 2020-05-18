@@ -4,6 +4,9 @@ import eod.IO.LocalOutput;
 import eod.IO.Output;
 import eod.Player;
 import eod.card.collection.Deck;
+import eod.card.concrete.attack.transparent.PreciseShot;
+import eod.card.concrete.normal.DroneSupport;
+import eod.card.concrete.normal.EmergencyHeal;
 import eod.warObject.leader.red.Sundar;
 
 public class GameStarter {
@@ -20,7 +23,12 @@ public class GameStarter {
         //A.setLeader(new Sundar(A));
     }
 
-    public static void getADeck() {
+    public static Deck getADeck(Player A) {
+        return new Deck(
+                new DroneSupport(A),
+                new EmergencyHeal(A),
+                new PreciseShot(A)
 
+        );
     }
 }

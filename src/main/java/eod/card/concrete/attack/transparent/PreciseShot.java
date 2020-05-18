@@ -20,7 +20,10 @@ public class PreciseShot extends AttackCard {
     @Override
     public void attack() {
         Accessing characters = Character(player.getBoard());
-        RegionalAttack attack = RequestRegionalAttack(player, 3).from(characters.which(OwnedBy(player)).which(Being(Shooter.class)).get());
+        RegionalAttack attack = RequestRegionalAttack(player, 3)
+                .from(
+                    characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
+                );
         attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
     }
 

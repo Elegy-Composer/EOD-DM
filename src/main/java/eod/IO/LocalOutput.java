@@ -23,11 +23,11 @@ public class LocalOutput implements Output {
 
     @Override
     public void sendRoundStarted(Round round) {
-        System.out.println(round.getPlayer())
+        System.out.println(round.getPlayer());
     }
 
     @Override
-    public void sendRoundStartEffectAvtivate() {
+    public void sendRoundStartEffectActivate() {
 
     }
 

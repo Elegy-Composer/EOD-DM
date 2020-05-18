@@ -8,7 +8,6 @@ import eod.card.concrete.attack.red.DeathPulse;
 import eod.card.concrete.normal.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
-import eod.event.listener.EventListener;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -95,9 +94,17 @@ public class Sundar extends Leader {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
                 Summon(player, new LittleGhost(player)).on(new Point(x, y));
-            } else if(attacker instanceof Ghost && ((WarObject) attacker).getPlayer().equals(player)){
+            } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                 player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }
         }
+    }
+
+    private boolean isDeadObjectOwnedByEnemy(WarObject deadObject) {
+        return deadObject.getPlayer().equals(player.rival());
+    }
+
+    private boolean isGhostOrSundar(CanAttack attacker) {
+        return attacker instanceof Ghost || attacker instanceof Sundar;
     }
 }
