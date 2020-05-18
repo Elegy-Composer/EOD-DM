@@ -7,7 +7,6 @@ import eod.card.abstraction.summon.SummonCard;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
-import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 public abstract class Leader extends Character implements Damageable, CanAttack {
     protected int max_hp, hp;
     protected int attack;
-    private ArrayList<Card> specialOrder;
+    private ArrayList<Card> command;
     protected ArrayList<Status> status;
     private CanAttack attacker;
 
@@ -25,7 +24,7 @@ public abstract class Leader extends Character implements Damageable, CanAttack 
         max_hp = hp;
         this.hp = max_hp;
 
-        specialOrder = generateSpecialOrder();
+        command = generateCommand();
     }
 
     @Override
@@ -73,7 +72,7 @@ public abstract class Leader extends Character implements Damageable, CanAttack 
         return this;
     }
 
-    protected abstract ArrayList<Card> generateSpecialOrder();
+    protected abstract ArrayList<Card> generateCommand();
 
     @Override
     public void attacked(CanAttack attacker, int hp) {
@@ -101,8 +100,8 @@ public abstract class Leader extends Character implements Damageable, CanAttack 
         player.loseLeader();
     }
 
-    public Card getSpecialOrder() {
-        return specialOrder.remove(0);
+    public Card getCommand() {
+        return command.remove(0);
     }
 
     public boolean isAlive() {
@@ -116,6 +115,7 @@ public abstract class Leader extends Character implements Damageable, CanAttack 
 
     @Override
     public SummonCard getSummonCard() {
+        // since the game ends if the leader leaves the board, there's no need to generate the summon card.
         return null;
     }
 
