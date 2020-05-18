@@ -37,6 +37,8 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
         A.attachToGame(this);
         B.attachToGame(this);
+        A.setPlayerA(true);
+        B.setPlayerA(false);
     }
 
 

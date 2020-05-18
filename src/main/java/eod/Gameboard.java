@@ -9,7 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
-    // Player A's base is (0,x) ~ (firstLine-1, x)
+    // Player A's base is (0,y) ~ (firstLine-1, y)
+    // Player A's front = (1,0)
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
     private Game game;
@@ -30,15 +31,27 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
     }
 
+    public static boolean inBounds(Point p) {
+        return inBounds(p.x, p.y);
+    }
+
+    public static boolean inBounds(int x, int y) {
+        return inBounds(x) && inBounds(y);
+    }
+
+    public static boolean inBounds(int n) {
+        return n >= 0 && n < boardSize;
+    }
+
     public boolean hasObjectOn(int x, int y) throws ArrayIndexOutOfBoundsException {
-        if(x<0 || x>= boardSize || y<0 || y>= boardSize) {
+        if(!inBounds(x, y)) {
             throw new ArrayIndexOutOfBoundsException("Trying to find an element at ("+x+", "+y+") on the board.");
         }
         return board[x][y]!=null;
     }
 
     public void moveObject(Point from, Point to) throws MoveInvalidException, ArrayIndexOutOfBoundsException {
-        if(to.x < 0 || to.x >= boardSize || to.y < 0 || to.y >= boardSize) {
+        if(!inBounds(to)) {
             throw new ArrayIndexOutOfBoundsException("Trying to move a character to ("+to.x+", "+to.y+").");
         }
 
@@ -57,7 +70,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public void removeObject(int x, int y) throws IllegalArgumentException {
-        if(x<0 || x >= boardSize || y < 0 || y >= boardSize) {
+        if(!inBounds(x, y)) {
             throw new IllegalArgumentException("Trying to remove a character at ("+x+", "+y+").");
         }
         if(board[x][y] == null) {
@@ -127,11 +140,11 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     public ArrayList<Point> getSurroundingEmpty(Point p, int range) {
         ArrayList<Point> points = new ArrayList<>();
         for(int x = p.x - range;x <= p.x + range;x++) {
-            if(x < 0 || x >= boardSize) {
+            if(!inBounds(x)) {
                 continue;
             }
             for(int y = p.y-range; y <= p.y+range;y++) {
-                if(y < 0 || y >= boardSize) {
+                if(!inBounds(y)) {
                     continue;
                 }
                 if(!hasObjectOn(x, y)) {
@@ -143,13 +156,14 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public ArrayList<Point> getSurrounding(Point p, int range) {
+        // the return list DOESN'T contain p
         ArrayList<Point> points = new ArrayList<>();
         for(int x = p.x - range;x <= p.x + range;x++) {
-            if(x < 0 || x >= boardSize) {
+            if(!inBounds(x)) {
                 continue;
             }
             for(int y = p.y - range; y <= p.y + range; y++) {
-                if(y < 0 || y >= boardSize) {
+                if(!inBounds(y) || (x == p.x && y == p.y)) {
                     continue;
                 }
                 points.add(new Point(x, y));
@@ -159,10 +173,11 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public ArrayList<Point> get4Ways(Point p, int range) {
+        // the return list DOESN'T contain p.
         ArrayList<Point> points = new ArrayList<>();
         int x = p.x - range, y = p.y;
         while(x <= p.x + range) {
-            if(x < 0) {
+            if(x < 0 || x == p.x) {
                 continue;
             }
             if(x >= boardSize) {
@@ -174,7 +189,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         x = p.x;
         y = p.y - range;
         while(y <= p.y + range) {
-            if(y < 0) {
+            if(y < 0 || y == p.y) {
                 continue;
             }
             if(y >= boardSize) {
@@ -187,19 +202,20 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public ArrayList<Point> get8ways(Point p, int range) {
+        // the return list DOESN'T contain p
         ArrayList<Point> points = get4Ways(p, range);
         int x = p.x - range, y = p.y - range, y2 = p.y + range;
         while(x <= p.x + range) {
-            if(x <0) {
+            if(x <0 || x == p.x) {
                 continue;
             }
             if(x >= boardSize) {
                 break;
             }
-            if(y >= 0 && y < boardSize) {
+            if(inBounds(y)) {
                 points.add(new Point(x, y));
             }
-            if(y2 >= 0 && y2 < boardSize) {
+            if(inBounds(y2)) {
                 points.add(new Point(x, y2));
             }
             x++;
@@ -241,6 +257,19 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         } else {
             return p.x >= secondLine;
         }
+    }
+
+    public ArrayList<Point> getLine(Point p, int dx, int dy, int num) {
+        ArrayList<Point> points = new ArrayList<>();
+        int x = p.x + dx, y = p.y + dy;
+
+        for(int i = 0;i < num; i++) {
+            if(!inBounds(x, y)) {
+                break;
+            }
+            points.add(new Point(x, y));
+        }
+        return points;
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

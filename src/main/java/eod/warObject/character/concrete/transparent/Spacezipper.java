@@ -39,6 +39,9 @@ public class Spacezipper extends Character implements Marker {
                     targets.add(q);
                 }
             }
+            if(!targets.contains(p)) {
+                targets.add(p);
+            }
         }
         for(Point q:board.getSurrounding(position, 1)) {
             if(!targets.contains(q)) {

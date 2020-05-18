@@ -7,6 +7,7 @@ public interface Damageable {
     boolean hasStatus(Status s);
     void removeStatus(Status s);
     void heal(int hp);
+    void addHealth(int hp);
     void die();
     int getHp();
     CanAttack getAttacker();

@@ -14,10 +14,7 @@ import eod.warObject.WarObject;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject {
@@ -29,6 +26,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private Input input;
     private Output output;
     private String name;
+    private boolean isPlayerA;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -54,6 +52,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void attachIO(Input input, Output output) {
         this.input = input;
         this.output = output;
+    }
+
+    public void setPlayerA(boolean is) {
+        isPlayerA = is;
+    }
+
+    public boolean isPlayerA() {
+        return isPlayerA;
     }
 
     public void handReceive(ArrayList<Card> h) {
@@ -86,7 +92,6 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     //TODO: implement validateDeck, just by checking the number of cards and other things.
-    // There's no need to look into the deck.
     public boolean validateDeck() {
         return true;
     }
@@ -206,6 +211,40 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void loseLeader() throws GameLosingException {
         throw new GameLosingException("Player "+this+" loses.");
+    }
+
+    public ArrayList<Point> getFL(Point p, int num) {
+        int dx, dy;
+        if(isPlayerA()) {
+            dx = 1;
+            dy = 1;
+        } else {
+            dx = -1;
+            dy = -1;
+        }
+        return getBoard().getLine(p, dx, dy, num);
+    }
+
+    public ArrayList<Point> getFR(Point p, int num) {
+        int dx, dy;
+        if(isPlayerA()) {
+            dx = 1;
+            dy = -1;
+        } else {
+            dx = -1;
+            dy = 1;
+        }
+        return getBoard().getLine(p, dx, dy, num);
+    }
+
+    public ArrayList<Point> getFront(Point p, int num) {
+        int dx;
+        if(isPlayerA()) {
+            dx = 1;
+        } else {
+            dx = -1;
+        }
+        return getBoard().getLine(p, dx, 0, num);
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {
