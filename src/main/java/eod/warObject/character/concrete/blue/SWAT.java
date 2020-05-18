@@ -43,7 +43,7 @@ public class SWAT extends Character {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-            if (!p.equals(position) && c.getPlayer().isPlayerA() == player.isPlayerA()) {
+            if (c.getPlayer().isPlayerA() == player.isPlayerA()) {
                 attack += 1;
                 addHealth(1);
                 break;

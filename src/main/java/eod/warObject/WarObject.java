@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 //WarObject represented anything on the gameboard
 public abstract class WarObject implements GameObject, EventListener {
+    // temporarily duplicated
     public Point position;
     protected Player player;
     public ArrayList<Class<? extends Event>> canHandle;
