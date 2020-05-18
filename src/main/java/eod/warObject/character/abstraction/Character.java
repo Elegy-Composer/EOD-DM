@@ -65,6 +65,17 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
+    public void addHealth(int hp) {
+        this.hp += hp;
+        this.max_hp += hp;
+    }
+
+    @Override
+    public void addAttack(int a) {
+        attack += a;
+    }
+
+    @Override
     public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
         ArrayList<Damageable> affected = new ArrayList<>();

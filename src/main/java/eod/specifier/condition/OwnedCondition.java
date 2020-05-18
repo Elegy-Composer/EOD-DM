@@ -15,7 +15,7 @@ public class OwnedCondition implements Condition {
     @Override
     public WarObject[] filter(WarObject[] objects) {
         return Arrays.stream(objects)
-                .filter(object -> object.getPlayer() == player)
+                .filter(object -> object.getPlayer().isPlayerA() == player.isPlayerA())
                 .toArray(WarObject[]::new);
     }
 }
