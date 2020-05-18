@@ -27,4 +27,6 @@ public interface CanAttack {
     default ArrayList<Point> getAttackRange() throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
+
+    void addAttack(int a);
 }
