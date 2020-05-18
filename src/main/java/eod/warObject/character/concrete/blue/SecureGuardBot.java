@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class SecureGuardBot extends Machine {
-    CanAttack attacker;
+    private CanAttack attacker;
     public SecureGuardBot(Player player) {
         super(player, 4, 4, 1, Party.BLUE);
     }
@@ -29,7 +29,9 @@ public class SecureGuardBot extends Machine {
 
     @Override
     public SummonCard getSummonCard() {
-        return new SecureGuardBotSummon(player);
+        SummonCard c = new SecureGuardBotSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

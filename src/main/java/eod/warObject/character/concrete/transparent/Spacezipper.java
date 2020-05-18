@@ -80,7 +80,9 @@ public class Spacezipper extends Character implements Marker {
 
     @Override
     public SummonCard getSummonCard() {
-        return new SpacezipperSummon(player);
+        SummonCard c = new SpacezipperSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

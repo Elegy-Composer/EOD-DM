@@ -18,9 +18,6 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class EmergencySupport extends NormalCard {
     private boolean followingActions;
-    public EmergencySupport(Player p) {
-        super(p);
-    }
 
     @Override
     public void applyEffect() {
@@ -54,7 +51,9 @@ public class EmergencySupport extends NormalCard {
 
     @Override
     public Card copy() {
-        return new EmergencySupport(player);
+        Card c = new EmergencySupport();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

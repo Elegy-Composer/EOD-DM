@@ -78,8 +78,15 @@ public class Sundar extends Leader {
     @Override
     protected ArrayList<Card> generateSpecialOrder() {
         ArrayList<Card> deck = new ArrayList<>();
-        deck.add(new EquivalentExchange(player));
-        deck.add(new DeathPulse(player));
+
+        EquivalentExchange equivalentExchange = new EquivalentExchange();
+        equivalentExchange.setPlayer(player);
+
+        DeathPulse deathPulse = new DeathPulse();
+        deathPulse.setPlayer(player);
+
+        deck.add(equivalentExchange);
+        deck.add(deathPulse);
         return deck;
     }
 

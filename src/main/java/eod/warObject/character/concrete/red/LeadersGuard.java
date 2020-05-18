@@ -5,6 +5,7 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.LeadersGuardSummon;
 import eod.effect.RegionalAttack;
+import eod.effect.Summon;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
@@ -20,7 +21,9 @@ public class LeadersGuard extends Shooter {
 
     @Override
     public SummonCard getSummonCard() {
-        return new LeadersGuardSummon(player);
+        SummonCard c = new LeadersGuardSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

@@ -18,6 +18,8 @@ public class LittleGhost extends Ghost {
 
     @Override
     public SummonCard getSummonCard() {
-        return new LittleGhostSummon(player);
+        SummonCard c = new LittleGhostSummon();
+        c.setPlayer(player);
+        return c;
     }
 }
