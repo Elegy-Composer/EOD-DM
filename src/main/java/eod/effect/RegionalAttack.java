@@ -3,6 +3,7 @@ package eod.effect;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
+import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
 import java.awt.*;
@@ -59,6 +60,12 @@ public class RegionalAttack extends Attack {
 
     public RegionalAttack to(WarObject[] candidates) {
         WarObject target = askToSelectOneFrom(candidates);
+        ArrayList<Point> singleTarget = new ArrayList<>();
+        singleTarget.add(target.position);
+        return to(singleTarget);
+    }
+
+    public RegionalAttack to(WarObject target) {
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(target.position);
         return to(singleTarget);

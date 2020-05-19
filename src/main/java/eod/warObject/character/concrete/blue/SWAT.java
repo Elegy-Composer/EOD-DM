@@ -35,6 +35,7 @@ public class SWAT extends Character {
 
     @Override
     public void attack() {
+        super.attack();
         decideAddHealthAndAttack();
         RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
     }

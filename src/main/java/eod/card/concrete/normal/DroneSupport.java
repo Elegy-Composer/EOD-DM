@@ -19,6 +19,9 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DroneSupport extends NormalCard {
     private Gameboard board;
+    public DroneSupport() {
+        super(3);
+    }
 
     @Override
     public void setPlayer(Player p) {
@@ -52,11 +55,6 @@ public class DroneSupport extends NormalCard {
         Card c = new DroneSupport();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override

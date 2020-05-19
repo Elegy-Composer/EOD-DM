@@ -4,6 +4,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
+import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -20,7 +21,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     protected int hp;
     protected int attack;
     protected final Party party;
-    private CanAttack attacker;
+    protected CanAttack attacker;
 
     public Character(Player player, int hp, int attack, Party party) {
         super(player);
@@ -47,8 +48,18 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
+    public int getAttack() {
+        return attack;
+    }
+
+    @Override
     public void addAttack(int a) {
         attack += a;
+    }
+
+    @Override
+    public void attack() {
+        removeStatus(Status.SNEAK);
     }
 
     @Override

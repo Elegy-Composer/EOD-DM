@@ -13,8 +13,11 @@ import eod.event.listener.EventListener;
 import java.util.ArrayList;
 
 public class GrandFeast extends NormalCard implements EventListener {
+
     ArrayList<Class<? extends Event>> canHandle;
+
     public GrandFeast() {
+        super(3);
         canHandle = new ArrayList<>();
         canHandle.add(RoundEndEvent.class);
         canHandle.add(AttackEvent.class);
@@ -30,11 +33,6 @@ public class GrandFeast extends NormalCard implements EventListener {
         Card c = new GrandFeast();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override

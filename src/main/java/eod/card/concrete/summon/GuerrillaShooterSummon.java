@@ -14,7 +14,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class GuerrillaShooterSummon extends SummonCard {
     public GuerrillaShooterSummon() {
-        super(SummonCardType.NORMAL);
+        super(2, SummonCardType.NORMAL);
     }
 
     @Override
@@ -29,11 +29,6 @@ public class GuerrillaShooterSummon extends SummonCard {
         Card c = new GuerrillaShooterSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 2;
     }
 
     @Override

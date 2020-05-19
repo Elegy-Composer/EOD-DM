@@ -16,6 +16,9 @@ import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.*;
 
 public class Snipe extends AttackCard {
+    public Snipe() {
+        super(5);
+    }
 
     @Override
     public Card copy() {
@@ -30,11 +33,6 @@ public class Snipe extends AttackCard {
         WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
         attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).which(WithoutStatus(Status.SNEAK)).get());
-    }
-
-    @Override
-    public int getCost() {
-        return 5;
     }
 
     @Override

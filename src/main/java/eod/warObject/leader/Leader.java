@@ -13,11 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Leader extends Character implements Damageable, CanAttack {
-    protected int max_hp, hp;
-    protected int attack;
     private ArrayList<Card> command;
-    protected ArrayList<Status> status;
-    private CanAttack attacker;
 
     public Leader(Player player, int hp, int attack, Party party) {
         super(player, hp, attack, party);

@@ -37,6 +37,7 @@ public class GuerrillaShooter extends Shooter {
 
     @Override
     public void attack() {
+        super.attack();
         ArrayList<Damageable> affected = RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1).getAffected();
         if(affected.size() > 0 && affected.get(0).getHp() <= 0) {
             specialEffectTimes++;

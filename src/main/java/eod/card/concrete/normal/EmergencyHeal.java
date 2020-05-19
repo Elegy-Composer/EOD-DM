@@ -10,10 +10,8 @@ import static eod.specifier.WarObjectSpecifier.*;
 import static eod.effect.EffectFunctions.*;
 
 public class EmergencyHeal extends NormalCard {
-
-    @Override
-    public int getCost() {
-        return 1;
+    public EmergencyHeal() {
+        super(1);
     }
 
     @Override

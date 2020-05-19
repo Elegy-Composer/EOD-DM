@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class HeavyPoliceSummon extends SummonCard {
     public HeavyPoliceSummon() {
-        super(SummonCardType.NORMAL);
+        super(6, SummonCardType.NORMAL);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class HeavyPoliceSummon extends SummonCard {
         Card c = new HeavyPoliceSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 6;
     }
 
     @Override

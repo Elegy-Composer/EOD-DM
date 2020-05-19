@@ -5,6 +5,10 @@ import eod.card.abstraction.Card;
 
 public abstract class ActionCard extends Card {
 
+    public ActionCard(int cost) {
+        super(cost);
+    }
+
     @Override
     public void effect() {
         applyEffect();

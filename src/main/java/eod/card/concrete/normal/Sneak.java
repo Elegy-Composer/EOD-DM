@@ -24,6 +24,9 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 import static eod.effect.EffectFunctions.GiveStatus;
 
 public class Sneak extends NormalCard{
+    public Sneak() {
+        super(2);
+    }
     @Override
     public void applyEffect() {
         Accessing ownedObjects = WarObject(player.getBoard()).which(OwnedBy(player));
@@ -46,11 +49,6 @@ public class Sneak extends NormalCard{
         Card c = new Sneak();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 2;
     }
 
     @Override

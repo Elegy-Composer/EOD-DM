@@ -3,6 +3,9 @@ package eod.card.abstraction.action;
 import eod.Player;
 
 public abstract class AttackCard extends ActionCard {
+    public AttackCard(int cost) {
+        super(cost);
+    }
     public Player rival;
 
     @Override
