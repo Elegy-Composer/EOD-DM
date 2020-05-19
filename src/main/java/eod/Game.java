@@ -1,5 +1,9 @@
 package eod;
 
+import eod.IO.Input;
+import eod.IO.LocalInput;
+import eod.IO.LocalOutput;
+import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
 import eod.event.Event;
@@ -43,9 +47,14 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         B.validateDeck();
 
         playerOrder = decidePlayerOrder();
+
+        playerOrder[0].sendPlayerOrder(true);
+        playerOrder[1].sendPlayerOrder(false);
+
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
+        //TODO: rewrite, the imagineer changed the rule.
         boolean hasInvalid;
         int drawRound = 0;
         do {
@@ -77,15 +86,17 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
             try {
                 eventManager.send(this, new RoundStartEvent(currentRound));
 
-                gameLoop();
+                gameLoop(currentRound.getPlayer());
 
                 eventManager.send(this, new RoundEndEvent(currentRound));
+                history.put(currentRound, takeSnapshot());
+
                 if(currentRound.getPlayer().equals(playerOrder[0])) {
                     currentRound = new Round(playerOrder[1], currentRound.getNumber());
                 } else {
                     currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
                 }
-                history.put(currentRound, takeSnapshot());
+
                 if(history.size() > maxHistoryLength) {
                     Round first = history.keySet().toArray(new Round[0])[0];
                     history.remove(first);
@@ -134,7 +145,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         return !player.checkInHand(ActionCard.class);
     }
 
-    private void gameLoop() throws GameLosingException {
+    private void gameLoop(Player player) throws GameLosingException {
+        player.drawFromDeck(currentRound.getNumber() == 1 ? 2:1);
+        player.startAutoAttackInOrder();
+
+
     }
 
     public void sendEvent(GameObject sender, Event event) {

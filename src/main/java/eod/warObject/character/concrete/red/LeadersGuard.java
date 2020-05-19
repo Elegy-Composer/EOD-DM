@@ -20,7 +20,9 @@ public class LeadersGuard extends Shooter {
 
     @Override
     public SummonCard getSummonCard() {
-        return new LeadersGuardSummon(player);
+        SummonCard c = new LeadersGuardSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class LeadersGuard extends Shooter {
 
         @Override
         public RegionalAttack to(ArrayList<Point> candidates, int number) {
-            Point target = askToSelectFrom(candidates);
+            Point target = askToSelectOneFrom(candidates);
             if(player.getBoard().getSurrounding(player.getLeader().position, 1).contains(target)) {
                 param.hp *= 2;
             }

@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GuerrillaShooterSummon;
+import eod.effect.Summon;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
@@ -19,7 +20,9 @@ public class GuerrillaShooter extends Shooter {
 
     @Override
     public SummonCard getSummonCard() {
-        return new GuerrillaShooterSummon(player);
+        SummonCard c = new GuerrillaShooterSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

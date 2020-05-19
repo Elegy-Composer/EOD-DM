@@ -13,9 +13,6 @@ import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class MaximumPower extends NormalCard {
-    public MaximumPower(Player p) {
-        super(p);
-    }
 
     @Override
     public void applyEffect() {
@@ -40,7 +37,9 @@ public class MaximumPower extends NormalCard {
 
     @Override
     public Card copy() {
-        return new MaximumPower(player);
+        Card c = new MaximumPower();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

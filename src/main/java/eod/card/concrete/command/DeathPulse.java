@@ -10,10 +10,7 @@ import eod.warObject.leader.red.Sundar;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 
-public class DeathPulse extends AttackCard implements CommandCard {
-    public DeathPulse(Player p) {
-        super(p);
-    }
+public class DeathPulse extends AttackCard {
 
     @Override
     public void attack() {
@@ -23,7 +20,9 @@ public class DeathPulse extends AttackCard implements CommandCard {
 
     @Override
     public Card copy() {
-        return new DeathPulse(player);
+        Card c = new DeathPulse();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

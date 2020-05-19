@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.red.GangBoss;
 import static eod.effect.EffectFunctions.Summon;
 
 public class GangBossSummon extends SummonCard {
-    public GangBossSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public GangBossSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class GangBossSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new GangBossSummon(player);
+        Card c = new GangBossSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

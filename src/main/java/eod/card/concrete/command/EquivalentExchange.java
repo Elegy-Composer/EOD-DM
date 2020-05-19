@@ -9,10 +9,7 @@ import eod.warObject.character.concrete.red.LittleGhost;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class EquivalentExchange extends NormalCard implements CommandCard {
-    public EquivalentExchange(Player p) {
-        super(p);
-    }
+public class EquivalentExchange extends NormalCard {
 
     @Override
     public void applyEffect() {
@@ -22,7 +19,9 @@ public class EquivalentExchange extends NormalCard implements CommandCard {
 
     @Override
     public Card copy() {
-        return new EquivalentExchange(player);
+        Card c = new EquivalentExchange();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

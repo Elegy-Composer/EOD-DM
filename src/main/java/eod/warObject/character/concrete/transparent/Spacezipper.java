@@ -7,6 +7,7 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SpacezipperSummon;
 import eod.event.Event;
+import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
 import eod.warObject.Marker;
 import eod.warObject.character.abstraction.Character;
@@ -79,7 +80,9 @@ public class Spacezipper extends Character implements Marker {
 
     @Override
     public SummonCard getSummonCard() {
-        return new SpacezipperSummon(player);
+        SummonCard c = new SpacezipperSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

@@ -41,7 +41,9 @@ public class Drone extends Machine implements CanAttack, Damageable {
 
     @Override
     public SummonCard getSummonCard() {
-        return new DroneSummon(player);
+        SummonCard c = new DroneSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override
