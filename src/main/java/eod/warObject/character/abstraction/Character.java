@@ -19,13 +19,11 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     protected int max_hp;
     protected int hp;
     protected int attack;
-    public int attackRange;
     protected final Party party;
     private CanAttack attacker;
 
-    public Character(Player player, int hp, int attack, int range, Party party) {
+    public Character(Player player, int hp, int attack, Party party) {
         super(player);
-        this.attackRange = range;
         this.player = player;
         max_hp = hp;
         this.hp = max_hp;
@@ -36,11 +34,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     @Override
     public boolean hasStatus(Status s) {
         return status.contains(s);
-    }
-
-    @Override
-    public ArrayList<Point> getAttackRange() {
-        return player.getBoard().getSurroundingEmpty(position, attackRange);
     }
 
     @Override

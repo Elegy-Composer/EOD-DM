@@ -5,37 +5,37 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
-import eod.warObject.character.concrete.transparent.Spacezipper;
+import eod.warObject.character.concrete.blue.Repairman;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class SpacezipperSummon extends SummonCard {
-    public SpacezipperSummon(Player p) {
-        super(p, SummonCardType.SPECIAL);
+public class RepairmanSummon extends SummonCard {
+    public RepairmanSummon(Player p) {
+        super(p, SummonCardType.NORMAL);
     }
 
     @Override
     public void summon() {
-        Summon(player, new Spacezipper(player)).from(player.getBaseEmpty());
+        Summon(player, new Repairman(player)).from(player.getBaseEmpty());
     }
 
     @Override
     public Card copy() {
-        return new SpacezipperSummon(player);
+        return new RepairmanSummon(player);
     }
 
     @Override
     public int getCost() {
-        return 7;
+        return 2;
     }
 
     @Override
     public String getName() {
-        return "召喚 圭月";
+        return "召喚 維修技師";
     }
 
     @Override
     public Party getParty() {
-        return Party.TRANSPARENT;
+        return Party.BLUE;
     }
 }

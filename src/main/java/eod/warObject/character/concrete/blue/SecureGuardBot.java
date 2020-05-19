@@ -19,7 +19,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class SecureGuardBot extends Machine {
     CanAttack attacker;
     public SecureGuardBot(Player player) {
-        super(player, 4, 4, 1, Party.BLUE);
+        super(player, 4, 4, Party.BLUE);
     }
 
     @Override

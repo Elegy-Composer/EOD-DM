@@ -5,37 +5,37 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
-import eod.warObject.character.concrete.transparent.Spacezipper;
+import eod.warObject.character.concrete.red.GangBoss;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class SpacezipperSummon extends SummonCard {
-    public SpacezipperSummon(Player p) {
-        super(p, SummonCardType.SPECIAL);
+public class GangBossSummon extends SummonCard {
+    public GangBossSummon(Player p) {
+        super(p, SummonCardType.NORMAL);
     }
 
     @Override
     public void summon() {
-        Summon(player, new Spacezipper(player)).from(player.getBaseEmpty());
+        Summon(player, new GangBoss(player)).from(player.getBaseEmpty());
     }
 
     @Override
     public Card copy() {
-        return new SpacezipperSummon(player);
+        return new GangBossSummon(player);
     }
 
     @Override
     public int getCost() {
-        return 7;
+        return 5;
     }
 
     @Override
     public String getName() {
-        return "召喚 圭月";
+        return "武鬥派頭頭";
     }
 
     @Override
     public Party getParty() {
-        return Party.TRANSPARENT;
+        return Party.RED;
     }
 }

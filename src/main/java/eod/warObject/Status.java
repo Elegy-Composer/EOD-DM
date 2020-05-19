@@ -4,5 +4,7 @@ public enum Status {
     ATTACKED,
     LOCKED,
     SNEAK,
-    DEAD
+    DEAD,
+    STABLE,
+    FURIOUS,
 }

@@ -2,10 +2,11 @@ package eod.warObject.leader.red;
 
 import eod.GameObject;
 import eod.Gameboard;
+import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.concrete.attack.red.DeathPulse;
-import eod.card.concrete.normal.EquivalentExchange;
+import eod.card.concrete.command.DeathPulse;
+import eod.card.concrete.command.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
@@ -27,7 +28,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class Sundar extends Leader implements EventListener {
     public Sundar(Player player) {
-        super(player, 20);
+        super(player, 20, 0, Party.RED);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class Sundar extends Leader implements EventListener {
     }
 
     @Override
-    protected ArrayList<Card> generateSpecialOrder() {
+    protected ArrayList<Card> generateCommand() {
         ArrayList<Card> deck = new ArrayList<>();
         deck.add(new EquivalentExchange(player));
         deck.add(new DeathPulse(player));
