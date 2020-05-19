@@ -4,6 +4,9 @@ import eod.Player;
 import eod.warObject.CanAttack;
 import eod.warObject.Status;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Conditions {
     public static AttackedCondition Injured() {
         return new AttackedCondition();
@@ -15,6 +18,10 @@ public class Conditions {
 
     public static BelongCondition Being(Class type) {
         return new BelongCondition(type);
+    }
+
+    public static InPointCollectionCondition inPoints(ArrayList<Point> points) {
+        return new InPointCollectionCondition(points);
     }
 
     public static InAttackRangeCondition InRangeOf(CanAttack center) {
