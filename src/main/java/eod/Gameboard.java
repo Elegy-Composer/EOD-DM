@@ -20,7 +20,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         this.game = game;
     }
 
-    public <T extends WarObject>T getObjectOn(int x, int y) throws IllegalArgumentException {
+    public <T extends WarObject> T getObjectOn(int x, int y) throws IllegalArgumentException {
         if(!hasObjectOn(x, y)) {
             throw new IllegalArgumentException("There's no object on ("+x+", "+y+").");
         }

@@ -20,5 +20,5 @@ public interface Input {
     public Point waitForChoosePointFrom(Point[] points);
     public Card waitForChooseCardFrom(Card[] cards);
     public WarObject waitForChooseWarObjectFrom(WarObject[] objects);
-    public WarObject[] waitForChooseMultipleWarObjectFrom(WarObject[] objects, int number);
+    public WarObject[] waitForChooseWarObjectFrom(WarObject[] objects, int number);
 }
