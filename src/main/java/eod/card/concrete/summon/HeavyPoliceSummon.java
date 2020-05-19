@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.blue.HeavyPolice;
 import static eod.effect.EffectFunctions.Summon;
 
 public class HeavyPoliceSummon extends SummonCard {
-    public HeavyPoliceSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public HeavyPoliceSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class HeavyPoliceSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new HeavyPoliceSummon(player);
+        Card c = new HeavyPoliceSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

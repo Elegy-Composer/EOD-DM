@@ -15,7 +15,9 @@ public class OneTimeAssassin extends Assassin {
 
     @Override
     public SummonCard getSummonCard() {
-        return new OneTimeAssassinSummon(player);
+        SummonCard card = new OneTimeAssassinSummon();
+        card.setPlayer(player);
+        return card;
     }
 
     @Override

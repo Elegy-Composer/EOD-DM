@@ -11,8 +11,8 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class OneTimeAssassinSummon extends SummonCard {
     // TODO: remove or change the name
-    public OneTimeAssassinSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public OneTimeAssassinSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -22,7 +22,9 @@ public class OneTimeAssassinSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new OneTimeAssassinSummon(player);
+        Card c = new OneTimeAssassinSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

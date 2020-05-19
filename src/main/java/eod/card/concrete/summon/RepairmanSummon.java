@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.blue.Repairman;
 import static eod.effect.EffectFunctions.Summon;
 
 public class RepairmanSummon extends SummonCard {
-    public RepairmanSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public RepairmanSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class RepairmanSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new RepairmanSummon(player);
+        Card c = new RepairmanSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override
