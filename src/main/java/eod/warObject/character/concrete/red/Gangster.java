@@ -5,6 +5,7 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangsterSummon;
 import eod.exceptions.NotSupportedException;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
@@ -26,6 +27,8 @@ public class Gangster extends Character {
 
     @Override
     public void attack() {
-        RequestRegionalAttack(player, attack).from(this).to(player.getFront(position, 1));
+        PointParam param = new PointParam();
+        param.range = 1;
+        RequestRegionalAttack(player, attack).from(this).to(player.getFront(position, param));
     }
 }

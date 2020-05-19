@@ -1,9 +1,6 @@
 package eod.warObject.leader.red;
 
-import eod.GameObject;
-import eod.Gameboard;
-import eod.Party;
-import eod.Player;
+import eod.*;
 import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
@@ -11,6 +8,7 @@ import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
 import eod.param.AttackParam;
+import eod.param.PointParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -38,16 +36,21 @@ public class Sundar extends Leader implements EventListener {
 
     @Override
     public void attack() {
-        Point p = player.selectPosition(player.getBoard().getSurroundingEmpty(position, 1));
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        param.range = 1;
+        Point p = player.selectPosition(player.getBoard().getSurrounding(position, param));
         player.summonObject(new LittleGhost(player), p);
         canHandle.add(ObjectDeadEvent.class);
     }
 
     public void deathPulse() {
-        ArrayList<Point> targets = player.getBoard().get8ways(position, Gameboard.boardSize);
-        AttackParam param = new AttackParam();
-        param.hp = 4;
-        attack(targets, param);
+        PointParam pointParam = new PointParam();
+        pointParam.range = Gameboard.boardSize;
+        ArrayList<Point> targets = player.getBoard().get8ways(position, pointParam);
+        AttackParam attackParam = new AttackParam();
+        attackParam.hp = 4;
+        attack(targets, attackParam);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class WarObjectSpecifier {
                 .toArray(WarObject[]::new));
     }
 
-    public static Accessing Touchable(Gameboard gameboard) {
+    public static Accessing Damageable(Gameboard gameboard) {
         WarObject[][] objects = gameboard.takeSnapshot().getAllObjects();
 
         return new Accessing(Arrays.stream(objects)

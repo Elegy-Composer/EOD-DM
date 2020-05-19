@@ -6,9 +6,11 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SecureGuardBotSummon;
 import eod.param.AttackParam;
+import eod.param.PointParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
+import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
@@ -56,7 +58,7 @@ public class SecureGuardBot extends Machine {
                     target.attacked(this, hp);
                 }
                 affected.add(target);
-                target.addStatus(Status.ATTACKED);
+                ((WarObject) target).addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
             }
@@ -66,6 +68,8 @@ public class SecureGuardBot extends Machine {
 
     @Override
     public ArrayList<Point> getAttackRange() {
-        return player.getBoard().getSurrounding(this.position, 1);
+        PointParam param = new PointParam();
+        param.range = 1;
+        return player.getBoard().getSurrounding(this.position, param);
     }
 }

@@ -6,6 +6,7 @@ import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.LeadersGuardSummon;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
 import java.awt.*;
@@ -47,7 +48,9 @@ public class LeadersGuard extends Shooter {
         @Override
         public RegionalAttack to(ArrayList<Point> candidates, int number) {
             Point target = askToSelectFrom(candidates);
-            if(player.getBoard().getSurrounding(player.getLeader().position, 1).contains(target)) {
+            PointParam pointParam = new PointParam();
+            pointParam.range = 1;
+            if(player.getBoard().getSurrounding(player.getLeader().position, pointParam).contains(target)) {
                 param.hp *= 2;
             }
             ArrayList<Point> singleTarget = new ArrayList<>(1);
