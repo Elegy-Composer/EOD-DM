@@ -5,39 +5,37 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
-import eod.warObject.character.concrete.transparent.Spacezipper;
+import eod.warObject.character.concrete.blue.HeavyPolice;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class SpacezipperSummon extends SummonCard {
-    public SpacezipperSummon() {
-        super(SummonCardType.SPECIAL);
+public class HeavyPoliceSummon extends SummonCard {
+    public HeavyPoliceSummon(Player p) {
+        super(p, SummonCardType.NORMAL);
     }
 
     @Override
     public void summon() {
-        Summon(player, new Spacezipper(player)).from(player.getBaseEmpty());
+        Summon(player, new HeavyPolice(player)).from(player.getBaseEmpty());
     }
 
     @Override
     public Card copy() {
-        Card c = new SpacezipperSummon();
-        c.setPlayer(player);
-        return c;
+        return new HeavyPoliceSummon(player);
     }
 
     @Override
     public int getCost() {
-        return 7;
+        return 6;
     }
 
     @Override
     public String getName() {
-        return "召喚 圭月";
+        return "召喚 重裝備武警";
     }
 
     @Override
     public Party getParty() {
-        return Party.TRANSPARENT;
+        return Party.BLUE;
     }
 }

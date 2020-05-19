@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class GhostOfHatred extends Ghost {
     public GhostOfHatred(Player player) {
-        super(player, 1, 1);
+        super(player, 1);
         // TODO: ask Spacezipper about the details of GhostOfHatred
     }
 

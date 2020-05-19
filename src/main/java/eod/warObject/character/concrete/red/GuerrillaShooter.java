@@ -15,7 +15,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class GuerrillaShooter extends Shooter {
     private int specialEffectTimes = 0;
     public GuerrillaShooter(Player player) {
-        super(player, 1, 2, 1, Party.RED);
+        super(player, 1, 2, Party.RED);
     }
 
     @Override

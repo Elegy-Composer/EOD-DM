@@ -1,8 +1,9 @@
-package eod.card.concrete.attack.red;
+package eod.card.concrete.command;
 
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
+import eod.card.abstraction.CommandCard;
 import eod.card.abstraction.action.AttackCard;
 import eod.warObject.leader.red.Sundar;
 

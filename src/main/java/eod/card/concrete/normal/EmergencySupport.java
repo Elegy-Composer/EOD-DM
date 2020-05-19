@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.Summon;
 
 public class EmergencySupport extends NormalCard {
-    private boolean followingActions;
 
     @Override
     public void applyEffect() {
-        setFollowingActions();
+        // TODO: add 3 cost to the player
+        boolean followingActions = player.getLeader().getHp() < 7;
         Gameboard board = player.getBoard();
 
         SWAT swat = new SWAT(player);
@@ -37,10 +37,6 @@ public class EmergencySupport extends NormalCard {
             drone.attack();
             bot.attack();
         }
-    }
-
-    private void setFollowingActions() {
-        followingActions = player.getLeader().getHp() < 7;
     }
 
     private ArrayList<Point> baseOrConflictEmpty() {

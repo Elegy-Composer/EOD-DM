@@ -5,7 +5,7 @@ import eod.Player;
 import eod.warObject.WarObject;
 
 public abstract class Bunker extends Character {
-    public Bunker(Player player, int hp, int attack, int range, Party party) {
-        super(player, hp, attack, range, party);
+    public Bunker(Player player, int hp, int attack, Party party) {
+        super(player, hp, attack, party);
     }
 }

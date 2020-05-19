@@ -23,7 +23,7 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 public class Spacezipper extends Character implements Marker {
     private ArrayList<Point> marked;
     public Spacezipper(Player player) {
-        super(player, 5, 3, -1, Party.TRANSPARENT);
+        super(player, 5, 3, Party.TRANSPARENT);
         canHandle.add(RoundStartEvent.class);
         marked = new ArrayList<>();
     }
@@ -60,7 +60,7 @@ public class Spacezipper extends Character implements Marker {
 
     @Override
     public String getName() {
-        return "空間之鏈 - 圭月";
+        return "圭月";
     }
 
     @Override

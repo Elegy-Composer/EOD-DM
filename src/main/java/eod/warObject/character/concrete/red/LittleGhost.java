@@ -7,7 +7,7 @@ import eod.warObject.character.abstraction.other.Ghost;
 
 public class LittleGhost extends Ghost {
     public LittleGhost(Player player) {
-        super(player, 1, 1);
+        super(player, 1);
         // TODO: ask Spacezipper about the details of LittleGhost
     }
 

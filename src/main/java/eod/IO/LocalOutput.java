@@ -92,4 +92,14 @@ public class LocalOutput implements Output {
     public void sendWarObjectSummoned(WarObject object, Point position) {
         System.out.println(object.getName() + "被召喚到了" + position.toString() + "的位置");
     }
+
+    @Override
+    public void sendWinning(Player player) {
+        System.out.println(player.getName() + "贏了");
+    }
+
+    @Override
+    public void sendLosing(Player player) {
+        System.out.println(player.getName() + "輸了");
+    }
 }

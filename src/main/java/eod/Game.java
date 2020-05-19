@@ -48,6 +48,9 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
 
         playerOrder = decidePlayerOrder();
 
+        playerOrder[0].sendPlayerOrder(true);
+        playerOrder[1].sendPlayerOrder(false);
+
         A.drawFromDeck(3);
         B.drawFromDeck(3);
 
@@ -83,7 +86,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
             try {
                 eventManager.send(this, new RoundStartEvent(currentRound));
 
-                gameLoop();
+                gameLoop(currentRound.getPlayer());
 
                 eventManager.send(this, new RoundEndEvent(currentRound));
                 history.put(currentRound, takeSnapshot());
@@ -142,7 +145,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         return !player.checkInHand(ActionCard.class);
     }
 
-    private void gameLoop() throws GameLosingException {
+    private void gameLoop(Player player) throws GameLosingException {
+        player.drawFromDeck(currentRound.getNumber() == 1 ? 2:1);
+        player.startAutoAttackInOrder();
+
+
     }
 
     public void sendEvent(GameObject sender, Event event) {

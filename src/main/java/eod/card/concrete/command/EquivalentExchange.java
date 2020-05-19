@@ -1,8 +1,9 @@
-package eod.card.concrete.normal;
+package eod.card.concrete.command;
 
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
+import eod.card.abstraction.CommandCard;
 import eod.card.abstraction.action.NormalCard;
 import eod.warObject.character.concrete.red.LittleGhost;
 

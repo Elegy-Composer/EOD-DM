@@ -27,4 +27,7 @@ public interface Output {
     public void sendWarObjectActivatedEffect(WarObject object);
     public void sendWarObjectSummoned(WarObject object, Point position);
 
+    public void sendWinning(Player player);
+    public void sendLosing(Player player);
+
 }

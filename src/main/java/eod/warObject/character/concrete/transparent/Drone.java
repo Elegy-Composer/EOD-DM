@@ -15,7 +15,7 @@ import static eod.specifier.condition.Conditions.*;
 public class Drone extends Machine implements CanAttack, Damageable {
 
     public Drone(Player player) {
-        super(player, 2, 3, 1, Party.TRANSPARENT);
+        super(player, 2, 3, Party.TRANSPARENT);
     }
 
     @Override
