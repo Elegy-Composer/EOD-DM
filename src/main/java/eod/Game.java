@@ -1,9 +1,5 @@
 package eod;
 
-import eod.IO.Input;
-import eod.IO.LocalInput;
-import eod.IO.LocalOutput;
-import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
 import eod.event.Event;

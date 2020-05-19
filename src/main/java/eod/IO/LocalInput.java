@@ -76,19 +76,11 @@ public class LocalInput implements Input {
 
     @Override
     public WarObject waitForChooseWarObjectFrom(WarObject[] objects) {
-        System.out.println("請選擇一個場上物體：");
-        showWarObjects(objects);
-
-        do {
-            int response = scanner.nextInt();
-            if (1 <= response && response <= objects.length) {
-                return objects[response-1];
-            }
-        } while(true);
+        return waitForChooseWarObjectFrom(objects, 1)[0];
     }
 
     @Override
-    public WarObject[] waitForChooseMultipleWarObjectFrom(WarObject[] objects, int number) {
+    public WarObject[] waitForChooseWarObjectFrom(WarObject[] objects, int number) {
         System.out.println("請選擇" + number + "個場上物體：");
         showWarObjects(objects);
 
