@@ -14,20 +14,22 @@ import static eod.specifier.WarObjectSpecifier.Character;
 import static eod.specifier.condition.Conditions.*;
 
 public class PreciseShot extends AttackCard {
-    public PreciseShot(Player p) {
-        super(p);
-    }
 
     @Override
     public void attack() {
         Accessing characters = Character(player.getBoard());
-        RegionalAttack attack = RequestRegionalAttack(player, 3).from(characters.which(OwnedBy(player)).which(Being(Shooter.class)).get());
+        RegionalAttack attack = RequestRegionalAttack(player, 3)
+                .from(
+                    characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
+                );
         attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
     }
 
     @Override
     public Card copy() {
-        return new PreciseShot(player);
+        Card c = new PreciseShot();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

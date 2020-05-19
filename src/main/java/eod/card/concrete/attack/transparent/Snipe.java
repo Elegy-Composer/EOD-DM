@@ -16,13 +16,12 @@ import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.*;
 
 public class Snipe extends AttackCard {
-    public Snipe(Player p) {
-        super(p);
-    }
 
     @Override
     public Card copy() {
-        return new Snipe(player);
+        Card c = new Snipe();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

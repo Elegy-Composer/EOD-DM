@@ -5,8 +5,8 @@ import eod.card.abstraction.Card;
 
 public abstract class SummonCard extends Card {
     public final SummonCardType type;
-    public SummonCard(Player p, SummonCardType type) {
-        super(p);
+    public SummonCard(SummonCardType type) {
+        super();
         this.type = type;
     }
 

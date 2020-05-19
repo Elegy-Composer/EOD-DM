@@ -16,7 +16,7 @@ public class RegionalAttack extends Attack {
     }
 
     public RegionalAttack from(WarObject[] objects) {
-        attacker = (CanAttack) askToSelectFrom(objects);
+        attacker = (CanAttack) askToSelectOneFrom(objects);
         return this;
     }
 
@@ -45,7 +45,7 @@ public class RegionalAttack extends Attack {
         }
         ArrayList<Point> targets = new ArrayList<>();
         for(int i = 0;i < number;i++) {
-            Point target = askToSelectFrom(candidates);
+            Point target = askToSelectOneFrom(candidates);
             targets.add(target);
             candidates.remove(target);
         }
@@ -58,7 +58,7 @@ public class RegionalAttack extends Attack {
     }
 
     public RegionalAttack to(WarObject[] candidates) {
-        WarObject target = askToSelectFrom(candidates);
+        WarObject target = askToSelectOneFrom(candidates);
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(target.position);
         return to(singleTarget);

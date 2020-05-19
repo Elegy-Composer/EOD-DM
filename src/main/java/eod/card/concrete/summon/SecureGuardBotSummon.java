@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.blue.SecureGuardBot;
 import static eod.effect.EffectFunctions.Summon;
 
 public class SecureGuardBotSummon extends SummonCard {
-    public SecureGuardBotSummon(Player p) {
-        super(p, SummonCardType.TOKEN);
+    public SecureGuardBotSummon() {
+        super(SummonCardType.TOKEN);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class SecureGuardBotSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new SecureGuardBotSummon(player);
+        Card c = new SecureGuardBotSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

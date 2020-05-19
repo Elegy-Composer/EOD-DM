@@ -16,13 +16,12 @@ import java.util.ArrayList;
 public abstract class WarObject implements GameObject, EventListener {
     public Point position;
     protected Player player;
-    public ArrayList<Class<? extends Event>> canHandle;
     ArrayList<Status> status;
+    protected ArrayList<Class<? extends Event>> canHandle;
 
     public WarObject(Player player) {
         this.player = player;
         canHandle = new ArrayList<>();
-        status = new ArrayList<>();
     }
 
     public Player getPlayer() {
@@ -68,6 +67,10 @@ public abstract class WarObject implements GameObject, EventListener {
         }
     }
 
+    public void addSupportedEventType(Class<? extends Event> eventType) {
+        canHandle.add(eventType);
+    }
+
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
         return canHandle;
@@ -75,6 +78,7 @@ public abstract class WarObject implements GameObject, EventListener {
 
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
+        //intended left blank
     }
 
     public abstract String getName();

@@ -23,7 +23,9 @@ public class SWAT extends Character {
 
     @Override
     public SummonCard getSummonCard() {
-        return new SWATSummon(player);
+        SummonCard c = new SWATSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

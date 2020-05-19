@@ -4,6 +4,7 @@ import eod.GameObject;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GhostOfHatredSummon;
+import eod.effect.Summon;
 import eod.event.Event;
 import eod.warObject.character.abstraction.other.Ghost;
 
@@ -23,6 +24,8 @@ public class GhostOfHatred extends Ghost {
 
     @Override
     public SummonCard getSummonCard() {
-        return new GhostOfHatredSummon(player);
+        SummonCard c = new GhostOfHatredSummon();
+        c.setPlayer(player);
+        return c;
     }
 }

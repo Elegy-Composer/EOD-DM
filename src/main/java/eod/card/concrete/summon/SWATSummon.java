@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.blue.SWAT;
 import static eod.effect.EffectFunctions.Summon;
 
 public class SWATSummon extends SummonCard {
-    public SWATSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public SWATSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class SWATSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new SWATSummon(player);
+        Card c = new SWATSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

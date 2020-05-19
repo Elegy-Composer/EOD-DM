@@ -1,6 +1,7 @@
 package eod.event;
 
 import eod.GameObject;
+import eod.Player;
 import eod.event.listener.EventListener;
 
 import java.util.ArrayList;

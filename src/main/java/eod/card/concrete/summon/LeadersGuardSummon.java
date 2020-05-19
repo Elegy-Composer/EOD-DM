@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.red.LeadersGuard;
 import static eod.effect.EffectFunctions.Summon;
 
 public class LeadersGuardSummon extends SummonCard {
-    public LeadersGuardSummon(Player p) {
-        super(p, SummonCardType.NORMAL);
+    public LeadersGuardSummon() {
+        super(SummonCardType.NORMAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class LeadersGuardSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new LeadersGuardSummon(player);
+        Card c = new LeadersGuardSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

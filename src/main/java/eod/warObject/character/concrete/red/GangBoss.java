@@ -22,7 +22,9 @@ public class GangBoss extends Fighter {
 
     @Override
     public SummonCard getSummonCard() {
-        return new GangBossSummon(player);
+        SummonCard card = new GangBossSummon();
+        card.setPlayer(player);
+        return card;
     }
 
     @Override

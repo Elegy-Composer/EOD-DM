@@ -14,7 +14,9 @@ public class HeavyPolice extends Character {
 
     @Override
     public SummonCard getSummonCard() {
-        return new HeavyPoliceSummon(player);
+        SummonCard card = new HeavyPoliceSummon();
+        card.setPlayer(player);
+        return card;
     }
 
     @Override

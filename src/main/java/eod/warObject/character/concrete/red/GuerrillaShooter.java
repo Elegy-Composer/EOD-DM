@@ -25,7 +25,9 @@ public class GuerrillaShooter extends Shooter {
 
     @Override
     public SummonCard getSummonCard() {
-        return new GuerrillaShooterSummon(player);
+        SummonCard c = new GuerrillaShooterSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

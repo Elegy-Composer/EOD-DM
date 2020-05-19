@@ -27,6 +27,7 @@ import static eod.effect.EffectFunctions.Summon;
 public class Sundar extends Leader implements EventListener {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
+        canHandle.add(ObjectDeadEvent.class);
     }
 
     @Override
@@ -41,7 +42,6 @@ public class Sundar extends Leader implements EventListener {
         param.range = 1;
         Point p = player.selectPosition(player.getBoard().getSurrounding(position, param));
         player.summonObject(new LittleGhost(player), p);
-        canHandle.add(ObjectDeadEvent.class);
     }
 
     public void deathPulse() {
@@ -83,8 +83,15 @@ public class Sundar extends Leader implements EventListener {
     @Override
     protected ArrayList<Card> generateCommand() {
         ArrayList<Card> deck = new ArrayList<>();
-        deck.add(new EquivalentExchange(player));
-        deck.add(new DeathPulse(player));
+
+        EquivalentExchange equivalentExchange = new EquivalentExchange();
+        equivalentExchange.setPlayer(player);
+
+        DeathPulse deathPulse = new DeathPulse();
+        deathPulse.setPlayer(player);
+
+        deck.add(equivalentExchange);
+        deck.add(deathPulse);
         return deck;
     }
 
@@ -99,9 +106,17 @@ public class Sundar extends Leader implements EventListener {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
                 Summon(player, new LittleGhost(player)).on(new Point(x, y));
-            } else if(attacker instanceof Ghost && ((WarObject) attacker).getPlayer().equals(player)){
+            } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                 player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }
         }
+    }
+
+    private boolean isDeadObjectOwnedByEnemy(WarObject deadObject) {
+        return deadObject.getPlayer().equals(player.rival());
+    }
+
+    private boolean isGhostOrSundar(CanAttack attacker) {
+        return attacker instanceof Ghost || attacker instanceof Sundar;
     }
 }

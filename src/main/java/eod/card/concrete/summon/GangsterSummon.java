@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.red.Gangster;
 import static eod.effect.EffectFunctions.Summon;
 
 public class GangsterSummon extends SummonCard {
-    public GangsterSummon(Player p) {
-        super(p, SummonCardType.TOKEN);
+    public GangsterSummon() {
+        super(SummonCardType.TOKEN);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class GangsterSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new GangsterSummon(player);
+        Card c = new GangsterSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

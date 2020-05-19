@@ -7,7 +7,7 @@ import eod.snapshots.Snapshotted;
 
 import java.util.*;
 
-public class Deck implements Snapshotted<Deck.Snapshot>, GameObject {
+public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameObject {
 
     public List<Card> cards;
 
@@ -64,6 +64,11 @@ public class Deck implements Snapshotted<Deck.Snapshot>, GameObject {
     @Override
     public int hashCode() {
         return Objects.hash(cards);
+    }
+
+    @Override
+    public Iterator<Card> iterator() {
+        return cards.iterator();
     }
 
     @Override

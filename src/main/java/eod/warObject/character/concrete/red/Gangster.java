@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangsterSummon;
+import eod.effect.Summon;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
@@ -17,7 +18,9 @@ public class Gangster extends Character {
 
     @Override
     public SummonCard getSummonCard() {
-        return new GangsterSummon(player);
+        SummonCard card = new GangsterSummon();
+        card.setPlayer(player);
+        return card;
     }
 
     @Override

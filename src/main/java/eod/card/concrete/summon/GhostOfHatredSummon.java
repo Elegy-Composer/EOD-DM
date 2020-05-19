@@ -11,8 +11,8 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class GhostOfHatredSummon extends SummonCard {
 
-    public GhostOfHatredSummon(Player p) {
-        super(p, SummonCardType.TOKEN);
+    public GhostOfHatredSummon() {
+        super(SummonCardType.TOKEN);
     }
 
     @Override
@@ -22,7 +22,9 @@ public class GhostOfHatredSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new GhostOfHatredSummon(player);
+        Card c = new GhostOfHatredSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override

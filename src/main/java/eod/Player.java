@@ -5,8 +5,9 @@ import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
-import eod.event.ObjectDeadEvent;
-import eod.event.ObjectMovingEvent;
+import eod.event.*;
+import eod.event.Event;
+import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
@@ -16,9 +17,10 @@ import eod.warObject.leader.Leader;
 
 import java.awt.*;
 import java.util.*;
+import java.util.function.Function;
 
 public class Player implements Snapshotted<Player.Snapshot>,
-                                GameObject {
+                                GameObject, EventListener {
 
     private Deck deck;
     private Game game;
@@ -26,15 +28,21 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private Leader leader;
     private Input input;
     private Output output;
+    private String name;
     private boolean isPlayerA;
 
-    public Player(Deck deck) {
-        this(deck, new Hand());
+    public Player(Deck deck, String name) {
+        this(deck, new Hand(), name);
     }
 
-    public Player(Deck deck, Hand hand) {
+    public Player(Deck deck, Hand hand, String name) {
         this.deck = deck;
         this.hand = hand;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setLeader(Leader leader) {
@@ -43,6 +51,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void attachToGame(Game game) {
         this.game = game;
+        game.registerListener(this);
+    }
+    public void attachIO(Input input, Output output) {
+        this.input = input;
+        this.output = output;
     }
 
     public void setPlayerA(boolean is) {
@@ -55,11 +68,16 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void handReceive(ArrayList<Card> h) {
         hand.receive(h);
+        output.sendReceivedCards(this, h.toArray(new Card[0]));
     }
 
     public void drawFromDeck(int count) {
+        output.sendDrawingCards(this);
+
         Card[] cards = deck.draw(count);
         handReceive(new ArrayList<>(Arrays.asList(cards)));
+
+        output.sendReceivedCards(this, cards);
     }
 
     public boolean checkInHand(Class<? extends Card> c) {
@@ -73,13 +91,19 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void dropCards(int k) throws IllegalArgumentException {
         hand.randomlyDropCards(k);
     }
+
+    public void startAutoAttackInOrder() {
+        //TODO: finish this
+        Gameboard board = game.getBoard();
+
+    }
     
     public void announceWon() {
-        
+        output.sendWinning(this);
     }
     
     public void announceLost() {
-        
+        output.sendLosing(this);
     }
 
     //TODO: implement validateDeck, just by checking the number of cards and other things.
@@ -101,6 +125,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public boolean inBase(Point p) {
         return game.getBoard().inBase(this, p);
+    }
+
+    public void sendPlayerOrder(boolean isFirst) {
+        output.sendPlayerOrder(this, isFirst);
     }
 
     public ArrayList<Point> getBaseEmpty() {
@@ -179,6 +207,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return objects[random.nextInt(objects.length)];
     }
 
+    public WarObject[] selectMultipleObject(WarObject[] objects, int number) {
+        //TODO: asks the player to select characters
+        return objects;
+    }
+
     public Point selectPosition(ArrayList<Point> points) {
         //TODO: connection with the frontend
         Random random = new Random();
@@ -240,6 +273,22 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
         }
         return getBoard().getLine(p, dx, 0, param);
+    }
+
+    @Override
+    public ArrayList<Class<? extends Event>> supportedEventTypes() {
+        return null;
+    }
+
+    @Override
+    public void onEventOccurred(GameObject sender, Event event) {
+        if(event instanceof RoundStartEvent) {
+            output.sendRoundStarted(((RoundStartEvent) event).getStartedRound());
+            return;
+        }
+        if(event instanceof RoundEndEvent) {
+            output.sendRoundEnded(((RoundEndEvent) event).getEndedRound());
+        }
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

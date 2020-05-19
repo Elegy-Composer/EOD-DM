@@ -30,7 +30,7 @@ public class Move implements Effect, GameObject {
     }
 
     public Move from(WarObject[] objects) {
-        target = askToSelectFrom(objects);
+        target = askToSelectOneFrom(objects);
         if(mode==MoveMode.STEP) {
             target.move(step);
         }
@@ -41,7 +41,7 @@ public class Move implements Effect, GameObject {
         if(mode != MoveMode.TELEPORT) {
             throw new MoveInvalidException("the method \"to\" is used only for teleport moves.");
         }
-        Point selected = askToSelectFrom(points);
+        Point selected = askToSelectOneFrom(points);
         target.moveTo(selected);
         return this;
     }

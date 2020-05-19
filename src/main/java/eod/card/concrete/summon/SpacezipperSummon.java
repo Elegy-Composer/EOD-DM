@@ -10,8 +10,8 @@ import eod.warObject.character.concrete.transparent.Spacezipper;
 import static eod.effect.EffectFunctions.Summon;
 
 public class SpacezipperSummon extends SummonCard {
-    public SpacezipperSummon(Player p) {
-        super(p, SummonCardType.SPECIAL);
+    public SpacezipperSummon() {
+        super(SummonCardType.SPECIAL);
     }
 
     @Override
@@ -21,7 +21,9 @@ public class SpacezipperSummon extends SummonCard {
 
     @Override
     public Card copy() {
-        return new SpacezipperSummon(player);
+        Card c = new SpacezipperSummon();
+        c.setPlayer(player);
+        return c;
     }
 
     @Override
