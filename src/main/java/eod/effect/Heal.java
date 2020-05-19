@@ -15,8 +15,15 @@ public class Heal implements Effect, GameObject {
     }
 
     public void to(WarObject[] objects) {
-        Damageable selected = (Damageable) askToSelectFrom(objects);
+        Damageable selected = (Damageable) askToSelectOneFrom(objects);
         selected.heal(hp);
+    }
+
+    public void to(WarObject[] objects, int number) {
+        Damageable[] selectedGroup = (Damageable[]) askToSelectMultipleFrom(objects, number);
+        for(Damageable select: selectedGroup) {
+            select.heal(hp);
+        }
     }
 
     @Override

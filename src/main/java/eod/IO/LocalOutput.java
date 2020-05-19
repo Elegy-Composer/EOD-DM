@@ -63,7 +63,7 @@ public class LocalOutput implements Output {
 
     @Override
     public void sendWarObjectApChanged(WarObject object, int ap) {
-        System.out.println(object.getName() + "的HP變成了" + ap);
+        System.out.println(object.getName() + "的AP變成了" + ap);
     }
 
     @Override

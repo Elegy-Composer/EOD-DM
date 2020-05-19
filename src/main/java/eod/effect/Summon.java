@@ -22,7 +22,7 @@ public class Summon implements Effect, GameObject {
     }
 
     public Point from(ArrayList<Point> points) {
-        return on(askToSelectFrom(points));
+        return on(askToSelectOneFrom(points));
     }
 
     @Override

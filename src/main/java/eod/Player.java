@@ -92,6 +92,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     public void startAutoAttackInOrder() {
+        //TODO: finish this
         Gameboard board = game.getBoard();
 
     }
@@ -199,6 +200,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         //TODO: asks the player to select a character
         Random random = new Random();
         return objects[random.nextInt(objects.length)];
+    }
+
+    public WarObject[] selectMultipleObject(WarObject[] objects, int number) {
+        //TODO: asks the player to select characters
+        return objects;
     }
 
     public Point selectPosition(ArrayList<Point> points) {

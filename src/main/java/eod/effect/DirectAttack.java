@@ -1,9 +1,7 @@
 package eod.effect;
 
-import eod.GameObject;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
-import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -18,7 +16,7 @@ public class DirectAttack extends Attack {
     }
 
     public DirectAttack from(WarObject[] objects) {
-        attacker = (CanAttack) askToSelectFrom(objects);
+        attacker = (CanAttack) askToSelectOneFrom(objects);
         return this;
     }
 
@@ -33,7 +31,7 @@ public class DirectAttack extends Attack {
     }
 
     public DirectAttack to(WarObject[] objects) {
-        target = (Damageable) askToSelectFrom(objects);
+        target = (Damageable) askToSelectOneFrom(objects);
         try {
             affected.addAll(attacker.attack(target, param));
         } catch (NotSupportedException e) {
