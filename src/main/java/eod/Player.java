@@ -275,9 +275,17 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return getBoard().getLine(p, dx, 0, param);
     }
 
+    public void registerListener(EventListener listener) {
+        game.registerListener(listener);
+    }
+
+    public void unregisterListener(EventListener listener) {
+        game.unregisterListener(listener);
+    }
+
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

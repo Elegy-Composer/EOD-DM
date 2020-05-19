@@ -31,7 +31,7 @@ public class Move implements Effect, GameObject {
 
     public Move from(WarObject[] objects) {
         target = askToSelectOneFrom(objects);
-        if(mode==MoveMode.STEP) {
+        if(mode == MoveMode.STEP) {
             target.move(step);
         }
         return this;
