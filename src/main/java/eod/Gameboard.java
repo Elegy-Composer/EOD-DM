@@ -3,7 +3,6 @@ package eod;
 import eod.exceptions.MoveInvalidException;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
-import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
@@ -145,7 +144,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
             WarObject object = getObjectOn(p.x, p.y);
             if(!param.emptySpace) {
                 boolean clean = true;
-                for(Status status:param.excludeStatus) {
+                for(Status status:param.excludeObjectStatus) {
                     if(object.hasStatus(status)) {
                         clean = false;
                         break;
