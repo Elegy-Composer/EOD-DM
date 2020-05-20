@@ -71,6 +71,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         output.sendReceivedCards(this, h.toArray(new Card[0]));
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
     public void drawFromDeck(int count) {
         output.sendDrawingCards(this);
 

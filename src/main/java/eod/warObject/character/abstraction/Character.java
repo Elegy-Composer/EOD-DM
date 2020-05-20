@@ -71,7 +71,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
                 if(param.realDamage) {
-                    target.damage(hp);
+                    target.realDamage(hp);
                 } else {
                     target.attacked(this, hp);
                 }
@@ -96,7 +96,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
         Arrays.stream(targets)
                 .forEach(target -> {
                     if(param.realDamage) {
-                        target.damage(hp);
+                        target.realDamage(hp);
                     } else {
                         target.attacked(this, hp);
                     }
@@ -107,11 +107,16 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void damage(int val) {
+    public void realDamage(int val) {
         hp -= val;
         if(hp <= 0) {
             die();
         }
+    }
+
+    @Override
+    public void damage(int val) {
+        realDamage(val);
     }
 
     @Override
