@@ -6,65 +6,56 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
-import eod.event.RoundEndEvent;
 import eod.event.TargetedEvent;
 import eod.event.listener.EventListener;
-import eod.exceptions.NotSupportedException;
-import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
-import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
-public class FightBack extends NormalCard {
-    public FightBack() {
-        super(4);
+public class SupportAttack extends NormalCard {
+    public SupportAttack() {
+        super(2);
     }
 
     @Override
     public void applyEffect() {
-        player.registerListener(
-                new AttackDetect((Damageable) player.selectObject(
-                    WarObject(player.getBoard())
-                            .which(Being(Damageable.class))
-                            .which(OwnedBy(player)).get())
-                )
-        );
+        Character c = (Character) player.selectObject(WarObject(player.getBoard()).which(Being(Character.class)).which(OwnedBy(player)).get());
+        player.registerListener(new EnemyAttack(c));
     }
 
     @Override
     public Card copy() {
-        Card c = new FightBack();
+        Card c = new SupportAttack();
         c.setPlayer(player);
         return c;
     }
 
     @Override
     public String getName() {
-        return "反擊";
+        return "支援打擊";
     }
 
     @Override
     public Party getParty() {
-        return Party.TRANSPARENT;
+        return Party.BLUE;
     }
 
-    public class AttackDetect implements EventListener, GameObject {
-        private Damageable watching;
+    public class EnemyAttack implements EventListener, GameObject {
+        private Character holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public AttackDetect(Damageable watching) {
-            this.watching = watching;
+        public EnemyAttack(Character holder) {
+            this.holder = holder;
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
             canHandle.add(TargetedEvent.class);
-            canHandle.add(RoundEndEvent.class);
         }
+
         @Override
         public ArrayList<Class<? extends Event>> supportedEventTypes() {
             return canHandle;
@@ -73,29 +64,26 @@ public class FightBack extends NormalCard {
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof ObjectDeadEvent) {
-                if(((ObjectDeadEvent) event).getDeadObject() == watching) {
-                    teardown();
-                }
-            }
-            if(event instanceof RoundEndEvent) {
-                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() == player.rival().isPlayerA()) {
+                ObjectDeadEvent e = (ObjectDeadEvent) event;
+                if(e.getDeadObject() == holder) {
                     teardown();
                 }
             }
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
-                if(e.getTarget() == watching) {
-                    Damageable attacker = (Damageable) e.getAttacker();
-                    attacker.damage(4);
+                if(e.getTarget() != holder) {
+                    ((Damageable) e.getAttacker()).damage(2);
+                    teardown();
                 }
-                teardown();
             }
         }
 
         @Override
         public void teardown() {
+            player.unregisterListener(this);
             canHandle.clear();
-            watching = null;
+            canHandle = null;
+            holder = null;
         }
     }
 }
