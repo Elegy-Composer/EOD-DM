@@ -41,7 +41,7 @@ public class SecureGuardBot extends Machine {
 
     @Override
     public void attack(){
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+        RequestRegionalAttack(attack).from(this).to(getAttackRange());
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Drone extends Machine implements CanAttack, Damageable {
         if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
             attack += 2;
         }
-        RequestRegionalAttack(player, attack).from(this).to(WarObject(player.getBoard())
+        RequestRegionalAttack(attack).from(this).to(WarObject(player.getBoard())
                 .which(OwnedBy(player.rival()))
                 .which(Being(Damageable.class))
                 .which(InRangeOf(this)).get());

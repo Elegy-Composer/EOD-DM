@@ -7,7 +7,6 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SpacezipperSummon;
 import eod.event.Event;
-import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
 import eod.warObject.Marker;
 import eod.warObject.character.abstraction.Character;
@@ -15,10 +14,7 @@ import eod.warObject.character.abstraction.Character;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
-import static eod.specifier.WarObjectSpecifier.Touchable;
-import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class Spacezipper extends Character implements Marker {
     private ArrayList<Point> marked;
@@ -49,7 +45,7 @@ public class Spacezipper extends Character implements Marker {
             }
         }
 
-        RequestRegionalAttack(player, attack).from(this).realDamage().to(targets);
+        RequestRegionalAttack(attack).from(this).realDamage().to(targets);
     }
 
     @Override

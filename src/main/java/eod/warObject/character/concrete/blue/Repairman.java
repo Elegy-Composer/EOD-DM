@@ -4,8 +4,6 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.RepairmanSummon;
-import eod.effect.Summon;
-import eod.exceptions.NotSupportedException;
 import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.supporter.Sapper;
 
@@ -45,7 +43,7 @@ public class Repairman extends Sapper {
                     machine.addAttack(1);
         });
 
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+        RequestRegionalAttack(attack).from(this).to(getAttackRange());
     }
 
     @Override

@@ -17,7 +17,7 @@ public class PreciseShot extends AttackCard {
     @Override
     public void attack(EffectExecutor executor) {
         Accessing characters = Character(player.getBoard());
-        RegionalAttack attack = RequestRegionalAttack(player, 3)
+        RegionalAttack attack = RequestRegionalAttack(3)
                 .from(
                     characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
                 );

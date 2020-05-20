@@ -6,17 +6,21 @@ import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class DirectAttack extends Attack {
     // This class should be used only in direct attacks.
     // If there's a ranged attack, use RegionalAttack.
-    private Damageable target;
+    private ArrayList<Damageable> targets;
 
-    public DirectAttack(Player player, int hp) {
-        super(player, hp);
+    public DirectAttack(int hp) {
+        super(hp);
+        targets = new ArrayList<>();
     }
 
-    public DirectAttack from(WarObject[] objects) {
-        attacker = (CanAttack) askToSelectOneFrom(objects);
+    public DirectAttack from(Player player, WarObject[] objects) {
+        attacker = (CanAttack) askToSelectOneFrom(player, objects);
         return this;
     }
 
@@ -30,29 +34,36 @@ public class DirectAttack extends Attack {
         return this;
     }
 
-    public DirectAttack to(WarObject[] objects) {
-        target = (Damageable) askToSelectOneFrom(objects);
-        try {
-            affected.addAll(attacker.attack(target, param));
-        } catch (NotSupportedException e) {
-            System.out.println(e.toString());
-        }
+    public DirectAttack to(Player player, WarObject[] objects) {
+        targets.add((Damageable) askToSelectOneFrom(player, objects));
         return this;
     }
 
     public DirectAttack toAll(Damageable[] targets) {
-        for(Damageable target:targets) {
-            try {
-                affected.addAll(attacker.attack(target, param));
-            } catch (NotSupportedException e) {
-                System.out.println(e.toString());
-            }
-        }
+        this.targets.addAll(Arrays.asList(targets));
         return this;
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        Player rival;
+        try {
+            rival = (Player) executor;
+        } catch (ClassCastException e) {
+            throw new WrongExecutorException();
+        }
+
+        for(Damageable target:targets) {
+            try {
+                affected.addAll(rival.damage(attacker, target, param));
+            } catch (NotSupportedException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+    @Override
+    public HandlerType desiredHandlerType() {
+        return HandlerType.Rival;
     }
 }

@@ -32,7 +32,7 @@ public class LeadersGuard extends Shooter {
 
     @Override
     public void attack() {
-        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(player, attack).from(this);
+        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(attack).from(this);
         SRA.to(getAttackRange(), 1);
     }
 

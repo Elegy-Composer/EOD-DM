@@ -25,7 +25,15 @@ public interface Effect {
     }
 
     enum HandlerType {
-        Owner, Game, Rival
+        //Note: Handler should be the one who has the right to manipulate the selected WarObject
+
+        //For example, an attack effect's handler type should be Rival
+        //because it's your rival player the one who should change its WarObject(Damaged)'s property.
+        //On the other hand, a heal effect's handler type should be Owner
+        //because it's you the one who should change your WarObject(Healed)'s property.
+        Owner,
+        Game,
+        Rival
     }
 
     class WrongExecutorException extends RuntimeException {

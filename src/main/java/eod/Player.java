@@ -12,7 +12,10 @@ import eod.event.Event;
 import eod.event.*;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
+import eod.exceptions.NotSupportedException;
+import eod.param.AttackParam;
 import eod.snapshots.Snapshotted;
+import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
@@ -199,6 +202,29 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public boolean inBase(Point p) {
         return game.getBoard().inBase(this, p);
+    }
+
+    public ArrayList<Damageable> damage(CanAttack attacker,
+                                        Damageable target,
+                                        AttackParam param) throws NotSupportedException {
+        return attacker.attack(target, param);
+    }
+
+    public ArrayList<Damageable> damage(CanAttack attack,
+                                       ArrayList<Point> targets,
+                                       AttackParam param) throws NotSupportedException {
+        return attack.attack(targets, param);
+    }
+
+    public void heal(Damageable damageable, int hp) {
+        WarObject object = (WarObject) damageable;
+        if(object.getPlayer().equals(this)) {
+            damageable.heal(hp);
+        }
+    }
+
+    public void move(WarObject target, int step) {
+        target.move(step);
     }
 
     public void sendPlayerOrder(boolean isFirst) {

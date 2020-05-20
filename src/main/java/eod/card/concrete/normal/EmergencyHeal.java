@@ -1,8 +1,9 @@
 package eod.card.concrete.normal;
 
-import eod.Player;
 import eod.Party;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 
 import static eod.specifier.condition.Conditions.Injured;
 import static eod.specifier.timing.Timings.LastEnemyTurn;
@@ -27,11 +28,11 @@ public class EmergencyHeal extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
-        RequestHeal(player, 3)
-                .to(
-                    Character(player.getBoard()).which(Injured()).in(LastEnemyTurn()).get()
-                );
+    public void applyEffect(EffectExecutor executor) {
+        Effect effect =
+                RequestHeal(3)
+                    .to(player, Character(player.getBoard()).which(Injured()).in(LastEnemyTurn()).get());
+        executor.tryToExecute(effect);
     }
 
     @Override

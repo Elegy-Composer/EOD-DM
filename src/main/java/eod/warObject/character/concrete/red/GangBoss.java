@@ -70,6 +70,6 @@ public class GangBoss extends Fighter {
         targets.addAll(player.getFL(position, 1));
         targets.addAll(player.getFront(position, 1));
         targets.addAll(player.getFR(position, 1));
-        RequestRegionalAttack(player, attack).from(this).to(targets);
+        RequestRegionalAttack(attack).from(this).to(targets);
     }
 }
