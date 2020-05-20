@@ -5,8 +5,11 @@ import eod.IO.Output;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
-import eod.event.*;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
+import eod.effect.Summon;
 import eod.event.Event;
+import eod.event.*;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
@@ -16,10 +19,12 @@ import eod.warObject.character.abstraction.Character;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Player implements Snapshotted<Player.Snapshot>,
-                                GameObject, EventListener {
+                                GameObject, EventListener, EffectExecutor {
 
     private Deck deck;
     private Game game;
@@ -29,6 +34,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private Output output;
     private String name;
     private boolean isPlayerA;
+    private boolean isActingPlayer = false;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -65,6 +71,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return isPlayerA;
     }
 
+    public void setIsActing(boolean acting) {
+        isActingPlayer = acting;
+    }
+
     public void handReceive(ArrayList<Card> h) {
         hand.receive(h);
         output.sendReceivedCards(this, h.toArray(new Card[0]));
@@ -79,7 +89,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         output.sendReceivedCards(this, cards);
     }
 
-    public boolean checkInHand(Class<? extends Card> c) {
+    public boolean checkCardTypeInHand(Class<? extends Card> c) {
         return hand.containsType(c);
     }
 
@@ -101,6 +111,39 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
         //TODO: start auto attack
         output.sendRoundStartEffectActivate();
+    }
+
+    public void enterActionPhase(EffectExecutor nextHandler) {
+        while(true) {
+            Card c = input.waitForPlayCard(hand.toArray());
+            //TODO: add {or cost == 0}
+            if(c == null) {
+                break;
+            }
+            if (hand.containsCard(c)) {
+                playCard(c, nextHandler);
+            }
+        }
+    }
+
+    private EffectExecutor effectNextHandler;
+    public void playCard(Card c, EffectExecutor nextHandler) {
+        //TODO: cost handling
+        //c.effect();
+        effectNextHandler = nextHandler;
+        c.effect(this);
+    }
+
+    @Override
+    public void tryToExecute(Effect effect) {
+        Summon.HandlerType desired = effect.desiredHandlerType();
+        if(desired == Summon.HandlerType.Owner && isActingPlayer) {
+            effect.action(this);
+        } else if(desired == Summon.HandlerType.Rival && !isActingPlayer) {
+            effect.action(this);
+        } else if(effectNextHandler != null) {
+            effectNextHandler.tryToExecute(effect);
+        }
     }
 
     private ArrayList<Character> collectCharacterFromAView(Gameboard board) {

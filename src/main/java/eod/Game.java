@@ -2,6 +2,9 @@ package eod;
 
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
+import eod.effect.Effect;
+import eod.effect.Summon;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.EventManager;
 import eod.event.RoundEndEvent;
@@ -16,7 +19,7 @@ import java.util.Random;
 
 //represent a game instance
 //each manages a ongoing game
-public class Game implements Snapshotted<Game.Snapshot>, GameObject {
+public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecutor {
 
     private Player A;
     private Player B;
@@ -78,6 +81,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         playerOrder[1].handReceive(firstHand);
 
         currentRound = new Round(playerOrder[0], 1);
+        playerOrder[0].setIsActing(true);
         while(true) {
             try {
                 eventManager.send(this, new RoundStartEvent(currentRound));
@@ -87,11 +91,9 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
                 eventManager.send(this, new RoundEndEvent(currentRound));
                 history.put(currentRound, takeSnapshot());
 
-                if(currentRound.getPlayer().equals(playerOrder[0])) {
-                    currentRound = new Round(playerOrder[1], currentRound.getNumber());
-                } else {
-                    currentRound = new Round(playerOrder[0], currentRound.getNumber() + 1);
-                }
+                currentRound.getPlayer().setIsActing(false);
+                currentRound = changeRound(currentRound);
+                currentRound.getPlayer().setIsActing(true);
 
                 if(history.size() > maxHistoryLength) {
                     Round first = history.keySet().toArray(new Round[0])[0];
@@ -125,6 +127,15 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
         }
     }
 
+    private Round changeRound(Round current) {
+        int currentNumber = current.getNumber();
+        if(current.getPlayer().equals(playerOrder[0])) {
+            return new Round(playerOrder[1], currentNumber);
+        } else {
+            return new Round(playerOrder[0], currentNumber + 1);
+        }
+    }
+
     public Player getRivalPlayer(Player player) {
         if(player.equals(A)) {
             return B;
@@ -138,14 +149,23 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject {
     }
 
     private boolean handIsInvalid(Player player) {
-        return !player.checkInHand(ActionCard.class);
+        return !player.checkCardTypeInHand(ActionCard.class);
     }
 
     private void gameLoop(Player player) throws GameLosingException {
         player.drawFromDeck(currentRound.getNumber() == 1 ? 2:1);
         player.startAutoAttackInOrder();
+        player.enterActionPhase(this);
+    }
 
-
+    @Override
+    public void tryToExecute(Effect effect) {
+        if(effect.desiredHandlerType() == Summon.HandlerType.Game) {
+            effect.action(this);
+        } else {
+            Player rival = getRivalPlayer(currentRound.getPlayer());
+            rival.tryToExecute(effect);
+        }
     }
 
     public void sendEvent(GameObject sender, Event event) {
