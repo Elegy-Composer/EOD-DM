@@ -1,12 +1,9 @@
 package eod.card.concrete.normal;
 
-import eod.Game;
 import eod.Gameboard;
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
-import eod.effect.Summon;
 import eod.warObject.character.concrete.blue.SWAT;
 import eod.warObject.character.concrete.blue.SecureGuardBot;
 import eod.warObject.character.concrete.transparent.Drone;
@@ -28,9 +25,9 @@ public class EmergencySupport extends NormalCard {
         Drone drone = new Drone(player);
         SecureGuardBot bot = new SecureGuardBot(player);
 
-        Summon(player, swat).from(baseOrConflictEmpty());
-        Summon(player, drone).from(baseOrConflictEmpty());
-        Summon(player, bot).from(baseOrConflictEmpty());
+        Summon(player, swat).onOnePointOf(baseOrConflictEmpty());
+        Summon(player, drone).onOnePointOf(baseOrConflictEmpty());
+        Summon(player, bot).onOnePointOf(baseOrConflictEmpty());
 
         if(followingActions) {
             swat.attack();

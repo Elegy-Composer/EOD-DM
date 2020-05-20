@@ -8,31 +8,37 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Summon implements Effect, GameObject {
-    private Player player;
     private WarObject object;
+    private Point summonPoint;
 
-    public Summon(Player player, WarObject object) {
-        this.player = player;
+    public Summon(WarObject object) {
         this.object = object;
     }
 
-    public Point on(Point point) {
-        player.summonObject(object, point);
-        return point;
+    public Summon on(Point point) {
+        summonPoint = point;
+        return this;
     }
 
-    public Point from(ArrayList<Point> points) {
-        return on(askToSelectOneFrom(points));
+    public Summon onOnePointOf(Player player, ArrayList<Point> points) {
+        return on(askToSelectOneFrom(player, points));
     }
 
-    @Override
-    public Player getPlayer() {
-        return player;
+    public HandlerType desiredHandlerType() {
+        return HandlerType.Owner;
+    }
+
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        try {
+            Player owner = (Player) executor;
+            owner.summonObject(object, summonPoint);
+        } catch (ClassCastException e) {
+            throw new WrongExecutorException();
+        }
     }
 
     @Override
     public void teardown() {
-        player = null;
         object = null;
     }
 }

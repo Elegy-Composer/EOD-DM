@@ -28,11 +28,11 @@ public class DroneSupport extends NormalCard {
 
     @Override
     public void applyEffect() {
-        Point firstDrone = Summon(player, new Drone(player)).from(board.allEmptySpaces(new Point(Gameboard.firstLine, 0)));
+        Point firstDrone = Summon(player, new Drone(player)).onOnePointOf(board.allEmptySpaces(new Point(Gameboard.firstLine, 0)));
         if(twoSapper()) {
             ArrayList<Point> emptySpaces = board.getSurroundingEmpty(firstDrone, 1);
             if(emptySpaces.size() != 0) {
-                Summon(player, new Drone(player)).from(emptySpaces);
+                Summon(player, new Drone(player)).onOnePointOf(emptySpaces);
             }
         }
     }

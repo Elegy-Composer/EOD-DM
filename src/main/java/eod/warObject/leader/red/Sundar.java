@@ -102,7 +102,7 @@ public class Sundar extends Leader implements EventListener {
             if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
-                Summon(player, new LittleGhost(player)).on(new Point(x, y));
+                Summon(player, new LittleGhost(player)).onOnePointOf(new Point(x, y));
             } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                 player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }

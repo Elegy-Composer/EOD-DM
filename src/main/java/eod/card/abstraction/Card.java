@@ -3,6 +3,7 @@ package eod.card.abstraction;
 import eod.GameObject;
 import eod.Party;
 import eod.Player;
+import eod.effect.EffectExecutor;
 
 public abstract class Card implements GameObject {
     
@@ -23,7 +24,7 @@ public abstract class Card implements GameObject {
         return getName() + "(" + getParty().toString() + ")";
     }
 
-    public abstract void effect();
+    public abstract void effect(EffectExecutor executor);
 
     @Override
     public void teardown() {

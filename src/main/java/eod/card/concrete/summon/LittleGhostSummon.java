@@ -1,10 +1,10 @@
 package eod.card.concrete.summon;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.LittleGhost;
 
 import static eod.effect.EffectFunctions.Summon;
@@ -15,8 +15,8 @@ public class LittleGhostSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
-        Summon(player, new LittleGhost(player)).from(player.getBaseEmpty());
+    public Summon summonEffect() {
+        return Summon(new LittleGhost(player)).onOnePointOf(player, player.getBaseEmpty());
     }
 
     @Override

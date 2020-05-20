@@ -25,7 +25,7 @@ public class EffectFunctions {
         return new RegionalAttack(player, hp);
     }
 
-    public static Summon Summon(Player player, WarObject object) {
-        return new Summon(player, object);
+    public static Summon Summon(WarObject object) {
+        return new Summon(object);
     }
 }
