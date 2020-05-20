@@ -316,6 +316,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         game.unregisterListener(listener);
     }
 
+    public void sendEvent(GameObject sender, Event event) {
+        game.sendEvent(sender, event);
+    }
+
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
         //TODO: add RegionalAttackEvent support
