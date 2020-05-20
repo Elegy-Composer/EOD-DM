@@ -8,8 +8,13 @@ public abstract class AttackCard extends ActionCard {
     public abstract void attack();
 
     @Override
+    public void setPlayer(Player p) {
+        super.setPlayer(p);
+        rival = p.rival();
+    }
+
+    @Override
     public void applyEffect() {
-        rival = player.rival();
         attack();
     }
 }

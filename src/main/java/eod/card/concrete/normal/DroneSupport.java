@@ -2,6 +2,7 @@ package eod.card.concrete.normal;
 
 import eod.Gameboard;
 import eod.Party;
+import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.warObject.character.abstraction.supporter.Sapper;
@@ -17,9 +18,16 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DroneSupport extends NormalCard {
 
+    private Gameboard board;
+
+    @Override
+    public void setPlayer(Player p) {
+        super.setPlayer(p);
+        board = p.getBoard();
+    }
+
     @Override
     public void applyEffect() {
-        Gameboard board = player.getBoard();
         Point firstDrone = Summon(player, new Drone(player)).from(board.allEmptySpaces(new Point(Gameboard.firstLine, 0)));
         if(twoSapper()) {
             ArrayList<Point> emptySpaces = board.getSurroundingEmpty(firstDrone, 1);
