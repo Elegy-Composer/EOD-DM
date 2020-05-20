@@ -13,11 +13,11 @@ import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
 import java.util.*;
-import java.util.function.Function;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject, EventListener {
@@ -93,9 +93,41 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     public void startAutoAttackInOrder() {
-        //TODO: finish this
         Gameboard board = game.getBoard();
+        ArrayList<Character> characters;
+        if(game.isPlayerA(this)) {
+            characters = collectCharacterFromAView(board);
+        } else {
+            characters = collectCharacterFromBView(board);
+        }
+        //TODO: start auto attack
+        output.sendRoundStartEffectActivate();
+    }
 
+    private ArrayList<Character> collectCharacterFromAView(Gameboard board) {
+        ArrayList<Character> characters = new ArrayList<>();
+        for(int y = Gameboard.boardSize-1; y >= 0; y--) {
+            for(int x = 0; x < Gameboard.boardSize; x++) {
+                Character character = board.getObjectOn(x, y);
+                if(character.getPlayer().equals(this)) {
+                    characters.add(character);
+                }
+            }
+        }
+        return characters;
+    }
+
+    private ArrayList<Character> collectCharacterFromBView(Gameboard board) {
+        ArrayList<Character> characters = new ArrayList<>();
+        for(int y = 0; y < Gameboard.boardSize; y++) {
+            for(int x = Gameboard.boardSize-1; x >= 0; x--) {
+                Character character = board.getObjectOn(x, y);
+                if(character.getPlayer().equals(this)) {
+                    characters.add(character);
+                }
+            }
+        }
+        return characters;
     }
     
     public void announceWon() {
@@ -202,26 +234,19 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     public WarObject selectObject(WarObject[] objects) {
-        //TODO: asks the player to select a character
-        Random random = new Random();
-        return objects[random.nextInt(objects.length)];
+        return input.waitForChooseWarObjectFrom(objects);
     }
 
     public WarObject[] selectMultipleObject(WarObject[] objects, int number) {
-        //TODO: asks the player to select characters
-        return objects;
+        return input.waitForChooseWarObjectFrom(objects, number);
     }
 
     public Point selectPosition(ArrayList<Point> points) {
-        //TODO: connection with the frontend
-        Random random = new Random();
-        return points.get(random.nextInt(points.size()));
+        return input.waitForChoosePointFrom(points.toArray(new Point[0]));
     }
 
-    public <T extends Card> T selectCard(T[] cards) {
-        //TODO:connection with the frontend
-        Random random = new Random();
-        return cards[random.nextInt(cards.length)];
+    public Card selectCard(Card[] cards) {
+        return input.waitForChooseCardFrom(cards);
     }
 
     public void moveObject(WarObject object, Point point) {
@@ -285,7 +310,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        return new ArrayList<>();
+        //TODO: add RegionalAttackEvent support
+        return new ArrayList<Class<? extends Event>>(){{
+            add(RoundStartEvent.class);
+            add(RoundEndEvent.class);
+            add(DirectAttackEvent.class);
+            add(ObjectDeadEvent.class);
+            add(ObjectMovingEvent.class);
+        }};
     }
 
     @Override
@@ -296,6 +328,25 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
         if(event instanceof RoundEndEvent) {
             output.sendRoundEnded(((RoundEndEvent) event).getEndedRound());
+            return;
+        }
+        if(event instanceof DirectAttackEvent) {
+            DirectAttackEvent directAttack = (DirectAttackEvent) event;
+            Character attacker = directAttack.getAttacker();
+            for(Damageable victim: directAttack.getTargets()) {
+                output.sendCharacterAttacked(attacker, (Character) victim);
+            }
+            return;
+        }
+        if(event instanceof ObjectDeadEvent) {
+            ObjectDeadEvent objectDeadEvent = (ObjectDeadEvent) event;
+            WarObject deadObject = (WarObject) objectDeadEvent.getDeadObject();
+            output.sendWarObjectDied(deadObject);
+            return;
+        }
+        if(event instanceof ObjectMovingEvent) {
+            ObjectMovingEvent movingEvent = (ObjectMovingEvent) event;
+            output.sendWarObjectMoved(movingEvent.getObject(), movingEvent.getNewPos());
         }
     }
 

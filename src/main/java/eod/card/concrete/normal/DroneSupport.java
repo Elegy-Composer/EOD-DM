@@ -31,6 +31,7 @@ public class DroneSupport extends NormalCard {
 
     @Override
     public void applyEffect() {
+        Gameboard board = player.getBoard();
         PointParam param = new PointParam();
         param.emptySpace = true;
         Point firstDrone = Summon(player, new Drone(player)).from(board.allSpaces(new Point(Gameboard.firstLine, 0), param));
@@ -44,7 +45,7 @@ public class DroneSupport extends NormalCard {
     }
 
     private boolean twoSapper() {
-        return Character(player.getBoard())
+        return WarObject(player.getBoard())
                 .which(OwnedBy(player))
                 .which(Being(Sapper.class)).get()
                 .length>=2;

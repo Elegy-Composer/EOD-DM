@@ -4,9 +4,8 @@ import eod.Player;
 import eod.Round;
 import eod.card.abstraction.Card;
 import eod.effect.Effect;
-import eod.warObject.CanAttack;
-import eod.warObject.Damageable;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 
@@ -22,8 +21,9 @@ public interface Output {
     void sendWarObjectHpChanged(WarObject object, int hp);
     void sendWarObjectApChanged(WarObject object, int ap);
     void sendWarObjectReceivedEffect(WarObject object, Effect effect);
-    void sendCanAttackAttacked(CanAttack attacker, Damageable victim);
+    void sendCharacterAttacked(Character attacker, Character victim);
     void sendWarObjectMoved(WarObject object, Point destination);
+    void sendWarObjectDied(WarObject object);
     void sendWarObjectActivatedEffect(WarObject object);
     void sendWarObjectSummoned(WarObject object, Point position);
 

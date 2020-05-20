@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameObject {
 
-    public List<Card> cards;
+    public ArrayList<Card> cards;
 
     public Deck(ArrayList<Card> cards) {
         this.cards = cards;
@@ -17,7 +17,7 @@ public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameOb
     }
 
     public Deck(Card... cards) {
-        this.cards = Arrays.asList(cards);
+        this.cards = new ArrayList<>(Arrays.asList(cards));
         Collections.shuffle(this.cards);
     }
 

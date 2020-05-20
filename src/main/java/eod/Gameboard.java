@@ -3,7 +3,6 @@ package eod;
 import eod.exceptions.MoveInvalidException;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
-import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
@@ -23,7 +22,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         this.game = game;
     }
 
-    public <T extends WarObject>T getObjectOn(int x, int y) throws IllegalArgumentException {
+    public <T extends WarObject> T getObjectOn(int x, int y) throws IllegalArgumentException {
         if(!hasObjectOn(x, y)) {
             throw new IllegalArgumentException("There's no object on ("+x+", "+y+").");
         }
@@ -82,19 +81,8 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         board[x][y] = null;
     }
 
-    public ArrayList<Point> allEmptySpaces() {
-        ArrayList<Point> points = new ArrayList<>();
-        for(int i = 0;i < boardSize; i++) {
-            for(int j = 0;j < boardSize;j++) {
-                if(!hasObjectOn(i, j)) {
-                    points.add(new Point(i, j));
-                }
-            }
-        }
-        return points;
-    }
-
     public ArrayList<Point> allSpaces(Point at, PointParam param) {
+        // If the x value is smaller than 0, return the whole board.
         int iMin, iMax;
         if(at.x < 0) {
             iMin = 0;
@@ -145,7 +133,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
             WarObject object = getObjectOn(p.x, p.y);
             if(!param.emptySpace) {
                 boolean clean = true;
-                for(Status status:param.excludeStatus) {
+                for(Status status:param.excludeObjectStatus) {
                     if(object.hasStatus(status)) {
                         clean = false;
                         break;

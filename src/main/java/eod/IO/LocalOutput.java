@@ -4,9 +4,8 @@ import eod.Player;
 import eod.Round;
 import eod.card.abstraction.Card;
 import eod.effect.Effect;
-import eod.warObject.CanAttack;
-import eod.warObject.Damageable;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 
@@ -72,15 +71,18 @@ public class LocalOutput implements Output {
     }
 
     @Override
-    public void sendCanAttackAttacked(CanAttack attacker, Damageable victim) {
-        WarObject attackSender = (WarObject) attacker;
-        WarObject attackReceiver = (WarObject) victim;
-        System.out.println(attackSender.getName() + "攻擊了" + attackReceiver.getName());
+    public void sendCharacterAttacked(Character attacker, Character victim) {
+        System.out.println(attacker.getName() + "攻擊了" + victim.getName());
     }
 
     @Override
     public void sendWarObjectMoved(WarObject object, Point destination) {
         System.out.println(object.getName() + "移動到" + destination.toString());
+    }
+
+    @Override
+    public void sendWarObjectDied(WarObject object) {
+        System.out.println(object.getName() + "死亡");
     }
 
     @Override
