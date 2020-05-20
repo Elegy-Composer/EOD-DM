@@ -81,19 +81,8 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         board[x][y] = null;
     }
 
-    public ArrayList<Point> allEmptySpaces() {
-        ArrayList<Point> points = new ArrayList<>();
-        for(int i = 0;i < boardSize; i++) {
-            for(int j = 0;j < boardSize;j++) {
-                if(!hasObjectOn(i, j)) {
-                    points.add(new Point(i, j));
-                }
-            }
-        }
-        return points;
-    }
-
     public ArrayList<Point> allSpaces(Point at, PointParam param) {
+        // If the x value is smaller than 0, return the whole board.
         int iMin, iMax;
         if(at.x < 0) {
             iMin = 0;
