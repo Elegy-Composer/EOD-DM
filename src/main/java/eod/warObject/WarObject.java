@@ -6,6 +6,7 @@ import eod.Gameboard;
 import eod.Player;
 import eod.event.Event;
 import eod.event.listener.EventListener;
+import eod.param.PointParam;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public abstract class WarObject implements GameObject, EventListener {
     public Point position;
     protected Player player;
+    ArrayList<Status> status;
     protected ArrayList<Class<? extends Event>> canHandle;
 
     public WarObject(Player player) {
@@ -31,7 +33,10 @@ public abstract class WarObject implements GameObject, EventListener {
     }
 
     protected void move() {
-        ArrayList<Point> possibleMoves = player.getBoard().getSurroundingEmpty(position, 1);
+        PointParam param = new PointParam();
+        param.range = 1;
+        param.emptySpace = true;
+        ArrayList<Point> possibleMoves = player.getBoard().getSurrounding(position, param);
         moveTo(player.selectPosition(possibleMoves));
     }
 
@@ -77,6 +82,19 @@ public abstract class WarObject implements GameObject, EventListener {
     }
 
     public abstract String getName();
+
+    public void addStatus(Status s) {
+        if(!hasStatus(s)) {
+            status.add(s);
+        }
+    }
+    public boolean hasStatus(Status s) {
+        return status.contains(s);
+    }
+
+    public void removeStatus(Status s) {
+        status.remove(s);
+    }
 
     @Override
     public void teardown() {

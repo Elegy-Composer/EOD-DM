@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangBossSummon;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -67,9 +68,11 @@ public class GangBoss extends Fighter {
         });
 
         ArrayList<Point> targets = new ArrayList<>();
-        targets.addAll(player.getFL(position, 1));
-        targets.addAll(player.getFront(position, 1));
-        targets.addAll(player.getFR(position, 1));
+        PointParam param = new PointParam();
+        param.range = 1;
+        targets.addAll(player.getFL(position, param));
+        targets.addAll(player.getFront(position, param));
+        targets.addAll(player.getFR(position, param));
         RequestRegionalAttack(player, attack).from(this).to(targets);
     }
 }

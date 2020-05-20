@@ -6,13 +6,17 @@ import eod.warObject.WarObject;
 
 import java.util.Arrays;
 
-public class AttackedCondition implements Condition {
+public class ExcludeStatusCondition implements Condition{
+    private Status status;
+
+    public ExcludeStatusCondition(Status status) {
+        this.status = status;
+    }
 
     @Override
     public WarObject[] filter(WarObject[] objects) {
         return Arrays.stream(objects)
-                .filter(object -> object instanceof Damageable)
-                .filter(character -> character.hasStatus(Status.ATTACKED))
+                .filter(object -> !object.hasStatus(status))
                 .toArray(WarObject[]::new);
     }
 }

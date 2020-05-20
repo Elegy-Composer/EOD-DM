@@ -9,16 +9,14 @@ import eod.card.concrete.summon.SpacezipperSummon;
 import eod.event.Event;
 import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
+import eod.param.PointParam;
 import eod.warObject.Marker;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
-import static eod.specifier.WarObjectSpecifier.Touchable;
-import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class Spacezipper extends Character implements Marker {
     private ArrayList<Point> marked;
@@ -32,9 +30,10 @@ public class Spacezipper extends Character implements Marker {
     public void attack() {
         ArrayList<Point> targets = new ArrayList<>();
         Gameboard board = player.getBoard();
-
+        PointParam param = new PointParam();
+        param.range = 1;
         for(Point p:getMarks()) {
-            for(Point q:board.getSurrounding(p, 1)) {
+            for(Point q:board.getSurrounding(p, param)) {
                 if(!targets.contains(q)) {
                     targets.add(q);
                 }
@@ -43,7 +42,7 @@ public class Spacezipper extends Character implements Marker {
                 targets.add(p);
             }
         }
-        for(Point q:board.getSurrounding(position, 1)) {
+        for(Point q:board.getSurrounding(position, param)) {
             if(!targets.contains(q)) {
                 targets.add(q);
             }
@@ -54,7 +53,9 @@ public class Spacezipper extends Character implements Marker {
 
     @Override
     protected void move() {
-        ArrayList<Point> possibleMoves = player.getBoard().allEmptySpaces();
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        ArrayList<Point> possibleMoves = player.getBoard().allSpaces(new Point(-1,-1), param);
         player.moveObject(this, player.selectPosition(possibleMoves));
     }
 

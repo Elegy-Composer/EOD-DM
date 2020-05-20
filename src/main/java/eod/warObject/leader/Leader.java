@@ -28,23 +28,6 @@ public abstract class Leader extends Character implements Damageable, CanAttack 
     }
 
     @Override
-    public void addStatus(Status s) {
-        if(!hasStatus(s)) {
-            status.add(s);
-        }
-    }
-
-    @Override
-    public boolean hasStatus(Status s) {
-        return status.contains(s);
-    }
-
-    @Override
-    public void removeStatus(Status s) {
-        status.remove(s);
-    }
-
-    @Override
     public void heal(int hp) {
         if(this.hp + hp >= max_hp) {
             this.hp = max_hp;

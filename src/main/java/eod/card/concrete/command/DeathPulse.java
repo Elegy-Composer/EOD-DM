@@ -9,12 +9,13 @@ import eod.warObject.leader.red.Sundar;
 
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
+import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DeathPulse extends AttackCard {
 
     @Override
     public void attack() {
-        Sundar sundar = (Sundar) WarObject(player.getBoard()).which(Being(Sundar.class)).get()[0];
+        Sundar sundar = (Sundar) WarObject(player.getBoard()).which(Being(Sundar.class)).which(OwnedBy(player)).get()[0];
         sundar.deathPulse();
     }
 

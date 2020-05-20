@@ -32,23 +32,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public boolean hasStatus(Status s) {
-        return status.contains(s);
-    }
-
-    @Override
-    public void addStatus(Status s) {
-        if(!hasStatus(s)) {
-            status.add(s);
-        }
-    }
-
-    @Override
-    public void removeStatus(Status s) {
-        status.remove(s);
-    }
-
-    @Override
     public void heal(int gain) {
         if(hp+gain >= max_hp) {
             hp = max_hp;
@@ -82,7 +65,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                     target.attacked(this, hp);
                 }
                 affected.add(target);
-                target.addStatus(Status.ATTACKED);
+                ((WarObject)target).addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
             }
@@ -107,7 +90,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                         target.attacked(this, hp);
                     }
                     affected.add(target);
-                    target.addStatus(Status.ATTACKED);
+                    ((WarObject)target).addStatus(Status.ATTACKED);
                 });
         return affected;
     }

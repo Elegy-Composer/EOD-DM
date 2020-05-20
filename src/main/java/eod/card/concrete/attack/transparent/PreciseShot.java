@@ -6,6 +6,7 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.action.AttackCard;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
@@ -21,7 +22,7 @@ public class PreciseShot extends AttackCard {
                 .from(
                     characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
                 );
-        attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).get());
+        attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
     }
 
     @Override

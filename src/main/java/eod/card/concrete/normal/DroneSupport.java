@@ -4,6 +4,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.supporter.Sapper;
 import eod.warObject.character.concrete.transparent.Drone;
 
@@ -11,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.Summon;
-import static eod.specifier.WarObjectSpecifier.Character;
+import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
@@ -20,9 +21,12 @@ public class DroneSupport extends NormalCard {
     @Override
     public void applyEffect() {
         Gameboard board = player.getBoard();
-        Point firstDrone = Summon(player, new Drone(player)).from(board.allEmptySpaces(new Point(Gameboard.firstLine, 0)));
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        Point firstDrone = Summon(player, new Drone(player)).from(board.allSpaces(new Point(Gameboard.firstLine, 0), param));
         if(twoSapper()) {
-            ArrayList<Point> emptySpaces = board.getSurroundingEmpty(firstDrone, 1);
+            param.range = 1;
+            ArrayList<Point> emptySpaces = board.getSurrounding(firstDrone, param);
             if(emptySpaces.size() != 0) {
                 Summon(player, new Drone(player)).from(emptySpaces);
             }

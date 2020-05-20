@@ -9,6 +9,7 @@ import eod.event.*;
 import eod.event.Event;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
+import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -165,11 +166,13 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public ArrayList<Point> getBaseEmpty() {
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize-1;
+        PointParam param = new PointParam();
+        param.emptySpace = true;
         if(game.isPlayerA(this)) {
-            return gameboard.allEmptySpaces(new Point(0, 0));
+            return gameboard.allSpaces(new Point(0,0), param);
         }
         else {
-            return gameboard.allEmptySpaces(new Point(boardEdge, boardEdge));
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge), param);
         }
     }
 
@@ -177,14 +180,16 @@ public class Player implements Snapshotted<Player.Snapshot>,
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize - 1;
         if(game.isPlayerA(this)) {
-            return gameboard.allSpaces(new Point(0,0));
+            return gameboard.allSpaces(new Point(0,0), new PointParam());
         } else {
-            return gameboard.allSpaces(new Point(boardEdge, boardEdge));
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge), new PointParam());
         }
     }
 
     public ArrayList<Point> getConflictEmpty() {
-        return game.getBoard().allEmptySpaces(new Point(Gameboard.firstLine, Gameboard.firstLine));
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        return game.getBoard().allSpaces(new Point(Gameboard.firstLine, Gameboard.firstLine), param);
     }
 
     public void summonObject(WarObject object, Point point) {
@@ -262,7 +267,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         throw new GameLosingException("Player "+this+" loses.");
     }
 
-    public ArrayList<Point> getFL(Point p, int num) {
+    public ArrayList<Point> getFL(Point p, PointParam param) {
         int dx, dy;
         if(isPlayerA()) {
             dx = 1;
@@ -271,10 +276,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
             dy = -1;
         }
-        return getBoard().getLine(p, dx, dy, num);
+        return getBoard().getLine(p, dx, dy, param);
     }
 
-    public ArrayList<Point> getFR(Point p, int num) {
+    public ArrayList<Point> getFR(Point p, PointParam param) {
         int dx, dy;
         if(isPlayerA()) {
             dx = 1;
@@ -283,17 +288,17 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
             dy = 1;
         }
-        return getBoard().getLine(p, dx, dy, num);
+        return getBoard().getLine(p, dx, dy, param);
     }
 
-    public ArrayList<Point> getFront(Point p, int num) {
+    public ArrayList<Point> getFront(Point p, PointParam param) {
         int dx;
         if(isPlayerA()) {
             dx = 1;
         } else {
             dx = -1;
         }
-        return getBoard().getLine(p, dx, 0, num);
+        return getBoard().getLine(p, dx, 0, param);
     }
 
     @Override

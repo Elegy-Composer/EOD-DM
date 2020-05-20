@@ -7,6 +7,7 @@ import eod.card.abstraction.action.AttackCard;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.disturber.Sniper;
 
@@ -28,7 +29,7 @@ public class Snipe extends AttackCard {
         Accessing objects = WarObject(player.getBoard());
         WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
         RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
-        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).get());
+        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).which(WithoutStatus(Status.SNEAK)).get());
     }
 
     @Override
