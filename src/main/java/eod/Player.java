@@ -200,6 +200,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return game.getBoard().allSpaces(new Point(Gameboard.firstLine, Gameboard.firstLine), param);
     }
 
+    public ArrayList<Point> getSelfConflict() {
+        PointParam param = new PointParam();
+        return game.getBoard().getPlayersConflict(this, param);
+    }
+
     public void summonObject(WarObject object, Point point) {
         getBoard().summonObject(object, point);
     }

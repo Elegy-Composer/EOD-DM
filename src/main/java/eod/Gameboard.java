@@ -15,6 +15,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     // Player A's front = (1,0)
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
+    public static final int middle = 4;
     private Game game;
     private WarObject[][] board = new Character[boardSize][boardSize];
 
@@ -79,6 +80,27 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
             throw new IllegalArgumentException("There's nothing at ("+x+", "+y+") on the board, cannot remove.");
         }
         board[x][y] = null;
+    }
+
+    public ArrayList<Point> getPlayersConflict(Player player, PointParam param) {
+        int iMin, iMax;
+        if(player.isPlayerA()) {
+            iMin = firstLine;
+            iMax = middle;
+        } else {
+            iMin = middle;
+            iMax = secondLine;
+        }
+
+        ArrayList<Point> r = new ArrayList<>();
+
+        for(int i = iMin;i < iMax;i++) {
+            for(int j = 0;j < boardSize;j++) {
+                decideAddPoint(new Point(i, j), r, param);
+            }
+        }
+
+        return r;
     }
 
     public ArrayList<Point> allSpaces(Point at, PointParam param) {

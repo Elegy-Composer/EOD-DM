@@ -20,7 +20,7 @@ public class GangsterGathering extends NormalCard {
     @Override
     public void applyEffect() {
         Gameboard board = player.getBoard();
-        int x = player.selectPosition(player.getBase()).x;
+        int x = player.selectPosition(player.getSelfConflict()).x;
         for(int y = 0;y < Gameboard.boardSize;y++) {
             if(!board.hasObjectOn(x, y)) {
                 Summon(player, new Gangster(player)).on(new Point(x, y));
