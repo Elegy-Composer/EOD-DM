@@ -32,6 +32,10 @@ public class Summon implements Effect, GameObject {
         return player;
     }
 
+    public WarObject getObject() {
+        return object;
+    }
+
     @Override
     public void teardown() {
         player = null;
