@@ -27,7 +27,7 @@ public interface Effect {
     enum HandlerType {
         //Note: Handler should be the one who has the right to manipulate the selected WarObject
 
-        //For example, an attack effect's handler type should be Rival
+        //For example, an DirectAttack effect's handler type should be Rival
         //because it's your rival player the one who should change its WarObject(Damaged)'s property.
         //On the other hand, a heal effect's handler type should be Owner
         //because it's you the one who should change your WarObject(Healed)'s property.
@@ -36,9 +36,21 @@ public interface Effect {
         Rival
     }
 
+    default <T> T castExecutor(EffectExecutor executor) throws WrongExecutorException {
+        try {
+            return (T) executor;
+        } catch (ClassCastException e) {
+            throw new WrongExecutorException();
+        }
+    }
+
     class WrongExecutorException extends RuntimeException {
         public WrongExecutorException() {
             super("Executor is not compatible with desiredHandlerType");
+        }
+
+        public WrongExecutorException(String message) {
+            super(message);
         }
     }
 }

@@ -24,17 +24,19 @@ public class Summon implements Effect, GameObject {
         return on(askToSelectOneFrom(player, points));
     }
 
+    public Point getSummonPoint() {
+        return summonPoint;
+    }
+
+    @Override
     public HandlerType desiredHandlerType() {
         return HandlerType.Owner;
     }
 
+    @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
-        try {
-            Player owner = (Player) executor;
-            owner.summonObject(object, summonPoint);
-        } catch (ClassCastException e) {
-            throw new WrongExecutorException();
-        }
+        Player owner = castExecutor(executor);
+        owner.summonObject(object, summonPoint);
     }
 
     @Override

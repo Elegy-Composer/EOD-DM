@@ -1,12 +1,13 @@
 package eod.card.abstraction.action;
 
 import eod.Player;
+import eod.effect.Attack;
 import eod.effect.EffectExecutor;
 
 public abstract class AttackCard extends ActionCard {
     public Player rival;
 
-    public abstract void attack(EffectExecutor executor);
+    public abstract Attack attack();
 
     @Override
     public void setPlayer(Player p) {
@@ -16,6 +17,6 @@ public abstract class AttackCard extends ActionCard {
 
     @Override
     public void applyEffect(EffectExecutor executor) {
-        attack(executor);
+        executor.tryToExecute(attack());
     }
 }

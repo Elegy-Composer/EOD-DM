@@ -3,16 +3,25 @@ package eod.card.concrete.command;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.concrete.red.LittleGhost;
+import eod.warObject.leader.Leader;
 
+import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.effect.EffectFunctions.Summon;
 
 public class EquivalentExchange extends NormalCard {
 
     @Override
-    public void applyEffect() {
-        player.getLeader().damage(2);
-        Summon(player, new LittleGhost(player)).onOnePointOf(player.getBaseEmpty());
+    public void applyEffect(EffectExecutor executor) {
+        Leader leader = player.getLeader();
+        Effect[] effects = new Effect[] {
+            //An attack to itself, then the handler should be its owner
+            RequestDirectAttack(2, Effect.HandlerType.Owner).from(leader).to(leader),
+            Summon(new LittleGhost(player)).onOnePointOf(player, player.getBaseEmpty())
+        };
+        executor.tryToExecuteInSequence(effects);
     }
 
     @Override

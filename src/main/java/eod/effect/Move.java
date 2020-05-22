@@ -48,15 +48,11 @@ public class Move implements Effect, GameObject {
 
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
-        try {
-            Player owner = (Player) executor;
-            if (mode == MoveMode.STEP && step != -1) {
-                owner.move(target, step);
-            } else if (mode == MoveMode.TELEPORT && selected != null) {
-                owner.moveObject(target, selected);
-            }
-        } catch(ClassCastException e) {
-            throw new WrongExecutorException();
+        Player owner = castExecutor(executor);
+        if (mode == MoveMode.STEP && step != -1) {
+            owner.move(target, step);
+        } else if (mode == MoveMode.TELEPORT && selected != null) {
+            owner.moveObject(target, selected);
         }
     }
 

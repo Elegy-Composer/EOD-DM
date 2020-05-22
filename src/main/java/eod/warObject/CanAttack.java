@@ -1,5 +1,6 @@
 package eod.warObject;
 
+import eod.Gameboard;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 
@@ -13,7 +14,7 @@ public interface CanAttack {
         throw new NotSupportedException(ERR_MSG);
     }
 
-    default ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) throws NotSupportedException {
+    default ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 

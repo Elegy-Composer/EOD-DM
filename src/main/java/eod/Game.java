@@ -3,7 +3,6 @@ package eod;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
 import eod.effect.Effect;
-import eod.effect.Summon;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.EventManager;
@@ -11,8 +10,13 @@ import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
+import eod.exceptions.NotSupportedException;
+import eod.param.AttackParam;
 import eod.snapshots.Snapshotted;
+import eod.warObject.CanAttack;
+import eod.warObject.Damageable;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Random;
@@ -160,12 +164,18 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
 
     @Override
     public void tryToExecute(Effect effect) {
-        if(effect.desiredHandlerType() == Summon.HandlerType.Game) {
+        if(effect.desiredHandlerType() == Effect.HandlerType.Game) {
             effect.action(this);
         } else {
             Player rival = getRivalPlayer(currentRound.getPlayer());
             rival.tryToExecute(effect);
         }
+    }
+
+    public ArrayList<Damageable> damage(CanAttack attacker,
+                                        ArrayList<Point> targets,
+                                        AttackParam param) throws NotSupportedException {
+        return attacker.attack(gameboard, targets, param);
     }
 
     public void sendEvent(GameObject sender, Event event) {

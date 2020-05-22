@@ -69,10 +69,9 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
         ArrayList<Damageable> affected = new ArrayList<>();
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);

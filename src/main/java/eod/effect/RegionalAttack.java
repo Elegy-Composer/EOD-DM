@@ -1,5 +1,6 @@
 package eod.effect;
 
+import eod.Game;
 import eod.Player;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.CanAttack;
@@ -60,15 +61,10 @@ public class RegionalAttack extends Attack {
 
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
-        Player rival;
-        try {
-            rival = (Player) executor;
-        } catch (ClassCastException e) {
-            throw new WrongExecutorException();
-        }
+        Game game = castExecutor(executor);
 
         try {
-            affected.addAll(rival.damage(attacker, targets, param));
+            affected.addAll(game.damage(attacker, targets, param));
         } catch (NotSupportedException e) {
             System.out.println(e.toString());
         }
@@ -76,6 +72,8 @@ public class RegionalAttack extends Attack {
 
     @Override
     public HandlerType desiredHandlerType() {
-        return HandlerType.Rival;
+        //The reason using Game is that once a RegionalAttack specify its attack point
+        //the Character standing on the point will be damaged, no matter who is its owner.
+        return HandlerType.Game;
     }
 }

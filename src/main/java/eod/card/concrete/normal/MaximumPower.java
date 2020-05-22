@@ -1,13 +1,16 @@
 package eod.card.concrete.normal;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.exceptions.NotSupportedException;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Machine;
 
+import static eod.effect.EffectFunctions.IncreaseAttack;
+import static eod.effect.EffectFunctions.IncreaseHealth;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
@@ -15,13 +18,16 @@ import static eod.specifier.condition.Conditions.OwnedBy;
 public class MaximumPower extends NormalCard {
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         WarObject[] machines = WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Machine.class)).get();
 
         for(WarObject object:machines) {
             Machine machine = (Machine) object;
-            machine.addHealth(2);
-            machine.addAttack(2);
+            Effect[] effects = new Effect[]{
+                IncreaseHealth(2).to(machine),
+                IncreaseAttack(2).to(machine)
+            };
+            executor.tryToExecuteInSequence(effects);
         }
 
         for(WarObject object:machines) {

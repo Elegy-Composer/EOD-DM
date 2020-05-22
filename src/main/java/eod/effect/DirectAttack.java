@@ -13,10 +13,15 @@ public class DirectAttack extends Attack {
     // This class should be used only in direct attacks.
     // If there's a ranged attack, use RegionalAttack.
     private ArrayList<Damageable> targets;
+    private HandlerType desiredHandlerType;
 
-    public DirectAttack(int hp) {
+    //Use HandlerType in constructor because a character might attack itself,
+    //thus the handler type might also be Owner, rather than Rival.
+    //Therefore, the handler will be decided by its use case.
+    public DirectAttack(int hp, HandlerType desiredHandlerType) {
         super(hp);
         targets = new ArrayList<>();
+        this.desiredHandlerType = desiredHandlerType;
     }
 
     public DirectAttack from(Player player, WarObject[] objects) {
@@ -39,6 +44,11 @@ public class DirectAttack extends Attack {
         return this;
     }
 
+    public DirectAttack to(WarObject object) {
+        targets.add((Damageable) object);
+        return this;
+    }
+
     public DirectAttack toAll(Damageable[] targets) {
         this.targets.addAll(Arrays.asList(targets));
         return this;
@@ -46,16 +56,13 @@ public class DirectAttack extends Attack {
 
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
-        Player rival;
-        try {
-            rival = (Player) executor;
-        } catch (ClassCastException e) {
-            throw new WrongExecutorException();
+        if(desiredHandlerType == HandlerType.Game) {
+            throw new WrongExecutorException("The executor of a DirectAttack should not be a game");
         }
-
-        for(Damageable target:targets) {
+        Player player = castExecutor(executor);
+        for(Damageable target: targets) {
             try {
-                affected.addAll(rival.damage(attacker, target, param));
+                affected.addAll(player.damage(attacker, target, param));
             } catch (NotSupportedException e) {
                 System.out.println(e.toString());
             }
@@ -64,6 +71,6 @@ public class DirectAttack extends Attack {
 
     @Override
     public HandlerType desiredHandlerType() {
-        return HandlerType.Rival;
+        return desiredHandlerType;
     }
 }

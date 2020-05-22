@@ -7,6 +7,8 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
+import eod.effect.Attack;
+import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.listener.EventListener;
@@ -43,19 +45,16 @@ public class Sundar extends Leader implements EventListener {
         player.summonObject(new LittleGhost(player), p);
     }
 
-    public void deathPulse() {
+    public Attack deathPulse() {
         ArrayList<Point> targets = player.getBoard().get8ways(position, Gameboard.boardSize);
-        AttackParam param = new AttackParam();
-        param.hp = 4;
-        attack(targets, param);
+        return new RegionalAttack(4).from(this).to(targets);
     }
 
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         ArrayList<Damageable> affected = new ArrayList<>();
         int hp = param.hp;
         this.damage(hp);
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 WarObject target = gameboard.getObjectOn(p.x, p.y);
@@ -102,7 +101,9 @@ public class Sundar extends Leader implements EventListener {
             if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                 heal(2);
             } else if (object.getPlayer().equals(player)) {
-                Summon(player, new LittleGhost(player)).onOnePointOf(new Point(x, y));
+                player.tryToExecute(
+                    Summon(new LittleGhost(player)).on(new Point(x, y))
+                );
             } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                 player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
             }

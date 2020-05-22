@@ -132,7 +132,6 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private EffectExecutor effectNextHandler;
     public void playCard(Card c, EffectExecutor nextHandler) {
         //TODO: cost handling
-        //c.effect();
         effectNextHandler = nextHandler;
         c.effect(this);
     }
@@ -210,12 +209,6 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return attacker.attack(target, param);
     }
 
-    public ArrayList<Damageable> damage(CanAttack attack,
-                                       ArrayList<Point> targets,
-                                       AttackParam param) throws NotSupportedException {
-        return attack.attack(targets, param);
-    }
-
     public void heal(Damageable damageable, int hp) {
         WarObject object = (WarObject) damageable;
         if(object.getPlayer().equals(this)) {
@@ -225,6 +218,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void move(WarObject target, int step) {
         target.move(step);
+    }
+
+    public void increaseHealth(Damageable damageable, int hp) {
+        damageable.addHealth(hp);
+    }
+
+    public void increaseAttack(CanAttack canAttack, int ap) {
+        canAttack.addAttack(ap);
     }
 
     public void sendPlayerOrder(boolean isFirst) {

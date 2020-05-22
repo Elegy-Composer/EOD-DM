@@ -33,15 +33,10 @@ public class Heal implements Effect, GameObject {
 
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
-        try {
-            Player owner = (Player) executor;
-            for(int i = 0; i < number; i++) {
-                owner.heal(objects.get(i), hp);
-            }
-        } catch (ClassCastException e) {
-            throw new WrongExecutorException();
+        Player owner = castExecutor(executor);
+        for(int i = 0; i < number; i++) {
+            owner.heal(objects.get(i), hp);
         }
-
     }
 
     @Override
