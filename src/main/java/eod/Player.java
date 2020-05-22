@@ -209,6 +209,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         getBoard().summonObject(object, point);
     }
 
+    public void transferObjectTo(WarObject from, WarObject to) {
+        getBoard().transfer(from, to);
+    }
+
     @Override
     public void teardown() {
         hand.teardown();
@@ -311,6 +315,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
         }
         return getBoard().getLine(p, dx, 0, param);
+    }
+
+    public BoardPosition getPosition(Point p) {
+        return getBoard().getPosition(this, p);
     }
 
     public void registerListener(EventListener listener) {

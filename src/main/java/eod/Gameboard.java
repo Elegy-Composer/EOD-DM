@@ -82,6 +82,30 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         board[x][y] = null;
     }
 
+    public BoardPosition getPosition(Player player, Point p) {
+        if(player.isPlayerA()) {
+            if(p.x < firstLine) {
+                return BoardPosition.SELF_BASE;
+            } else if(p.x < middle) {
+                return BoardPosition.SELF_CONFLICT;
+            } else if(p.x < secondLine) {
+                return BoardPosition.ENEMY_CONFLICT;
+            } else {
+                return BoardPosition.ENEMY_BASE;
+            }
+        } else {
+            if(p.x >= secondLine) {
+                return BoardPosition.SELF_BASE;
+            } else if(p.x >= middle) {
+                return BoardPosition.SELF_CONFLICT;
+            } else if(p.x >= firstLine) {
+                return BoardPosition.ENEMY_CONFLICT;
+            } else {
+                return BoardPosition.ENEMY_BASE;
+            }
+        }
+    }
+
     public ArrayList<Point> getPlayersConflict(Player player, PointParam param) {
         int iMin, iMax;
         if(player.isPlayerA()) {
@@ -243,6 +267,12 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
         board[x][y] = object;
         object.updatePosition(point);
+    }
+
+    public void transfer(WarObject from, WarObject to) {
+        Point p = new Point(from.position.x, from.position.y);
+        board[p.x][p.y] = to;
+        to.updatePosition(p);
     }
 
     @Override

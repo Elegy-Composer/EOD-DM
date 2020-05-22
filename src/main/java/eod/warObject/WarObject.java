@@ -101,4 +101,8 @@ public abstract class WarObject implements GameObject, EventListener {
         player = null;
         canHandle.clear();
     }
+
+    public void transferTo(WarObject object) {
+        player.transferObjectTo(this, object);
+    }
 }
