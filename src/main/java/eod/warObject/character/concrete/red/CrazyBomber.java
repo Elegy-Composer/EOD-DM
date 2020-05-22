@@ -45,7 +45,7 @@ public class CrazyBomber extends Character {
 
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(p);
-        RequestRegionalAttack(player, 1).from(this).to(singleTarget);
+        RequestRegionalAttack(player, attack).from(this).to(singleTarget);
 
         PointParam param = new PointParam();
         param.range = 1;

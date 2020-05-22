@@ -1,5 +1,6 @@
 package eod.specifier.condition;
 
+import eod.Party;
 import eod.Player;
 import eod.warObject.CanAttack;
 import eod.warObject.Status;
@@ -30,5 +31,9 @@ public class Conditions {
 
     public static ExcludeStatusCondition WithoutStatus(Status status) {
         return new ExcludeStatusCondition(status);
+    }
+
+    public static PartyCondition InParty(Party party) {
+        return new PartyCondition(party);
     }
 }

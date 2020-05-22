@@ -20,16 +20,14 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     protected int max_hp;
     protected int hp;
     protected int attack;
-    protected final Party party;
     protected CanAttack attacker;
 
     public Character(Player player, int hp, int attack, Party party) {
-        super(player);
+        super(player, party);
         this.player = player;
         max_hp = hp;
         this.hp = max_hp;
         this.attack = attack;
-        this.party = party;
     }
 
     @Override
@@ -81,6 +79,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                 System.out.println(e.toString());
             }
         }
+        afterAttack();
         return affected;
     }
 
@@ -103,7 +102,14 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
                     affected.add(target);
                     ((WarObject)target).addStatus(Status.ATTACKED);
                 });
+        afterAttack();
         return affected;
+    }
+
+    protected void afterAttack() {
+        if(status.contains(Status.FURIOUS)) {
+            damage(1);
+        }
     }
 
     @Override
@@ -141,10 +147,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public void teardown() {
         super.teardown();
         status.clear();
-    }
-
-    public Party getParty() {
-        return party;
     }
 
     @Override

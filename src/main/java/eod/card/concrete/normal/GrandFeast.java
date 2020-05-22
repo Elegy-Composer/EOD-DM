@@ -1,18 +1,21 @@
 package eod.card.concrete.normal;
 
-import eod.GameObject;
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.RoundEndEvent;
-import eod.event.listener.EventListener;
+import eod.warObject.Status;
+import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.util.ArrayList;
 
-public class GrandFeast extends NormalCard implements EventListener {
+import static eod.specifier.WarObjectSpecifier.WarObject;
+import static eod.specifier.condition.Conditions.*;
+
+public class GrandFeast extends NormalCard {
 
     ArrayList<Class<? extends Event>> canHandle;
 
@@ -25,7 +28,9 @@ public class GrandFeast extends NormalCard implements EventListener {
 
     @Override
     public void applyEffect() {
-        player.registerListener(this);
+        for(WarObject object:WarObject (player.getBoard()).which(OwnedBy(player)).which(Being(Character.class)).which(InParty(Party.RED)).get()) {
+            object.addStatus(Status.FURIOUS);
+        }
     }
 
     @Override
@@ -43,25 +48,6 @@ public class GrandFeast extends NormalCard implements EventListener {
     @Override
     public Party getParty() {
         return Party.RED;
-    }
-
-    @Override
-    public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        return canHandle;
-    }
-
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        if (event instanceof AttackEvent) {
-            AttackEvent e = (AttackEvent) event;
-            if(e.getSender().isPlayerA() == player.isPlayerA()) {
-                e.param.hp *= 2;
-            }
-        }
-        else if (event instanceof RoundEndEvent) {
-            player.unregisterListener(this);
-            teardown();
-        }
     }
 
     @Override

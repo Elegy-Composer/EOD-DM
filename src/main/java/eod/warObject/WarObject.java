@@ -3,6 +3,7 @@ package eod.warObject;
 
 import eod.GameObject;
 import eod.Gameboard;
+import eod.Party;
 import eod.Player;
 import eod.event.Event;
 import eod.event.listener.EventListener;
@@ -16,11 +17,13 @@ import java.util.ArrayList;
 public abstract class WarObject implements GameObject, EventListener {
     public Point position;
     protected Player player;
+    protected final Party party;
     ArrayList<Status> status;
     protected ArrayList<Class<? extends Event>> canHandle;
 
-    public WarObject(Player player) {
+    public WarObject(Player player, Party party) {
         this.player = player;
+        this.party = party;
         canHandle = new ArrayList<>();
     }
 
@@ -30,6 +33,10 @@ public abstract class WarObject implements GameObject, EventListener {
 
     public Point getPosition() {
         return position;
+    }
+
+    public Party getParty() {
+        return party;
     }
 
     protected void move() {
