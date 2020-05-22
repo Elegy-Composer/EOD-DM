@@ -46,8 +46,6 @@ public class Repairman extends Sapper {
                     machine.addHealth(1);
                     machine.addAttack(1);
         });
-
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
     }
 
     @Override
