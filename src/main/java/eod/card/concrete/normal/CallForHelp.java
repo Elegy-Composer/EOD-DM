@@ -28,11 +28,11 @@ public class CallForHelp extends NormalCard {
 
     @Override
     public String getName() {
-        return null;
+        return "呼叫幫手";
     }
 
     @Override
     public Party getParty() {
-        return null;
+        return Party.RED;
     }
 }

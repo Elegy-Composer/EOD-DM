@@ -19,7 +19,6 @@ public class Summon implements Effect, GameObject {
 
     public Point on(Point point) {
         player.summonObject(object, point);
-        player.sendEvent(player, new ObjectEnterEvent(object));
         return point;
     }
 
