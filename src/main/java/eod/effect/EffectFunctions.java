@@ -2,7 +2,8 @@ package eod.effect;
 
 import eod.warObject.WarObject;
 
-//Effect functions should only be used by effect and its subclass
+//EffectFunctions is used to describe a (set of) property changes of an object.
+//The object changed is usually a WarObject
 public class EffectFunctions {
     public static Heal RequestHeal(int hp) {
         return new Heal(hp);
