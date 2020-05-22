@@ -49,7 +49,7 @@ public class CrazyBomber extends Character {
 
         PointParam param = new PointParam();
         param.range = 1;
-        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(player, 1);
+        SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, 1);
         SRA.to(player.getBoard().getSurrounding(p, param));
     }
 
