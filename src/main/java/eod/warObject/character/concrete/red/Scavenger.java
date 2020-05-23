@@ -7,6 +7,7 @@ import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.ScavengerSummon;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -46,22 +47,29 @@ public class Scavenger extends Character {
     public void attack() {
         super.attack();
         RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+
+        afterAttack();
     }
 
     @Override
     public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
-        int hp = param.hp;
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp *2;
+        } else {
+            a = param.hp;
+        }
         ArrayList<Damageable> affected = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
+                DamageParam dp = new DamageParam(a);
+                dp.realDamage = param.realDamage;
                 if(target.getHp() <= 2) {
                     target.die();
-                } else if(param.realDamage) {
-                    target.realDamage(hp);
                 } else {
-                    target.attacked(this, hp);
+                    target.attacked(this, dp);
                 }
                 affected.add(target);
                 ((WarObject)target).addStatus(Status.ATTACKED);

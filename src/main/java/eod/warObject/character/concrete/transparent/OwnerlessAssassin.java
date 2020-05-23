@@ -7,17 +7,21 @@ import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.OwnerlessAssassinSummon;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
+import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class OwnerlessAssassin extends Assassin {
     public OwnerlessAssassin(Player player) {
         super(player, 2, 4, Party.TRANSPARENT);
-        canHandle.add(RoundStartEvent.class);
+        new OwnedAbilities(this);
     }
 
     @Override
@@ -33,21 +37,48 @@ public class OwnerlessAssassin extends Assassin {
     }
 
     @Override
+    public void attack() {
+        super.attack();
+        RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+    }
+
+    @Override
     public ArrayList<Point> getAttackRange() {
         PointParam param = new PointParam();
         param.range = 1;
         return player.getBoard().getSurrounding(position, param);
     }
 
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(hasStatus(Status.NO_EFFECT)) {
-            return;
+    private class OwnedAbilities implements EventReceiver {
+        private OwnerlessAssassin holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities(OwnerlessAssassin holder) {
+            this.holder = holder;
+            canHandle = new ArrayList<>();
+            canHandle.add(RoundStartEvent.class);
+            holder.registerReceiver(this);
         }
-        if(event instanceof RoundStartEvent) {
-            RoundStartEvent e = (RoundStartEvent) event;
-            player = e.getStartedRound().getPlayer();
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof RoundStartEvent) {
+                RoundStartEvent e = (RoundStartEvent) event;
+                holder.player = e.getStartedRound().getPlayer();
+            }
+        }
+
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
         }
     }
 }

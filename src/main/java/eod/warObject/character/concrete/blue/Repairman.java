@@ -46,6 +46,8 @@ public class Repairman extends Sapper {
                     machine.addHealth(1);
                     machine.addAttack(1);
         });
+
+        afterAttack();
     }
 
     @Override

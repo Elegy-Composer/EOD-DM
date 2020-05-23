@@ -38,6 +38,8 @@ public class Gangster extends Character {
         PointParam param = new PointParam();
         param.range = 1;
         RequestRegionalAttack(player, attack).from(this).to(player.getFront(position, param));
+
+        afterAttack();
     }
 
     @Override

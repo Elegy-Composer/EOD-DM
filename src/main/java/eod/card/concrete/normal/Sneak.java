@@ -4,12 +4,10 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
-import eod.effect.Attack;
 import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
-import eod.event.RoundEndEvent;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
 import eod.specifier.Accessing;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
@@ -37,9 +35,7 @@ public class Sneak extends NormalCard{
         if(afterEffect) {
             Arrays.stream(assassins)
                 .map(object -> (Assassin) object)
-                .forEach(assassin ->
-                    player.registerListener(new NextDamageDouble(assassin))
-                );
+                .forEach(NextDamageDouble::new);
         }
     }
 
@@ -61,14 +57,16 @@ public class Sneak extends NormalCard{
         return Party.TRANSPARENT;
     }
 
-    public class NextDamageDouble implements EventListener, GameObject {
+    public class NextDamageDouble implements EventReceiver, GameObject {
         private Assassin assassin;
         private ArrayList<Class<? extends Event>> canHandle;
+
         public NextDamageDouble(Assassin assassin) {
             this.assassin = assassin;
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
             canHandle.add(AttackEvent.class);
+            assassin.registerReceiver(this);
         }
 
         @Override
@@ -94,10 +92,10 @@ public class Sneak extends NormalCard{
 
         @Override
         public void teardown() {
+            assassin.unregisterReceiver(this);
             assassin = null;
             canHandle.clear();
             canHandle = null;
-            player.unregisterListener(this);
         }
     }
 }

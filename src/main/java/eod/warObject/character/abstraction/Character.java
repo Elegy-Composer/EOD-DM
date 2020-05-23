@@ -4,8 +4,10 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.exceptions.NotSupportedException;
+import eod.event.AfterObjectDamageEvent;
+import eod.event.BeforeObjectDamageEvent;
 import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -62,24 +64,26 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
 
     @Override
     public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
-        int hp = param.hp;
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp * 2;
+        } else {
+            a = param.hp;
+        }
         ArrayList<Damageable> affected = new ArrayList<>();
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
-                if(param.realDamage) {
-                    target.realDamage(hp);
-                } else {
-                    target.attacked(this, hp);
-                }
+                DamageParam dp = new DamageParam(a);
+                dp.realDamage = param.realDamage;
+                target.attacked(this, dp);
                 affected.add(target);
                 ((WarObject)target).addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.toString());
             }
         }
-        afterAttack();
         return affected;
     }
 
@@ -90,45 +94,44 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
 
     @Override
     public ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) {
-        int hp = param.hp;
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp * 2;
+        } else {
+            a = param.hp;
+        }
         ArrayList<Damageable> affected = new ArrayList<>();
         Arrays.stream(targets)
                 .forEach(target -> {
-                    if(param.realDamage) {
-                        target.realDamage(hp);
-                    } else {
-                        target.attacked(this, hp);
-                    }
+                    DamageParam dp = new DamageParam(a);
+                    dp.realDamage = param.realDamage;
+                    target.attacked(this, dp);
                     affected.add(target);
                     ((WarObject)target).addStatus(Status.ATTACKED);
                 });
-        afterAttack();
         return affected;
     }
 
     protected void afterAttack() {
         if(status.contains(Status.FURIOUS)) {
-            damage(1);
+            damage(new DamageParam(1));
         }
     }
 
     @Override
-    public void realDamage(int val) {
-        hp -= val;
+    public void damage(DamageParam param) {
+        player.sendUp(this, new BeforeObjectDamageEvent(this, param));
+        hp -= param.damage;
         if(hp <= 0) {
             die();
         }
+        player.sendUp(this, new AfterObjectDamageEvent(this, param));
     }
 
     @Override
-    public void damage(int val) {
-        realDamage(val);
-    }
-
-    @Override
-    public void attacked(CanAttack attacker, int hp) {
+    public void attacked(CanAttack attacker, DamageParam param) {
         this.attacker = attacker;
-        damage(hp);
+        damage(param);
         this.attacker = null;
     }
 

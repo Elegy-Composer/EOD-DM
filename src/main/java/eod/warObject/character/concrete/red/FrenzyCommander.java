@@ -41,6 +41,8 @@ public class FrenzyCommander extends Character {
         Gangster g = (Gangster) s.getObject();
         g.addHealth(2);
         g.addAttack(2);
+
+        afterAttack();
     }
 
     @Override

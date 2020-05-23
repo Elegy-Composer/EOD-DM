@@ -1,10 +1,14 @@
 package eod.warObject.character.concrete.red;
 
+import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.LeadersGuardSummon;
 import eod.effect.RegionalAttack;
+import eod.event.Event;
+import eod.event.ObjectMovingEvent;
+import eod.event.relay.EventReceiver;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Shooter;
@@ -17,6 +21,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
         super(player, 5, 2, Party.RED);
+        new OwnedAbilities(this);
     }
 
     @Override
@@ -34,13 +39,48 @@ public class LeadersGuard extends Shooter {
     @Override
     public void attack() {
         super.attack();
-        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(player, attack).from(this);
-        SRA.to(getAttackRange(), 1);
+        SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, attack);
+        SRA.from(this).to(getAttackRange(), 1);
     }
 
     @Override
     public ArrayList<Point> getAttackRange() {
         return player.getBase();
+    }
+
+    private class OwnedAbilities implements EventReceiver {
+        private LeadersGuard holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities(LeadersGuard holder) {
+            this.holder = holder;
+            canHandle = new ArrayList<>();
+            canHandle.add(ObjectMovingEvent.class);
+            holder.registerReceiver(this);
+        }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof ObjectMovingEvent) {
+                ObjectMovingEvent e = (ObjectMovingEvent) event;
+                if(e.getObject() == holder && !player.inBase(e.getNewPos())) {
+                    e.setNewPos(e.getOrigPos());
+                }
+            }
+        }
+
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
+        }
     }
 
     private class SpecialRegionalAttack extends RegionalAttack {

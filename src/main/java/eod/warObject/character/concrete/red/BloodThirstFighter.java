@@ -8,6 +8,7 @@ import eod.card.concrete.summon.BloodThirstFighterSummon;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectEnterEvent;
+import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -21,6 +22,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class BloodThirstFighter extends Fighter {
     public BloodThirstFighter(Player player) {
         super(player, 4, 3, Party.RED);
+        new OwnedAbilities(this);
     }
 
     @Override
@@ -56,17 +58,39 @@ public class BloodThirstFighter extends Fighter {
         return player.getBoard().get4Ways(position, param);
     }
 
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(hasStatus(Status.NO_EFFECT)) {
-            return;
+    private class OwnedAbilities implements EventReceiver {
+        private BloodThirstFighter holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities(BloodThirstFighter holder) {
+            this.holder = holder;
+            canHandle = new ArrayList<>();
+            canHandle.add(ObjectEnterEvent.class);
+            holder.registerReceiver(this);
         }
-        if(event instanceof ObjectEnterEvent) {
-            ObjectEnterEvent e = (ObjectEnterEvent) event;
-            if(e.getObject() == this) {
-                attack();
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof ObjectEnterEvent) {
+                ObjectEnterEvent e = (ObjectEnterEvent) event;
+                if(e.getObject() == holder) {
+                    holder.attack();
+                    teardown();
+                }
             }
+        }
+
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
         }
     }
 }

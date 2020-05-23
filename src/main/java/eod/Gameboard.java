@@ -1,5 +1,6 @@
 package eod;
 
+import eod.event.ObjectEnterEvent;
 import eod.exceptions.MoveInvalidException;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
@@ -267,6 +268,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
         board[x][y] = object;
         object.updatePosition(point);
+        game.sendEvent(object, new ObjectEnterEvent(object));
     }
 
     public void transfer(WarObject from, WarObject to) {

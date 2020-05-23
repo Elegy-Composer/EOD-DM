@@ -1,12 +1,17 @@
 package eod.warObject.character.concrete.red;
 
+import eod.GameObject;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.CrazyBomberSummon;
 import eod.effect.RegionalAttack;
+import eod.event.Event;
+import eod.event.ObjectDeadEvent;
+import eod.event.relay.EventReceiver;
 import eod.exceptions.NotSupportedException;
+import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Character;
@@ -19,6 +24,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class CrazyBomber extends Character {
     public CrazyBomber(Player player) {
         super(player, 1, 2, Party.RED);
+        new OwnedAbilities(this);
     }
 
     @Override
@@ -53,17 +59,45 @@ public class CrazyBomber extends Character {
         SRA.to(player.getBoard().getSurrounding(p, param));
     }
 
-    @Override
-    public void die() {
-        PointParam param = new PointParam();
-        param.range = 1;
-        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(player, 3).from(this);
-        SRA.to(player.getBoard().getSurrounding(position, param));
-        player.loseObject(this);
-        teardown();
+    private class OwnedAbilities implements EventReceiver {
+        private CrazyBomber holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities(CrazyBomber holder) {
+            holder.registerReceiver(this);
+            this.holder = holder;
+            canHandle = new ArrayList<>();
+            canHandle.add(ObjectDeadEvent.class);
+        }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof ObjectDeadEvent) {
+                ObjectDeadEvent e = (ObjectDeadEvent) event;
+                if(e.getDeadObject() == holder) {
+                    PointParam param = new PointParam();
+                    param.range = 1;
+                    SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, 3);
+                    SRA.from(holder).to(player.getBoard().getSurrounding(position, param));
+                }
+            }
+        }
+
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
+        }
     }
 
-    public class SpecialRegionalAttack extends RegionalAttack {
+    private class SpecialRegionalAttack extends RegionalAttack {
 
         public SpecialRegionalAttack(Player player, int hp) {
             super(player, hp);
@@ -75,7 +109,7 @@ public class CrazyBomber extends Character {
             for(Point p:targets) {
                 try {
                     Damageable target = board.getObjectOn(p.x, p.y);
-                    target.damage(param.hp);
+                    target.damage(new DamageParam(param.hp));
                 } catch (IllegalArgumentException e) {
                     System.out.println("There's no object on the point, skipping.");
                 }

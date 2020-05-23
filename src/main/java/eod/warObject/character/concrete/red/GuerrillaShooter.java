@@ -47,6 +47,8 @@ public class GuerrillaShooter extends Shooter {
             specialEffectTimes -= 2;
             attack();
         }
+
+        afterAttack();
     }
 
     @Override

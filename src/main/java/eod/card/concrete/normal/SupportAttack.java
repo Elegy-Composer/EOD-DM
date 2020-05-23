@@ -7,7 +7,7 @@ import eod.card.abstraction.action.NormalCard;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.TargetedEvent;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Character;
 
@@ -24,8 +24,11 @@ public class SupportAttack extends NormalCard {
 
     @Override
     public void applyEffect() {
-        Character c = (Character) player.selectObject(WarObject(player.getBoard()).which(Being(Character.class)).which(OwnedBy(player)).get());
-        player.registerListener(new EnemyAttack(c));
+        new EnemyAttack((Character) player.selectObject(
+                WarObject(player.getBoard())
+                .which(Being(Character.class))
+                .which(OwnedBy(player)).get()
+        ));
     }
 
     @Override
@@ -45,12 +48,13 @@ public class SupportAttack extends NormalCard {
         return Party.BLUE;
     }
 
-    public class EnemyAttack implements EventListener, GameObject {
+    public class EnemyAttack implements EventReceiver, GameObject {
         private Character holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
         public EnemyAttack(Character holder) {
             this.holder = holder;
+            holder.registerReceiver(this);
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
             canHandle.add(TargetedEvent.class);
@@ -80,7 +84,7 @@ public class SupportAttack extends NormalCard {
 
         @Override
         public void teardown() {
-            player.unregisterListener(this);
+            holder.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
             holder = null;
