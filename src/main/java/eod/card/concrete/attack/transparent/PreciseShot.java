@@ -27,7 +27,7 @@ public class PreciseShot extends AttackCard {
                 .from(
                     characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
                 );
-        attack.to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
+        attack.realDamage().to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
     }
 
     @Override

@@ -31,8 +31,16 @@ public class Snipe extends AttackCard {
     public void attack() {
         Accessing objects = WarObject(player.getBoard());
         WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
+        RegionalAttack attack = RequestRegionalAttack(player, decideAttack(ownedSnipers)).from(ownedSnipers);
         attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).which(WithoutStatus(Status.SNEAK)).get());
+    }
+
+    private int decideAttack(WarObject[] snipers) {
+        if(snipers.length >= 2) {
+            return 8;
+        } else {
+            return 6;
+        }
     }
 
     @Override

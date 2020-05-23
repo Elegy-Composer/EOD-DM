@@ -51,6 +51,7 @@ public class Sundar extends Leader implements EventListener {
         ArrayList<Point> targets = player.getBoard().get8ways(position, pointParam);
         AttackParam attackParam = new AttackParam();
         attackParam.hp = 4;
+        attackParam.realDamage = true;
         attack(targets, attackParam);
     }
 
