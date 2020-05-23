@@ -56,6 +56,9 @@ public class AssaultTeamLeader extends Character {
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
         super.onEventOccurred(sender, event);
+        if(hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
         if(event instanceof ObjectEnterEvent) {
             if(((ObjectEnterEvent) event).getObject() == this) {
                 addAttack(1);

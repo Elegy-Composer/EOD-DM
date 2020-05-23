@@ -85,7 +85,9 @@ public abstract class WarObject implements GameObject, EventListener {
 
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
-        //intended left blank
+        if(hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
     }
 
     public abstract String getName();

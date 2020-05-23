@@ -25,7 +25,7 @@ public class PreciseShot extends AttackCard {
         Accessing characters = WarObject(player.getBoard()).which(Being(Character.class));
         RegionalAttack attack = RequestRegionalAttack(player, 3)
                 .from(
-                    characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
+                    characters.which(OwnedBy(player)).which(Being(Shooter.class)).which(WithoutStatus(Status.CANT_ATTACK)).get()
                 );
         attack.realDamage().to(characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
     }

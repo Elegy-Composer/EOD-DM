@@ -8,6 +8,7 @@ import eod.card.concrete.summon.OwnerlessAssassinSummon;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.param.PointParam;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
@@ -41,6 +42,9 @@ public class OwnerlessAssassin extends Assassin {
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
         super.onEventOccurred(sender, event);
+        if(hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
         if(event instanceof RoundStartEvent) {
             RoundStartEvent e = (RoundStartEvent) event;
             player = e.getStartedRound().getPlayer();

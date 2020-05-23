@@ -10,6 +10,7 @@ import eod.event.Event;
 import eod.event.ObjectEnterEvent;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -58,6 +59,9 @@ public class BloodThirstFighter extends Fighter {
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
         super.onEventOccurred(sender, event);
+        if(hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
         if(event instanceof ObjectEnterEvent) {
             ObjectEnterEvent e = (ObjectEnterEvent) event;
             if(e.getObject() == this) {

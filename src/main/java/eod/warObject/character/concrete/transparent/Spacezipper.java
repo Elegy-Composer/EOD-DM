@@ -11,6 +11,7 @@ import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
 import eod.param.PointParam;
 import eod.warObject.Marker;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -68,6 +69,9 @@ public class Spacezipper extends Character implements Marker {
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
         super.onEventOccurred(sender, event);
+        if (hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
         if(event instanceof RoundStartEvent) {
             mark(position);
             move();

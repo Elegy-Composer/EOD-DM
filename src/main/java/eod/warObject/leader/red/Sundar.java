@@ -11,6 +11,7 @@ import eod.param.AttackParam;
 import eod.param.PointParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
@@ -99,6 +100,10 @@ public class Sundar extends Leader implements EventListener {
 
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
+        super.onEventOccurred(sender, event);
+        if(hasStatus(Status.NO_EFFECT)) {
+            return;
+        }
         if (event instanceof ObjectDeadEvent) {
             Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
             WarObject object = (WarObject) deadObject;
