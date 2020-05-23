@@ -212,6 +212,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void transferObjectTo(WarObject from, WarObject to) {
         getBoard().transfer(from, to);
+        output.sendWarObjectTransferred(from, to);
     }
 
     @Override

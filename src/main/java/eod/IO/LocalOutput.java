@@ -96,6 +96,11 @@ public class LocalOutput implements Output {
     }
 
     @Override
+    public void sendWarObjectTransferred(WarObject from, WarObject to) {
+        System.out.println(from.getName() + "變身為" + to.getName());
+    }
+
+    @Override
     public void sendWinning(Player player) {
         System.out.println(player.getName() + "贏了");
     }

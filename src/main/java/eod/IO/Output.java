@@ -26,6 +26,7 @@ public interface Output {
     void sendWarObjectDied(WarObject object);
     void sendWarObjectActivatedEffect(WarObject object);
     void sendWarObjectSummoned(WarObject object, Point position);
+    void sendWarObjectTransferred(WarObject from, WarObject to);
 
     void sendWinning(Player player);
     void sendLosing(Player player);
