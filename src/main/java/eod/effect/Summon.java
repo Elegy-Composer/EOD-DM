@@ -2,6 +2,7 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
+import eod.event.ObjectEnterEvent;
 import eod.warObject.WarObject;
 
 import java.awt.*;

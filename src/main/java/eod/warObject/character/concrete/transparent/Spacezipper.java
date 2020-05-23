@@ -28,6 +28,7 @@ public class Spacezipper extends Character implements Marker {
 
     @Override
     public void attack() {
+        super.attack();
         ArrayList<Point> targets = new ArrayList<>();
         Gameboard board = player.getBoard();
         PointParam param = new PointParam();

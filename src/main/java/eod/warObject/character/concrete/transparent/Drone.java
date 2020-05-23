@@ -25,6 +25,7 @@ public class Drone extends Machine implements CanAttack, Damageable {
 
     @Override
     public void attack() {
+        super.attack();
         if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
             attack += 2;
         }

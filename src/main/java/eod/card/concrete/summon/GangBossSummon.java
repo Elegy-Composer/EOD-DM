@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class GangBossSummon extends SummonCard {
     public GangBossSummon() {
-        super(SummonCardType.NORMAL);
+        super(5, SummonCardType.NORMAL);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class GangBossSummon extends SummonCard {
         Card c = new GangBossSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 5;
     }
 
     @Override

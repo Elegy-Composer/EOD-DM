@@ -12,6 +12,9 @@ import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DeathPulse extends AttackCard {
+    public DeathPulse() {
+        super(4);
+    }
 
     @Override
     public void attack() {
@@ -24,11 +27,6 @@ public class DeathPulse extends AttackCard {
         Card c = new DeathPulse();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 4;
     }
 
     @Override

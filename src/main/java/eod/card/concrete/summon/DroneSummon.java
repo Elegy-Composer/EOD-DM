@@ -12,7 +12,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class DroneSummon extends SummonCard {
     public DroneSummon() {
-        super(SummonCardType.TOKEN);
+        super(3, SummonCardType.TOKEN);
     }
 
     @Override
@@ -25,11 +25,6 @@ public class DroneSummon extends SummonCard {
         Card c = new DroneSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override

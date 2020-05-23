@@ -26,6 +26,7 @@ public class HeavyPolice extends Character {
 
     @Override
     public void attack() {
+        super.attack();
         // TodO
     }
 }

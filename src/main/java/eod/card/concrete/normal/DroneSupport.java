@@ -2,6 +2,7 @@ package eod.card.concrete.normal;
 
 import eod.Gameboard;
 import eod.Party;
+import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.param.PointParam;
@@ -17,6 +18,16 @@ import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
 
 public class DroneSupport extends NormalCard {
+    private Gameboard board;
+    public DroneSupport() {
+        super(3);
+    }
+
+    @Override
+    public void setPlayer(Player p) {
+        super.setPlayer(p);
+        board = p.getBoard();
+    }
 
     @Override
     public void applyEffect() {
@@ -34,7 +45,7 @@ public class DroneSupport extends NormalCard {
     }
 
     private boolean twoSapper() {
-        return Character(player.getBoard())
+        return WarObject(player.getBoard())
                 .which(OwnedBy(player))
                 .which(Being(Sapper.class)).get()
                 .length>=2;
@@ -45,11 +56,6 @@ public class DroneSupport extends NormalCard {
         Card c = new DroneSupport();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override

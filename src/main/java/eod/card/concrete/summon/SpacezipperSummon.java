@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class SpacezipperSummon extends SummonCard {
     public SpacezipperSummon() {
-        super(SummonCardType.SPECIAL);
+        super(7, SummonCardType.SPECIAL);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class SpacezipperSummon extends SummonCard {
         Card c = new SpacezipperSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 7;
     }
 
     @Override

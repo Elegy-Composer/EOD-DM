@@ -27,6 +27,7 @@ public class OneTimeAssassin extends Assassin {
 
     @Override
     public void attack() {
-
+        super.attack();
+        // tOdo
     }
 }

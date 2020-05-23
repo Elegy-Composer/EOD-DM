@@ -30,6 +30,7 @@ public class Gangster extends Character {
 
     @Override
     public void attack() {
+        super.attack();
         PointParam param = new PointParam();
         param.range = 1;
         RequestRegionalAttack(player, attack).from(this).to(player.getFront(position, param));

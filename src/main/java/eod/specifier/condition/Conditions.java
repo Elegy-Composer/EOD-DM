@@ -20,7 +20,7 @@ public class Conditions {
         return new BelongCondition(type);
     }
 
-    public static InPointCollectionCondition inPoints(ArrayList<Point> points) {
+    public static InPointCollectionCondition InPoints(ArrayList<Point> points) {
         return new InPointCollectionCondition(points);
     }
 

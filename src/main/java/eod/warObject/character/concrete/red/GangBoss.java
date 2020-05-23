@@ -58,6 +58,7 @@ public class GangBoss extends Fighter {
 
     @Override
     public void attack() {
+        super.attack();
         Arrays.stream(
             WarObject(player.getBoard())
                 .which(InRangeOf(this))

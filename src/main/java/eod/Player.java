@@ -71,6 +71,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         output.sendReceivedCards(this, h.toArray(new Card[0]));
     }
 
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Hand getHand() {
+        return hand;
+    }
+
     public void drawFromDeck(int count) {
         output.sendDrawingCards(this);
 
@@ -129,7 +137,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
         return characters;
     }
-
+    
     public void announceWon() {
         output.sendWinning(this);
     }
@@ -190,6 +198,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         PointParam param = new PointParam();
         param.emptySpace = true;
         return game.getBoard().allSpaces(new Point(Gameboard.firstLine, Gameboard.firstLine), param);
+    }
+
+    public ArrayList<Point> getSelfConflict() {
+        PointParam param = new PointParam();
+        return game.getBoard().getPlayersConflict(this, param);
     }
 
     public void summonObject(WarObject object, Point point) {
@@ -301,6 +314,18 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return getBoard().getLine(p, dx, 0, param);
     }
 
+    public void registerListener(EventListener listener) {
+        game.registerListener(listener);
+    }
+
+    public void unregisterListener(EventListener listener) {
+        game.unregisterListener(listener);
+    }
+
+    public void sendEvent(GameObject sender, Event event) {
+        game.sendEvent(sender, event);
+    }
+
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
         //TODO: add RegionalAttackEvent support
@@ -326,8 +351,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         if(event instanceof DirectAttackEvent) {
             DirectAttackEvent directAttack = (DirectAttackEvent) event;
             Character attacker = directAttack.getAttacker();
-            for(Character victim: directAttack.getTargets()) {
-                output.sendCharacterAttacked(attacker, victim);
+            for(Damageable victim: directAttack.getTargets()) {
+                output.sendCharacterAttacked(attacker, (Character) victim);
             }
             return;
         }

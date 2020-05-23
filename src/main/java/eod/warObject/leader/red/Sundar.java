@@ -37,6 +37,7 @@ public class Sundar extends Leader implements EventListener {
 
     @Override
     public void attack() {
+        super.attack();
         PointParam param = new PointParam();
         param.emptySpace = true;
         param.range = 1;

@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.Summon;
 
 public class EmergencySupport extends NormalCard {
+    public EmergencySupport() {
+        super(7);
+    }
 
     @Override
     public void applyEffect() {
@@ -50,11 +53,6 @@ public class EmergencySupport extends NormalCard {
         Card c = new EmergencySupport();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 7;
     }
 
     @Override

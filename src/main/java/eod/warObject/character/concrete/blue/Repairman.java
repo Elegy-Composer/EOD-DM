@@ -37,6 +37,7 @@ public class Repairman extends Sapper {
 
     @Override
     public void attack() {
+        super.attack();
         Arrays.stream(WarObject(player.getBoard())
                 .which(InRangeOf(this))
                 .which(OwnedBy(player))
