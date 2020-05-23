@@ -207,6 +207,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void summonObject(WarObject object, Point point) {
         getBoard().summonObject(object, point);
+        output.sendWarObjectSummoned(object, point);
     }
 
     public void transferObjectTo(WarObject from, WarObject to) {

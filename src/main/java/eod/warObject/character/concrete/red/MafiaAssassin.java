@@ -38,8 +38,8 @@ public class MafiaAssassin extends Assassin {
     @Override
     public void attack() {
         super.attack();
-        SpecialRegionalAttack a = (SpecialRegionalAttack) RequestRegionalAttack(player, attack).from(this);
-        a.to(getAttackRange());
+        SpecialRegionalAttack a = new SpecialRegionalAttack(player, attack);
+        a.from(this).to(getAttackRange());
     }
 
     @Override
