@@ -8,6 +8,7 @@ import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.TargetedEvent;
 import eod.event.relay.EventReceiver;
+import eod.param.DamageParam;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Character;
 
@@ -76,7 +77,7 @@ public class SupportAttack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() != holder) {
-                    ((Damageable) e.getAttacker()).damage(2);
+                    ((Damageable) e.getAttacker()).damage(new DamageParam(2));
                     teardown();
                 }
             }
