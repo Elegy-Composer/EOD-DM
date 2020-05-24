@@ -8,27 +8,27 @@ import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
 import eod.effect.Attack;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
-import eod.event.listener.EventListener;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Bunker;
+import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
-import eod.warObject.character.abstraction.Bunker;
-import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class Sundar extends Leader implements EventListener {
+public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
         canHandle.add(ObjectDeadEvent.class);
@@ -40,9 +40,9 @@ public class Sundar extends Leader implements EventListener {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         Point p = player.selectPosition(player.getBoard().getSurroundingEmpty(position, 1));
-        player.summonObject(new LittleGhost(player), p);
+        executor.tryToExecute(Summon(new LittleGhost(player)).on(p));
     }
 
     public Attack deathPulse() {
@@ -63,7 +63,7 @@ public class Sundar extends Leader implements EventListener {
                 }
                 if(target.getPlayer().equals(player)) {
                     if(target instanceof Ghost) {
-                        ((Ghost) target).attack();
+                        ((Ghost) target).attack(player); //TODO: This need to be fixed
                     }
                 } else {
                     ((Damageable) target).attacked(this, hp);

@@ -36,9 +36,9 @@ public class EmergencySupport extends NormalCard {
         executor.tryToExecuteInSequence(effects);
 
         if(followingActions) {
-            swat.attack();
-            drone.attack();
-            bot.attack();
+            swat.attack(executor);
+            drone.attack(executor);
+            bot.attack(executor);
         }
     }
 

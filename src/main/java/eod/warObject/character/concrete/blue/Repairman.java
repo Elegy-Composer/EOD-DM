@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.RepairmanSummon;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.supporter.Sapper;
 
@@ -33,7 +34,7 @@ public class Repairman extends Sapper {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         Arrays.stream(WarObject(player.getBoard())
                 .which(InRangeOf(this))
                 .which(OwnedBy(player))
@@ -42,8 +43,9 @@ public class Repairman extends Sapper {
                     machine.addHealth(1);
                     machine.addAttack(1);
         });
-
-        RequestRegionalAttack(attack).from(this).to(getAttackRange());
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
     }
 
     @Override

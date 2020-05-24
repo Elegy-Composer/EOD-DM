@@ -2,6 +2,7 @@ package eod.warObject.character.abstraction.other;
 
 import eod.Party;
 import eod.Player;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.Character;
 
 public abstract class Ghost extends Character {
@@ -17,7 +18,7 @@ public abstract class Ghost extends Character {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         // TODO
     }
 }

@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GuerrillaShooterSummon;
+import eod.effect.EffectExecutor;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
@@ -30,15 +31,15 @@ public class GuerrillaShooter extends Shooter {
     }
 
     @Override
-    public void attack() {
-        ArrayList<Damageable> affected = RequestRegionalAttack(attack).from(this).to(player.getBoard().getSurrounding(position, 1), 1).getAffected();
+    public void attack(EffectExecutor executor) {
+        ArrayList<Damageable> affected = RequestRegionalAttack(attack).from(this).to(player, player.getBoard().getSurrounding(position, 1), 1).getAffected();
         if(affected.size() > 0 && affected.get(0).getHp() <= 0) {
             specialEffectTimes++;
             move();
         }
         if(specialEffectTimes >= 2) {
             specialEffectTimes -= 2;
-            attack();
+            attack(executor);
         }
     }
 

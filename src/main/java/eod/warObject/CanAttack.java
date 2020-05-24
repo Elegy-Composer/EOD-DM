@@ -1,6 +1,7 @@
 package eod.warObject;
 
 import eod.Gameboard;
+import eod.effect.EffectExecutor;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public interface CanAttack {
     String ERR_MSG = "This method isn't supported by the object.";
 
-    default void attack() throws NotSupportedException {
+    default void attack(EffectExecutor executor) throws NotSupportedException {
         throw new NotSupportedException(ERR_MSG);
     }
 

@@ -5,14 +5,13 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.warObject.CanAttack;
-import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Leader extends Character implements Damageable, CanAttack {
+public abstract class Leader extends Character {
     protected int max_hp, hp;
     protected int attack;
     private ArrayList<Card> command;

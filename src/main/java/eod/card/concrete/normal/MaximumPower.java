@@ -33,7 +33,7 @@ public class MaximumPower extends NormalCard {
         for(WarObject object:machines) {
             Machine machine = (Machine) object;
             try {
-                machine.attack();
+                machine.attack(executor);
             } catch (NotSupportedException e) {
                 System.out.println("The machine "+machine.getName()+" doesn't have the default attack.");
                 System.out.println("Skipping");

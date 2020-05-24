@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangBossSummon;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -56,20 +57,22 @@ public class GangBoss extends Fighter {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         Arrays.stream(
             WarObject(player.getBoard())
                 .which(InRangeOf(this))
                 .which(Being(Gangster.class)).get()
         ).forEach(object -> {
             Gangster gangster = (Gangster) object;
-            gangster.attack();
+            gangster.attack(executor);
         });
 
         ArrayList<Point> targets = new ArrayList<>();
         targets.addAll(player.getFL(position, 1));
         targets.addAll(player.getFront(position, 1));
         targets.addAll(player.getFR(position, 1));
-        RequestRegionalAttack(attack).from(this).to(targets);
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(targets)
+        );
     }
 }

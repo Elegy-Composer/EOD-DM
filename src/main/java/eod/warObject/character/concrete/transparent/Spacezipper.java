@@ -6,6 +6,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SpacezipperSummon;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.warObject.Marker;
@@ -25,7 +26,7 @@ public class Spacezipper extends Character implements Marker {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         ArrayList<Point> targets = new ArrayList<>();
         Gameboard board = player.getBoard();
 
@@ -44,8 +45,10 @@ public class Spacezipper extends Character implements Marker {
                 targets.add(q);
             }
         }
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).realDamage().to(targets)
+        );
 
-        RequestRegionalAttack(attack).from(this).realDamage().to(targets);
     }
 
     @Override

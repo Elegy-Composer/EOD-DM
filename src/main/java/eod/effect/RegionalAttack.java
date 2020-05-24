@@ -62,7 +62,6 @@ public class RegionalAttack extends Attack {
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
         Game game = castExecutor(executor);
-
         try {
             affected.addAll(game.damage(attacker, targets, param));
         } catch (NotSupportedException e) {

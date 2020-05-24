@@ -4,7 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.OneTimeAssassinSummon;
-import eod.exceptions.NotSupportedException;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 
 public class OneTimeAssassin extends Assassin {
@@ -26,7 +26,7 @@ public class OneTimeAssassin extends Assassin {
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
 
     }
 }
