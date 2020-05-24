@@ -5,6 +5,7 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.CommandCard;
 import eod.card.abstraction.action.NormalCard;
+import eod.param.DamageParam;
 import eod.warObject.character.concrete.red.LittleGhost;
 
 import static eod.effect.EffectFunctions.Summon;
@@ -16,7 +17,7 @@ public class EquivalentExchange extends NormalCard {
 
     @Override
     public void applyEffect() {
-        player.getLeader().damage(2);
+        player.getLeader().damage(new DamageParam(2));
         Summon(player, new LittleGhost(player)).from(player.getBaseEmpty());
     }
 

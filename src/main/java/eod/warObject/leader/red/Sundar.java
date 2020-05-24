@@ -68,7 +68,7 @@ public class Sundar extends Leader {
         } else {
             a = param.hp;
         }
-        this.damage(param.hp);
+        this.damage(new DamageParam(param.hp));
         DamageParam dp = new DamageParam(a);
         dp.realDamage = param.realDamage;
         Gameboard gameboard = player.getBoard();
