@@ -38,6 +38,7 @@ public class SWAT extends Character {
         super.attack();
         decideAddHealthAndAttack();
         RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+        afterAttack();
     }
 
     private void decideAddHealthAndAttack() {

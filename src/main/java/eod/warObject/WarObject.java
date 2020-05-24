@@ -6,7 +6,9 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.event.Event;
-import eod.event.listener.EventListener;
+import eod.event.StatusAcquiredEvent;
+import eod.event.relay.EventReceiver;
+import eod.event.relay.EventSender;
 import eod.param.PointParam;
 
 import java.awt.*;
@@ -14,17 +16,19 @@ import java.util.ArrayList;
 
 //WarObject represented anything on the gameboard
 // temporarily duplicated
-public abstract class WarObject implements GameObject, EventListener {
+public abstract class WarObject implements GameObject, EventReceiver, EventSender {
     public Point position;
     protected Player player;
     protected final Party party;
     ArrayList<Status> status;
     protected ArrayList<Class<? extends Event>> canHandle;
+    protected ArrayList<EventReceiver> receivers;
 
     public WarObject(Player player, Party party) {
         this.player = player;
         this.party = party;
         canHandle = new ArrayList<>();
+        receivers = new ArrayList<>();
     }
 
     public Player getPlayer() {
@@ -79,6 +83,24 @@ public abstract class WarObject implements GameObject, EventListener {
     }
 
     @Override
+    public void registerReceiver(EventReceiver receiver) {
+        receivers.add(receiver);
+        canHandle.addAll(receiver.supportedEventTypes());
+    }
+
+    @Override
+    public void unregisterReceiver(EventReceiver receiver) {
+        receivers.remove(receiver);
+    }
+
+    @Override
+    public void send(GameObject sender, Event event) {
+        receivers.stream()
+                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+                .forEach(receiver -> receiver.onEventOccurred(sender, event));
+    }
+
+    @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
         return canHandle;
     }
@@ -88,12 +110,14 @@ public abstract class WarObject implements GameObject, EventListener {
         if(hasStatus(Status.NO_EFFECT)) {
             return;
         }
+        send(sender, event);
     }
 
     public abstract String getName();
 
     public void addStatus(Status s) {
         if(!hasStatus(s)) {
+            player.sendUp(this, new StatusAcquiredEvent(this, s));
             status.add(s);
         }
     }
@@ -109,6 +133,8 @@ public abstract class WarObject implements GameObject, EventListener {
     public void teardown() {
         player = null;
         canHandle.clear();
+        receivers.forEach(EventReceiver::teardown);
+        receivers.clear();
     }
 
     public void transferTo(WarObject object) {

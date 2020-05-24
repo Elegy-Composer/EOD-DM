@@ -268,7 +268,6 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
         board[x][y] = object;
         object.updatePosition(point);
-        game.sendEvent(this, new ObjectEnterEvent(object));
     }
 
     public void transfer(WarObject from, WarObject to) {

@@ -6,8 +6,9 @@ import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
 import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class Sundar extends Leader implements EventListener {
+public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
         canHandle.add(ObjectDeadEvent.class);
@@ -54,13 +55,22 @@ public class Sundar extends Leader implements EventListener {
         attackParam.hp = 4;
         attackParam.realDamage = true;
         attack(targets, attackParam);
+
+        afterAttack();
     }
 
     @Override
     public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
         ArrayList<Damageable> affected = new ArrayList<>();
-        int hp = param.hp;
-        this.damage(hp);
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp * 2;
+        } else {
+            a = param.hp;
+        }
+        this.damage(param.hp);
+        DamageParam dp = new DamageParam(a);
+        dp.realDamage = param.realDamage;
         Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
@@ -68,12 +78,12 @@ public class Sundar extends Leader implements EventListener {
                 if(target instanceof Bunker || target instanceof Machine) {
                     continue;
                 }
-                if(target.getPlayer().equals(player)) {
+                if(target.getPlayer().isPlayerA() == player.isPlayerA()) {
                     if(target instanceof Ghost) {
                         ((Ghost) target).attack();
                     }
                 } else {
-                    ((Damageable) target).attacked(this, hp);
+                    ((Damageable) target).attacked(this, dp);
                     affected.add((Damageable) target);
                 }
             } catch (Exception e) {
@@ -98,29 +108,50 @@ public class Sundar extends Leader implements EventListener {
         return deck;
     }
 
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(hasStatus(Status.NO_EFFECT)) {
-            return;
+    private class OwnedAbilities implements EventReceiver {
+        private Sundar holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+
+        public OwnedAbilities(Sundar holder) {
+            this.holder = holder;
+            this.canHandle = new ArrayList<>();
+            canHandle.add(ObjectDeadEvent.class);
+            holder.registerReceiver(this);
         }
-        if (event instanceof ObjectDeadEvent) {
-            Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
-            WarObject object = (WarObject) deadObject;
-            CanAttack attacker = deadObject.getAttacker();
-            int x = object.position.x, y = object.position.y;
-            if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
-                heal(2);
-            } else if (object.getPlayer().equals(player)) {
-                Summon(player, new LittleGhost(player)).on(new Point(x, y));
-            } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
-                player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
+            if (event instanceof ObjectDeadEvent) {
+                Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
+                WarObject object = (WarObject) deadObject;
+                CanAttack attacker = deadObject.getAttacker();
+                int x = object.position.x, y = object.position.y;
+                if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
+                    heal(2);
+                } else if (object.getPlayer().equals(player)) {
+                    Summon(player, new LittleGhost(player)).on(new Point(x, y));
+                } else if(object.getPlayer().isPlayerA() == holder.player.isPlayerA() && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
+                    player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
+                }
             }
         }
-    }
 
-    private boolean isDeadObjectOwnedByEnemy(WarObject deadObject) {
-        return deadObject.getPlayer().equals(player.rival());
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
+        }
     }
 
     private boolean isGhostOrSundar(CanAttack attacker) {

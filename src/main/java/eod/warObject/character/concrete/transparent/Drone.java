@@ -4,9 +4,15 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.DroneSummon;
+import eod.exceptions.NotSupportedException;
+import eod.param.PointParam;
+import eod.specifier.Accessing;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Machine;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.WarObjectSpecifier.*;
@@ -26,13 +32,13 @@ public class Drone extends Machine implements CanAttack, Damageable {
     @Override
     public void attack() {
         super.attack();
-        if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
+        Accessing objects = WarObject(player.getBoard()).which(InRangeOf(this));
+        if(objects.which(OwnedBy(player)).which(Being(Drone.class)).get().length >= 1) {
             attack += 2;
         }
-        RequestRegionalAttack(player, attack).from(this).to(WarObject(player.getBoard())
+        RequestRegionalAttack(player, attack).from(this).to(objects
                 .which(OwnedBy(player.rival()))
-                .which(Being(Damageable.class))
-                .which(InRangeOf(this)).get());
+                .which(Being(Damageable.class)).get());
     }
 
     @Override
@@ -48,7 +54,9 @@ public class Drone extends Machine implements CanAttack, Damageable {
     }
 
     @Override
-    public void teardown() {
-        super.teardown();
+    public ArrayList<Point> getAttackRange() {
+        PointParam param = new PointParam();
+        param.range = 1;
+        return player.getBoard().getSurrounding(position, param);
     }
 }

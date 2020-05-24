@@ -38,8 +38,10 @@ public class MafiaAssassin extends Assassin {
     @Override
     public void attack() {
         super.attack();
-        SpecialRegionalAttack a = new SpecialRegionalAttack(player, attack);
-        a.from(this).to(getAttackRange());
+        SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, attack);
+        SRA.from(this).to(getAttackRange(), 1);
+
+        afterAttack();
     }
 
     @Override
@@ -49,7 +51,7 @@ public class MafiaAssassin extends Assassin {
         return player.getBoard().get4Ways(position, param);
     }
 
-    public class SpecialRegionalAttack extends RegionalAttack {
+    private class SpecialRegionalAttack extends RegionalAttack {
         public SpecialRegionalAttack(Player player, int hp) {
             super(player, hp);
         }

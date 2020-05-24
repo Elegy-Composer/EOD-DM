@@ -7,7 +7,8 @@ import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.event.*;
 import eod.event.Event;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
+import eod.event.relay.EventSender;
 import eod.exceptions.GameLosingException;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
@@ -20,7 +21,7 @@ import java.awt.*;
 import java.util.*;
 
 public class Player implements Snapshotted<Player.Snapshot>,
-                                GameObject, EventListener {
+                                GameObject, EventReceiver, EventSender {
 
     private Deck deck;
     private Game game;
@@ -30,6 +31,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private Output output;
     private String name;
     private boolean isPlayerA;
+    private ArrayList<EventReceiver> receivers;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -39,6 +41,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         this.deck = deck;
         this.hand = hand;
         this.name = name;
+        receivers = new ArrayList<>();
     }
 
     public String getName() {
@@ -51,7 +54,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void attachToGame(Game game) {
         this.game = game;
-        game.registerListener(this);
+        game.registerReceiver(this);
     }
     public void attachIO(Input input, Output output) {
         this.input = input;
@@ -223,6 +226,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         deck = null;
         leader.teardown();
         leader = null;
+        for(EventReceiver receiver:receivers) {
+            receiver.teardown();
+        }
+        receivers.clear();
     }
 
     @Override
@@ -271,14 +278,25 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void moveObject(WarObject object, Point point) {
         game.getBoard().moveObject(object.position, point);
         game.sendEvent(this, new ObjectMovingEvent(object, point));
+        if(inEnemyBase(object.position)) {
+            game.sendEvent(this, new ObjectEnterEnemyBaseEvent(object));
+        }
         object.updatePosition(point);
     }
 
+    public boolean inEnemyBase(Point p) {
+        if(isPlayerA) {
+            return p.x < Gameboard.firstLine;
+        } else {
+            return p.x >= Gameboard.secondLine;
+        }
+    }
+
     public void loseObject(WarObject object) {
-        getBoard().removeObject(object);
         if(object instanceof Damageable) {
             game.sendEvent(this, new ObjectDeadEvent((Damageable) object));
         }
+        getBoard().removeObject(object);
     }
 
     public void loseLeader() throws GameLosingException {
@@ -323,15 +341,24 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return getBoard().getPosition(this, p);
     }
 
-    public void registerListener(EventListener listener) {
-        game.registerListener(listener);
+    @Override
+    public void registerReceiver(EventReceiver receiver) {
+        receivers.add(receiver);
     }
 
-    public void unregisterListener(EventListener listener) {
-        game.unregisterListener(listener);
+    @Override
+    public void unregisterReceiver(EventReceiver receiver) {
+        receivers.remove(receiver);
     }
 
-    public void sendEvent(GameObject sender, Event event) {
+    @Override
+    public void send(GameObject sender, Event event) {
+        receivers.stream()
+                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+                .forEach(receiver -> receiver.onEventOccurred(sender, event));
+    }
+
+    public void sendUp(GameObject sender, Event event) {
         game.sendEvent(sender, event);
     }
 

@@ -61,5 +61,7 @@ public class AssaultDirector extends Character {
                 gangster.moveTo(p);
             }
         } while (true);
+
+        afterAttack();
     }
 }

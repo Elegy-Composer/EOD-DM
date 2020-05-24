@@ -8,15 +8,14 @@ import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.RoundEndEvent;
 import eod.event.TargetedEvent;
-import eod.event.listener.EventListener;
-import eod.exceptions.NotSupportedException;
-import eod.warObject.CanAttack;
+import eod.event.relay.EventReceiver;
+import eod.param.DamageParam;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Character;
 
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
@@ -28,13 +27,11 @@ public class FightBack extends NormalCard {
 
     @Override
     public void applyEffect() {
-        player.registerListener(
-                new AttackDetect((Damageable) player.selectObject(
-                    WarObject(player.getBoard())
-                            .which(Being(Damageable.class))
-                            .which(OwnedBy(player)).get())
-                )
-        );
+        new AttackDetect(player.selectObject(
+                WarObject(player.getBoard())
+                .which(Being(Character.class))
+                .which(OwnedBy(player)).get()
+        ));
     }
 
     @Override
@@ -54,12 +51,13 @@ public class FightBack extends NormalCard {
         return Party.TRANSPARENT;
     }
 
-    public class AttackDetect implements EventListener, GameObject {
-        private Damageable watching;
+    public class AttackDetect implements EventReceiver, GameObject {
+        private WarObject watching;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public AttackDetect(Damageable watching) {
+        public AttackDetect(WarObject watching) {
             this.watching = watching;
+            watching.registerReceiver(this);
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
             canHandle.add(TargetedEvent.class);
@@ -86,7 +84,8 @@ public class FightBack extends NormalCard {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
                     Damageable attacker = (Damageable) e.getAttacker();
-                    attacker.damage(4);
+                    DamageParam param = new DamageParam(4);
+                    attacker.damage(param);
                 }
                 teardown();
             }
@@ -95,6 +94,7 @@ public class FightBack extends NormalCard {
         @Override
         public void teardown() {
             canHandle.clear();
+            watching.unregisterReceiver(this);
             watching = null;
         }
     }

@@ -5,12 +5,9 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.AssaultTeamLeaderSummon;
-import eod.effect.Summon;
+import eod.event.*;
 import eod.event.Event;
-import eod.event.ObjectEnterEvent;
-import eod.event.RoundStartEvent;
-import eod.event.StatusAcquiredEvent;
-import eod.exceptions.NotSupportedException;
+import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
@@ -23,15 +20,14 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        canHandle.add(ObjectEnterEvent.class);
-        canHandle.add(StatusAcquiredEvent.class);
-        canHandle.add(RoundStartEvent.class);
+        new OwnedAbilities(this);
     }
 
     @Override
     public void attack() {
         super.attack();
         RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+        afterAttack();
     }
 
     @Override
@@ -53,37 +49,61 @@ public class AssaultTeamLeader extends Character {
         return "特攻隊隊長";
     }
 
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(hasStatus(Status.NO_EFFECT)) {
-            return;
-        }
-        if(event instanceof ObjectEnterEvent) {
-            if(((ObjectEnterEvent) event).getObject() == this) {
-                addAttack(1);
-                addHealth(1);
-            }
+    private class OwnedAbilities implements EventReceiver {
+        private AssaultTeamLeader holder;
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities(AssaultTeamLeader holder) {
+            this.holder = holder;
+            canHandle = new ArrayList<>();
+            canHandle.add(RoundStartEvent.class);
+            canHandle.add(ObjectEnterEnemyBaseEvent.class);
+            canHandle.add(StatusAcquiredEvent.class);
+            holder.registerReceiver(this);
         }
 
-        if(event instanceof StatusAcquiredEvent) {
-            StatusAcquiredEvent e = (StatusAcquiredEvent) event;
-            if(e.getObject() == this && e.getStatus() == Status.SNEAK) {
-                addAttack(1);
-                addHealth(1);
-            }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
         }
 
-        if(event instanceof RoundStartEvent) {
-            if(((RoundStartEvent) event).getStartedRound().getPlayer().isPlayerA() == player.isPlayerA()) {
-                PointParam param = new PointParam();
-                param.emptySpace = true;
-                param.range = 1;
-                ArrayList<Point> front = player.getFront(position, param);
-                if(front.size() != 0) {
-                    moveTo(front.get(0));
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof RoundStartEvent) {
+                RoundStartEvent e = (RoundStartEvent) event;
+                if (e.getStartedRound().getPlayer().isPlayerA() == holder.getPlayer().isPlayerA()) {
+                    PointParam param = new PointParam();
+                    param.emptySpace = true;
+                    param.range = 1;
+                    ArrayList<Point> front = player.getFront(position, param);
+                    if(front.size() != 0) {
+                        moveTo(front.get(0));
+                    }
                 }
             }
+            if(event instanceof StatusAcquiredEvent) {
+                StatusAcquiredEvent e = (StatusAcquiredEvent) event;
+                if(e.getObject() == holder && e.getStatus() == Status.SNEAK) {
+                    holder.addAttack(1);
+                    holder.addHealth(1);
+                }
+            }
+            if(event instanceof ObjectEnterEnemyBaseEvent) {
+                ObjectEnterEnemyBaseEvent e = (ObjectEnterEnemyBaseEvent) event;
+                if(e.getObject() == holder) {
+                    holder.addAttack(1);
+                    holder.addHealth(1);
+                }
+            }
+        }
+
+        @Override
+        public void teardown() {
+            holder.unregisterReceiver(this);
+            holder = null;
+            canHandle.clear();
+            canHandle = null;
         }
     }
 }

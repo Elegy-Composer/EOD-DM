@@ -25,4 +25,8 @@ public class ObjectMovingEvent implements Event {
     public Point getNewPos() {
         return newPos;
     }
+
+    public void setNewPos(Point newPos) {
+        this.newPos = newPos;
+    }
 }
