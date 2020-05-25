@@ -44,18 +44,14 @@ public class RegionalAttack extends Attack {
         if(number >= candidates.size()) {
             return to(candidates);
         }
+
         ArrayList<Point> targets = new ArrayList<>();
         for(int i = 0;i < number;i++) {
             Point target = askToSelectOneFrom(candidates);
             targets.add(target);
             candidates.remove(target);
         }
-        try {
-            affected.addAll(attacker.attack(targets, param));
-        } catch (NotSupportedException e) {
-            System.out.println(e.toString());
-        }
-        return this;
+        return to(targets);
     }
 
     public RegionalAttack to(WarObject[] candidates) {
