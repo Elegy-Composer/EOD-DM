@@ -76,7 +76,12 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
             if(hasInvalid) {
                 drawRound++;
             }
-        } while(drawRound<3 || hasInvalid);
+            if(!hasInvalid) {
+                break;
+            } else if(drawRound >= 3) {
+                break;
+            }
+        } while(true);
 
 
         // the second player should receive a {placeholder} at the start
@@ -133,7 +138,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
 
     private Round changeRound(Round current) {
         int currentNumber = current.getNumber();
-        if(current.getPlayer().equals(playerOrder[0])) {
+        if(current.getPlayer().isPlayerA() == playerOrder[0].isPlayerA()) {
             return new Round(playerOrder[1], currentNumber);
         } else {
             return new Round(playerOrder[0], currentNumber + 1);
