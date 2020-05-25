@@ -4,6 +4,7 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.TargetedEvent;
@@ -23,7 +24,7 @@ public class SupportAttack extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         Character c = (Character) player.selectObject(WarObject(player.getBoard()).which(Being(Character.class)).which(OwnedBy(player)).get());
         player.registerListener(new EnemyAttack(c));
     }

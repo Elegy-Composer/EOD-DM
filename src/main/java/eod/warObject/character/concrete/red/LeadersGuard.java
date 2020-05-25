@@ -4,6 +4,8 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.LeadersGuardSummon;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
@@ -32,10 +34,10 @@ public class LeadersGuard extends Shooter {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(player, attack).from(this);
-        SRA.to(getAttackRange(), 1);
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        SpecialRegionalAttack SRA = (SpecialRegionalAttack) RequestRegionalAttack(attack).from(this);
+        SRA.to(player, getAttackRange(), 1);
     }
 
     @Override
@@ -44,13 +46,13 @@ public class LeadersGuard extends Shooter {
     }
 
     private class SpecialRegionalAttack extends RegionalAttack {
-        public SpecialRegionalAttack(Player player, int hp) {
-            super(player, hp);
+        public SpecialRegionalAttack(int hp) {
+            super(hp);
         }
 
         @Override
-        public RegionalAttack to(ArrayList<Point> candidates, int number) {
-            Point target = askToSelectOneFrom(candidates);
+        public RegionalAttack to(Player player, ArrayList<Point> candidates, int number) {
+            Point target = askToSelectOneFrom(player, candidates);
             PointParam pointParam = new PointParam();
             pointParam.range = 1;
             if(player.getBoard().getSurrounding(player.getLeader().position, pointParam).contains(target)) {
@@ -58,12 +60,7 @@ public class LeadersGuard extends Shooter {
             }
             ArrayList<Point> singleTarget = new ArrayList<>(1);
             singleTarget.add(target);
-            try {
-                affected.addAll(attacker.attack(singleTarget, param));
-            } catch (NotSupportedException e) {
-                System.out.println(e.toString());
-            }
-            return this;
+            return to(singleTarget);
         }
     }
 }

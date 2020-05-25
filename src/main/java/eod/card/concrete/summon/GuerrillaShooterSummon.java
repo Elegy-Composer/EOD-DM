@@ -1,10 +1,10 @@
 package eod.card.concrete.summon;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.GuerrillaShooter;
 
 import java.awt.*;
@@ -18,10 +18,10 @@ public class GuerrillaShooterSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
+    public Summon summonEffect() {
         ArrayList<Point> canEnter = player.getBaseEmpty();
         canEnter.addAll(player.getConflictEmpty());
-        Summon(player, new GuerrillaShooter(player)).from(canEnter);
+        return Summon(new GuerrillaShooter(player)).onOnePointOf(player, canEnter);
     }
 
     @Override

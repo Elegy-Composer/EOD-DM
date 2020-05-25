@@ -3,6 +3,7 @@ package eod.card.concrete.normal;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.concrete.red.Gangster;
 
 import static eod.effect.EffectFunctions.Summon;
@@ -13,9 +14,11 @@ public class CallForHelp extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         for(int i = 0;i < 2;i++) {
-            Summon(player, new Gangster(player)).from(player.getConflictEmpty());
+            executor.tryToExecute(
+                Summon(new Gangster(player)).onOnePointOf(player, player.getConflictEmpty())
+            );
         }
     }
 

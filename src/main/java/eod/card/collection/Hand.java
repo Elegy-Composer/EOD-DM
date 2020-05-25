@@ -56,8 +56,15 @@ public class Hand implements GameObject, Iterable<Card>, Snapshotted<Hand.Snapsh
         return false;
     }
 
+    public boolean containsCard(Card c) {
+        return hand.contains(c);
+    }
+
     public Stream<Card> stream() {
         return hand.stream();
+    }
+    public Card[] toArray() {
+        return hand.toArray(new Card[0]);
     }
 
     public void remove(Card c) {

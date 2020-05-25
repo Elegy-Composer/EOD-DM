@@ -1,22 +1,21 @@
 package eod.warObject.character.concrete.red;
 
+import eod.Game;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.MafiaAssassinSummon;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
-import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class MafiaAssassin extends Assassin {
     public MafiaAssassin(Player player) {
@@ -36,10 +35,10 @@ public class MafiaAssassin extends Assassin {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        SpecialRegionalAttack a = new SpecialRegionalAttack(player, attack);
-        a.from(this).to(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        SpecialRegionalAttack a = new SpecialRegionalAttack(attack);
+        a.from(this).to(player, getAttackRange(), 1);
     }
 
     @Override
@@ -50,28 +49,34 @@ public class MafiaAssassin extends Assassin {
     }
 
     public class SpecialRegionalAttack extends RegionalAttack {
-        public SpecialRegionalAttack(Player player, int hp) {
-            super(player, hp);
+        public SpecialRegionalAttack(int hp) {
+            super(hp);
         }
 
         @Override
-        public RegionalAttack to(ArrayList<Point> targets) {
-            Gameboard board = player.getBoard();
-            for(Point p:targets) {
+        public RegionalAttack to(Player player, ArrayList<Point> targets, int num) {
+            super.to(player, targets, num);
+            return this;
+        }
+
+        @Override
+        public void action(EffectExecutor executor) throws WrongExecutorException {
+            Game game = castExecutor(executor);
+            Gameboard board = game.getBoard();
+
+            for(Point p:getTargets()) {
                 try {
                     WarObject target = board.getObjectOn(p.x, p.y);
                     if(target instanceof Leader) {
                         param.hp *= 2;
                     }
-                    Damageable t = (Damageable) target;
-                    affected.addAll(attacker.attack(t, param));
+                    affected.addAll(game.damage(attacker, p, param));
                 } catch (IllegalArgumentException e) {
                     System.out.println("There's no object on ("+p.x+", "+p.y+"). \nSkipping.");
                 } catch (NotSupportedException e) {
                     System.out.println("The attacker "+((WarObject)attacker).getName()+" cannot attack a target directly.");
                 }
             }
-            return this;
         }
     }
 }

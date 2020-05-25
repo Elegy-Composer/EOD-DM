@@ -5,6 +5,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SecureGuardBotSummon;
+import eod.effect.EffectExecutor;
 import eod.param.AttackParam;
 import eod.param.PointParam;
 import eod.warObject.CanAttack;
@@ -42,16 +43,17 @@ public class SecureGuardBot extends Machine {
     }
 
     @Override
-    public void attack(){
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
     }
 
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
         ArrayList<Damageable> affected = new ArrayList<>();
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);

@@ -2,38 +2,45 @@ package eod.effect;
 
 import eod.GameObject;
 import eod.Player;
-import eod.event.ObjectEnterEvent;
 import eod.warObject.WarObject;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Summon implements Effect, GameObject {
-    private Player player;
     private WarObject object;
+    private Point summonPoint;
 
-    public Summon(Player player, WarObject object) {
-        this.player = player;
+    public Summon(WarObject object) {
         this.object = object;
     }
 
-    public Point on(Point point) {
-        player.summonObject(object, point);
-        return point;
+    public Summon on(Point point) {
+        summonPoint = point;
+        return this;
     }
 
-    public Point from(ArrayList<Point> points) {
-        return on(askToSelectOneFrom(points));
+    public Summon onOnePointOf(Player player, ArrayList<Point> points) {
+        return on(askToSelectOneFrom(player, points));
+    }
+
+    public Point getSummonPoint() {
+        return summonPoint;
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public HandlerType desiredHandlerType() {
+        return HandlerType.Owner;
+    }
+
+    @Override
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        Player owner = castExecutor(executor);
+        owner.summonObject(object, summonPoint);
     }
 
     @Override
     public void teardown() {
-        player = null;
         object = null;
     }
 }

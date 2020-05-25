@@ -4,19 +4,16 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.RoundEndEvent;
 import eod.event.TargetedEvent;
 import eod.event.listener.EventListener;
-import eod.exceptions.NotSupportedException;
-import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
-import eod.warObject.WarObject;
 
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
@@ -27,7 +24,7 @@ public class FightBack extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         player.registerListener(
                 new AttackDetect((Damageable) player.selectObject(
                     WarObject(player.getBoard())
@@ -85,6 +82,7 @@ public class FightBack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
+                    //TODO: find a way to use player or game (i.e. EffectHandler) to do this
                     Damageable attacker = (Damageable) e.getAttacker();
                     attacker.damage(4);
                 }

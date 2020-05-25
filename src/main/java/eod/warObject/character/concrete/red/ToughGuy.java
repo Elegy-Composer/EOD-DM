@@ -4,7 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.ToughGuySummon;
-import eod.exceptions.NotSupportedException;
+import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
@@ -31,9 +31,9 @@ public class ToughGuy extends Fighter {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        RequestRegionalAttack(attack).from(this).to(getAttackRange());
     }
 
     @Override

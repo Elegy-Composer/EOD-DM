@@ -2,9 +2,9 @@ package eod.card.concrete.normal;
 
 import eod.GameObject;
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.RoundEndEvent;
@@ -24,7 +24,7 @@ public class GrandFeast extends NormalCard implements EventListener {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         player.registerListener(this);
     }
 

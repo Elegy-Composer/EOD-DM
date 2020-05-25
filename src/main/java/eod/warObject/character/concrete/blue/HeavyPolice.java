@@ -4,7 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.HeavyPoliceSummon;
-import eod.exceptions.NotSupportedException;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.Character;
 
 public class HeavyPolice extends Character {
@@ -25,8 +25,8 @@ public class HeavyPolice extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        // TodO
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        // TODO
     }
 }

@@ -1,36 +1,40 @@
 package eod.effect;
 
-import eod.Player;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 
-//Effect functions should only be used by effect and its subclass
+//EffectFunctions is used to describe a (set of) property changes of an object.
+//The object changed is usually a WarObject
 public class EffectFunctions {
-    public static Heal RequestHeal(Player player, int hp) {
-        return new Heal(player, hp);
+    public static Heal RequestHeal(int hp) {
+        return new Heal(hp);
+    }
+    public static Move RequestMove(int step) {
+        return new Move(step);
+    }
+    public static Move RequestMove() {
+        return new Move();
+    }
+    public static DirectAttack RequestDirectAttack(int hp) {
+        return new DirectAttack(hp);
+    }
+    public static Damage Damage(int hp, Effect.HandlerType handlerType) {
+        return new Damage(hp, handlerType);
+    }
+    public static RegionalAttack RequestRegionalAttack(int hp) {
+        return new RegionalAttack(hp);
+    }
+    public static Summon Summon(WarObject object) {
+        return new Summon(object);
+    }
+    public static IncreaseHealth IncreaseHealth(int hp) {
+        return new IncreaseHealth(hp);
+    }
+    public static IncreaseAttack IncreaseAttack(int hp) {
+        return new IncreaseAttack(hp);
     }
 
-    public static Move RequestMove(Player player, int step) {
-        return new Move(player, step);
-    }
-
-    public static Move RequestMove(Player player) {
-        return new Move(player);
-    }
-
-    public static DirectAttack RequestDirectAttack(Player player, int hp) {
-        return new DirectAttack(player, hp);
-    }
-
-    public static RegionalAttack RequestRegionalAttack(Player player, int hp) {
-        return new RegionalAttack(player, hp);
-    }
-
-    public static Summon Summon(Player player, WarObject object) {
-        return new Summon(player, object);
-    }
-
-    public static GiveStatus GiveStatus(Player player, Status status) {
-        return new GiveStatus(player, status);
+    public static GiveStatus GiveStatus(Status status, Effect.HandlerType handlerType) {
+        return new GiveStatus(status, handlerType);
     }
 }

@@ -6,6 +6,8 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
 import eod.param.PointParam;
+import eod.effect.EffectExecutor;
+import eod.effect.Summon;
 import eod.warObject.character.abstraction.supporter.Sapper;
 import eod.warObject.character.concrete.transparent.Drone;
 
@@ -29,17 +31,18 @@ public class DroneSupport extends NormalCard {
         board = p.getBoard();
     }
 
+
     @Override
-    public void applyEffect() {
-        Gameboard board = player.getBoard();
+    public void applyEffect(EffectExecutor executor) {
         PointParam param = new PointParam();
         param.emptySpace = true;
-        Point firstDrone = Summon(player, new Drone(player)).from(board.allSpaces(new Point(Gameboard.firstLine, 0), param));
+        Summon effect = Summon(new Drone(player)).onOnePointOf(player, board.allSpaces(new Point(Gameboard.firstLine, 0), param));
+        executor.tryToExecute(effect);
         if(twoSapper()) {
             param.range = 1;
-            ArrayList<Point> emptySpaces = board.getSurrounding(firstDrone, param);
+            ArrayList<Point> emptySpaces = board.getSurrounding(effect.getSummonPoint(), param);
             if(emptySpaces.size() != 0) {
-                Summon(player, new Drone(player)).from(emptySpaces);
+                executor.tryToExecute(Summon(new Drone(player)).onOnePointOf(player, emptySpaces));
             }
         }
     }

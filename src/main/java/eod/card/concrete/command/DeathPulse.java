@@ -1,10 +1,9 @@
 package eod.card.concrete.command;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.CommandCard;
 import eod.card.abstraction.action.AttackCard;
+import eod.effect.Attack;
 import eod.warObject.leader.red.Sundar;
 
 import static eod.specifier.WarObjectSpecifier.WarObject;
@@ -17,9 +16,9 @@ public class DeathPulse extends AttackCard {
     }
 
     @Override
-    public void attack() {
+    public Attack attack() {
         Sundar sundar = (Sundar) WarObject(player.getBoard()).which(Being(Sundar.class)).which(OwnedBy(player)).get()[0];
-        sundar.deathPulse();
+        return sundar.deathPulse();
     }
 
     @Override

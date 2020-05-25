@@ -1,7 +1,8 @@
 package eod.card.abstraction.summon;
 
-import eod.Player;
 import eod.card.abstraction.Card;
+import eod.effect.EffectExecutor;
+import eod.effect.Summon;
 
 public abstract class SummonCard extends Card {
     public final SummonCardType type;
@@ -11,9 +12,9 @@ public abstract class SummonCard extends Card {
     }
 
     @Override
-    public void effect() {
-        summon();
+    public void effect(EffectExecutor executor) {
+        executor.tryToExecute(summonEffect());
     }
 
-    public abstract void summon();
+    public abstract Summon summonEffect();
 }

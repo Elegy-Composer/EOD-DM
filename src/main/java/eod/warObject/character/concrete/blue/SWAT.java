@@ -5,8 +5,8 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SWATSummon;
+import eod.effect.EffectExecutor;
 import eod.param.PointParam;
-import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
@@ -34,10 +34,12 @@ public class SWAT extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
         decideAddHealthAndAttack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1)
+        );
     }
 
     private void decideAddHealthAndAttack() {

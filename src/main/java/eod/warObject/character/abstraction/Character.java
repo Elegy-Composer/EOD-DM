@@ -4,7 +4,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.exceptions.NotSupportedException;
+import eod.effect.EffectExecutor;
 import eod.param.AttackParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
@@ -58,15 +58,14 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
-    public void attack() {
+    public void attack(EffectExecutor executor) {
         removeStatus(Status.SNEAK);
     }
 
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         int hp = param.hp;
         ArrayList<Damageable> affected = new ArrayList<>();
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);

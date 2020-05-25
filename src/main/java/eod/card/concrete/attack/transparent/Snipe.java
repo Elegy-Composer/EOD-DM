@@ -1,9 +1,9 @@
 package eod.card.concrete.attack.transparent;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.AttackCard;
+import eod.effect.Attack;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
 import eod.warObject.Damageable;
@@ -28,11 +28,11 @@ public class Snipe extends AttackCard {
     }
 
     @Override
-    public void attack() {
+    public Attack attack() {
         Accessing objects = WarObject(player.getBoard());
         WarObject[] ownedSnipers = objects.which(OwnedBy(player)).which(Being(Sniper.class)).get();
-        RegionalAttack attack = RequestRegionalAttack(player, 8).from(ownedSnipers);
-        attack.to(objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).which(WithoutStatus(Status.SNEAK)).get());
+        RegionalAttack attack = RequestRegionalAttack(8).from(player, ownedSnipers);
+        return attack.to(player, objects.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(Being(Damageable.class)).which(WithoutStatus(Status.SNEAK)).get());
     }
 
     @Override

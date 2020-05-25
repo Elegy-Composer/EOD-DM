@@ -3,6 +3,7 @@ package eod.card.concrete.normal;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.specifier.Accessing;
 import eod.warObject.WarObject;
@@ -12,6 +13,7 @@ import eod.warObject.character.abstraction.assaulter.Fighter;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static eod.effect.EffectFunctions.RequestMove;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
@@ -22,7 +24,7 @@ public class BraveryCall extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         Accessing myCharacters = WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Character.class));
         WarObject toMove = player.selectObject(myCharacters.get());
         PointParam param = new PointParam();
@@ -39,16 +41,18 @@ public class BraveryCall extends NormalCard {
             }
         }
 
-        toMove.moveTo(currentPos);
+        executor.tryToExecute(
+                RequestMove().from(toMove).to(currentPos)
+        );
 
         if(myCharacters.which(Being(Fighter.class)).get().length >= 2) {
-            allFightersAttack();
+            allFightersAttack(executor);
         }
     }
 
-    private void allFightersAttack() {
+    private void allFightersAttack(EffectExecutor executor) {
         for(WarObject fighter:WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Fighter.class)).get()) {
-            ((Fighter) fighter).attack();
+            ((Fighter) fighter).attack(executor);
         }
     }
 

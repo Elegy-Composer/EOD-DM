@@ -5,12 +5,11 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.AssaultTeamLeaderSummon;
-import eod.effect.Summon;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectEnterEvent;
 import eod.event.RoundStartEvent;
 import eod.event.StatusAcquiredEvent;
-import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
@@ -29,9 +28,11 @@ public class AssaultTeamLeader extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
     }
 
     @Override

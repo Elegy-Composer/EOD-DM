@@ -4,27 +4,36 @@ import eod.Player;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 
-import java.util.Arrays;
-
 public class GiveStatus implements Effect {
     private Status status;
-    private Player player;
+    private WarObject[] targets;
+    private HandlerType handlerType;
 
-    public GiveStatus(Player player, Status status) {
-        this.player = player;
+    public GiveStatus(Status status, HandlerType handlerType) {
         this.status = status;
+        this.handlerType = handlerType;
     }
 
-    public void to(WarObject object) {
-        to(new WarObject[] {object});
+    public GiveStatus to(WarObject object) {
+        return to(new WarObject[] {object});
     }
 
-    public void to(WarObject[] objects) {
-        Arrays.stream(objects).forEach(object -> object.addStatus(status));
+    public GiveStatus to(WarObject[] objects) {
+        targets = objects;
+        return this;
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        if(handlerType == HandlerType.Game) {
+            throw new WrongExecutorException("The executor of a DirectAttack should not be a game");
+        }
+        Player player = castExecutor(executor);
+        player.giveStatus(targets, status);
+    }
+
+    @Override
+    public HandlerType desiredHandlerType() {
+        return handlerType;
     }
 }
