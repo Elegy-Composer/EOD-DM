@@ -7,6 +7,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 //Base interface of all effect
+//TODO: find a way to include passive effect (i.e. a effect (or action) that is activated by
+// rule, due to the occurrence of an event
 public interface Effect {
 
     void action(EffectExecutor executor) throws WrongExecutorException;

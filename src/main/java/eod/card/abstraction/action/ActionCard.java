@@ -5,6 +5,10 @@ import eod.effect.EffectExecutor;
 
 public abstract class ActionCard extends Card {
 
+    public ActionCard(int cost) {
+        super(cost);
+    }
+
     public abstract void applyEffect(EffectExecutor executor);
 
     @Override

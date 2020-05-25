@@ -14,6 +14,19 @@ public class Hand implements GameObject, Iterable<Card>, Snapshotted<Hand.Snapsh
         hand.addAll(cards);
     }
 
+    public void dropCard(Card card) {
+        for(Card c:hand) {
+            if(c.cardTypeEquals(card.getClass())) {
+                hand.remove(c);
+                break;
+            }
+        }
+    }
+
+    public void dropAll(Card card) {
+        hand.removeIf(c -> c.cardTypeEquals(card.getClass()));
+    }
+
     public void dropAllCards() {
         hand.clear();
     }

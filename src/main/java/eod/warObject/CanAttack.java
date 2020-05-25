@@ -31,4 +31,6 @@ public interface CanAttack {
     }
 
     void addAttack(int a);
+
+    int getAttack();
 }

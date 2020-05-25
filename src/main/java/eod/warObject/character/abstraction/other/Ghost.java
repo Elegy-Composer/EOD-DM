@@ -19,6 +19,7 @@ public abstract class Ghost extends Character {
 
     @Override
     public void attack(EffectExecutor executor) {
+        super.attack(executor);
         // TODO
     }
 }

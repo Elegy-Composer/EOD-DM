@@ -1,13 +1,19 @@
 package eod.warObject.character.concrete.red;
 
+import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GuerrillaShooterSummon;
 import eod.effect.EffectExecutor;
+import eod.exceptions.NotSupportedException;
+import eod.param.PointParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
+import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
@@ -32,7 +38,8 @@ public class GuerrillaShooter extends Shooter {
 
     @Override
     public void attack(EffectExecutor executor) {
-        ArrayList<Damageable> affected = RequestRegionalAttack(attack).from(this).to(player, player.getBoard().getSurrounding(position, 1), 1).getAffected();
+        super.attack(executor);
+        ArrayList<Damageable> affected = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1).getAffected();
         if(affected.size() > 0 && affected.get(0).getHp() <= 0) {
             specialEffectTimes++;
             move();
@@ -46,5 +53,12 @@ public class GuerrillaShooter extends Shooter {
     @Override
     public int getHp() {
         return hp;
+    }
+
+    @Override
+    public ArrayList<Point> getAttackRange() {
+        PointParam param = new PointParam();
+        param.range = 1;
+        return player.getBoard().getSurrounding(position, param);
     }
 }

@@ -5,6 +5,9 @@ import eod.effect.Attack;
 import eod.effect.EffectExecutor;
 
 public abstract class AttackCard extends ActionCard {
+    public AttackCard(int cost) {
+        super(cost);
+    }
     public Player rival;
 
     public abstract Attack attack();

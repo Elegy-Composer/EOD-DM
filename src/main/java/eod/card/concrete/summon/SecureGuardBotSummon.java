@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class SecureGuardBotSummon extends SummonCard {
     public SecureGuardBotSummon() {
-        super(SummonCardType.TOKEN);
+        super(3, SummonCardType.TOKEN);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class SecureGuardBotSummon extends SummonCard {
         Card c = new SecureGuardBotSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override

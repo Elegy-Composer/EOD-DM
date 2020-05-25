@@ -43,6 +43,20 @@ public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameOb
 
     }
 
+    public void dropCard(Card card) {
+        for(Card c:cards) {
+            if(c.cardTypeEquals(card.getClass())) {
+                cards.remove(c);
+                break;
+            }
+        }
+        Collections.shuffle(cards);
+    }
+
+    public void dropAll(Card card) {
+        cards.removeIf(c -> c.cardTypeEquals(card.getClass()));
+    }
+
     @Override
     public void teardown() {
         cards.clear();

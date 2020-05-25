@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class LittleGhostSummon extends SummonCard {
     public LittleGhostSummon() {
-        super(SummonCardType.TOKEN);
+        super(0, SummonCardType.TOKEN);
     }
 
     @Override
@@ -24,12 +24,6 @@ public class LittleGhostSummon extends SummonCard {
         Card c = new LittleGhostSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 0;
-        // TODO: ask Spacezipper about the details of the ghosts.
     }
 
     @Override

@@ -26,6 +26,7 @@ public class HeavyPolice extends Character {
 
     @Override
     public void attack(EffectExecutor executor) {
-        // TodO
+        super.attack(executor);
+        // TODO
     }
 }

@@ -1,6 +1,7 @@
 package eod.event;
 
 import eod.Player;
+import eod.param.AttackParam;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -8,8 +9,8 @@ import java.awt.*;
 public class RegionalAttackEvent extends AttackEvent {
     private Point[] targets;
 
-    public RegionalAttackEvent(Player sender, Character attacker, Point[] targets, int hp, boolean allowCondition, boolean willSuccess) {
-        super(sender, attacker, hp, allowCondition, willSuccess);
+    public RegionalAttackEvent(Player sender, Character attacker, Point[] targets, AttackParam param) {
+        super(sender, attacker, param);
         this.targets = targets;
     }
 

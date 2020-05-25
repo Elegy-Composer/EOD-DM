@@ -10,24 +10,22 @@ import java.util.Arrays;
 
 public class InAttackRangeCondition implements Condition{
     private WarObject center;
-    private ArrayList<Point> attackRange;
+    private ArrayList<Point> points;
+
     public InAttackRangeCondition(CanAttack center) {
+        points = new ArrayList<>();
         this.center = (WarObject) center;
         try {
-            attackRange = center.getAttackRange();
+            points = center.getAttackRange();
         } catch (NotSupportedException e) {
-            attackRange = new ArrayList<>();
+            System.out.println("The center "+((WarObject) center).getName()+" doesn't have the attack range");
         }
     }
 
     @Override
     public WarObject[] filter(WarObject[] objects) {
         return Arrays.stream(objects)
-                .filter(this::inRange)
+                .filter(object -> points.contains(object.position))
                 .toArray(WarObject[]::new);
-    }
-
-    private boolean inRange(WarObject target) {
-        return attackRange.contains(target.position);
     }
 }

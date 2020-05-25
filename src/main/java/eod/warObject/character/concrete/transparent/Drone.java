@@ -9,7 +9,7 @@ import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Machine;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
-import static eod.specifier.WarObjectSpecifier.WarObject;
+import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.*;
 
 public class Drone extends Machine {
@@ -25,6 +25,7 @@ public class Drone extends Machine {
 
     @Override
     public void attack(EffectExecutor executor) {
+        super.attack(executor);
         if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
             attack += 2;
         }

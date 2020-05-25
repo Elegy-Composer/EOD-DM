@@ -12,7 +12,6 @@ public class AttackedCondition implements Condition {
     public WarObject[] filter(WarObject[] objects) {
         return Arrays.stream(objects)
                 .filter(object -> object instanceof Damageable)
-                .map(object -> (Damageable) object)
                 .filter(character -> character.hasStatus(Status.ATTACKED))
                 .toArray(WarObject[]::new);
     }

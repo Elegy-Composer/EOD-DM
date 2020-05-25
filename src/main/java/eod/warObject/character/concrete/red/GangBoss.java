@@ -5,6 +5,7 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangBossSummon;
 import eod.effect.EffectExecutor;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -58,6 +59,7 @@ public class GangBoss extends Fighter {
 
     @Override
     public void attack(EffectExecutor executor) {
+        super.attack(executor);
         Arrays.stream(
             WarObject(player.getBoard())
                 .which(InRangeOf(this))
@@ -68,11 +70,13 @@ public class GangBoss extends Fighter {
         });
 
         ArrayList<Point> targets = new ArrayList<>();
-        targets.addAll(player.getFL(position, 1));
-        targets.addAll(player.getFront(position, 1));
-        targets.addAll(player.getFR(position, 1));
+        PointParam param = new PointParam();
+        param.range = 1;
+        targets.addAll(player.getFL(position, param));
+        targets.addAll(player.getFront(position, param));
+        targets.addAll(player.getFR(position, param));
         executor.tryToExecute(
-            RequestRegionalAttack(attack).from(this).to(targets)
+                RequestRegionalAttack(attack).from(this).to(targets)
         );
     }
 }

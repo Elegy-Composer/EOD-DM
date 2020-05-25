@@ -14,9 +14,11 @@ import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
+import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 import eod.warObject.leader.Leader;
@@ -81,6 +83,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void handReceive(ArrayList<Card> h) {
         hand.receive(h);
         output.sendReceivedCards(this, h.toArray(new Card[0]));
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Hand getHand() {
+        return hand;
     }
 
     public void drawFromDeck(int count) {
@@ -228,6 +238,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         canAttack.addAttack(ap);
     }
 
+    public void giveStatus(WarObject[] targets, Status status) {
+        Arrays.stream(targets).forEach(object -> object.addStatus(status));
+    }
+
     public void sendPlayerOrder(boolean isFirst) {
         output.sendPlayerOrder(this, isFirst);
     }
@@ -235,11 +249,13 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public ArrayList<Point> getBaseEmpty() {
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize-1;
+        PointParam param = new PointParam();
+        param.emptySpace = true;
         if(game.isPlayerA(this)) {
-            return gameboard.allEmptySpaces(new Point(0, 0));
+            return gameboard.allSpaces(new Point(0,0), param);
         }
         else {
-            return gameboard.allEmptySpaces(new Point(boardEdge, boardEdge));
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge), param);
         }
     }
 
@@ -247,14 +263,21 @@ public class Player implements Snapshotted<Player.Snapshot>,
         Gameboard gameboard = game.getBoard();
         int boardEdge = Gameboard.boardSize - 1;
         if(game.isPlayerA(this)) {
-            return gameboard.allSpaces(new Point(0,0));
+            return gameboard.allSpaces(new Point(0,0), new PointParam());
         } else {
-            return gameboard.allSpaces(new Point(boardEdge, boardEdge));
+            return gameboard.allSpaces(new Point(boardEdge, boardEdge), new PointParam());
         }
     }
 
     public ArrayList<Point> getConflictEmpty() {
-        return game.getBoard().allEmptySpaces(new Point(Gameboard.firstLine, Gameboard.firstLine));
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        return game.getBoard().allSpaces(new Point(Gameboard.firstLine, Gameboard.firstLine), param);
+    }
+
+    public ArrayList<Point> getSelfConflict() {
+        PointParam param = new PointParam();
+        return game.getBoard().getPlayersConflict(this, param);
     }
 
     public void summonObject(WarObject object, Point point) {
@@ -332,7 +355,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         throw new GameLosingException("Player "+this+" loses.");
     }
 
-    public ArrayList<Point> getFL(Point p, int num) {
+    public ArrayList<Point> getFL(Point p, PointParam param) {
         int dx, dy;
         if(isPlayerA()) {
             dx = 1;
@@ -341,10 +364,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
             dy = -1;
         }
-        return getBoard().getLine(p, dx, dy, num);
+        return getBoard().getLine(p, dx, dy, param);
     }
 
-    public ArrayList<Point> getFR(Point p, int num) {
+    public ArrayList<Point> getFR(Point p, PointParam param) {
         int dx, dy;
         if(isPlayerA()) {
             dx = 1;
@@ -353,17 +376,29 @@ public class Player implements Snapshotted<Player.Snapshot>,
             dx = -1;
             dy = 1;
         }
-        return getBoard().getLine(p, dx, dy, num);
+        return getBoard().getLine(p, dx, dy, param);
     }
 
-    public ArrayList<Point> getFront(Point p, int num) {
+    public ArrayList<Point> getFront(Point p, PointParam param) {
         int dx;
         if(isPlayerA()) {
             dx = 1;
         } else {
             dx = -1;
         }
-        return getBoard().getLine(p, dx, 0, num);
+        return getBoard().getLine(p, dx, 0, param);
+    }
+
+    public void registerListener(EventListener listener) {
+        game.registerListener(listener);
+    }
+
+    public void unregisterListener(EventListener listener) {
+        game.unregisterListener(listener);
+    }
+
+    public void sendEvent(GameObject sender, Event event) {
+        game.sendEvent(sender, event);
     }
 
     @Override
@@ -391,8 +426,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         if(event instanceof DirectAttackEvent) {
             DirectAttackEvent directAttack = (DirectAttackEvent) event;
             Character attacker = directAttack.getAttacker();
-            for(Character victim: directAttack.getTargets()) {
-                output.sendCharacterAttacked(attacker, victim);
+            for(Damageable victim: directAttack.getTargets()) {
+                output.sendCharacterAttacked(attacker, (Character) victim);
             }
             return;
         }

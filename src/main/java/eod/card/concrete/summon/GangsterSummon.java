@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class GangsterSummon extends SummonCard {
     public GangsterSummon() {
-        super(SummonCardType.TOKEN);
+        super(1, SummonCardType.TOKEN);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class GangsterSummon extends SummonCard {
         Card c = new GangsterSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 1;
     }
 
     @Override

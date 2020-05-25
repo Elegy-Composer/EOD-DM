@@ -1,7 +1,10 @@
 package eod;
 
+import eod.event.ObjectEnterEvent;
 import eod.exceptions.MoveInvalidException;
+import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 
@@ -13,6 +16,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     // Player A's front = (1,0)
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
+    public static final int middle = 4;
     private Game game;
     private WarObject[][] board = new Character[boardSize][boardSize];
 
@@ -79,21 +83,34 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         board[x][y] = null;
     }
 
-    public ArrayList<Point> allEmptySpaces() {
-        ArrayList<Point> points = new ArrayList<>();
-        for(int i = 0;i < boardSize; i++) {
+    public ArrayList<Point> getPlayersConflict(Player player, PointParam param) {
+        int iMin, iMax;
+        if(player.isPlayerA()) {
+            iMin = firstLine;
+            iMax = middle;
+        } else {
+            iMin = middle;
+            iMax = secondLine;
+        }
+
+        ArrayList<Point> r = new ArrayList<>();
+
+        for(int i = iMin;i < iMax;i++) {
             for(int j = 0;j < boardSize;j++) {
-                if(!hasObjectOn(i, j)) {
-                    points.add(new Point(i, j));
-                }
+                decideAddPoint(new Point(i, j), r, param);
             }
         }
-        return points;
+
+        return r;
     }
 
-    public ArrayList<Point> allEmptySpaces(Point at) {
+    public ArrayList<Point> allSpaces(Point at, PointParam param) {
+        // If the x value is smaller than 0, return the whole board.
         int iMin, iMax;
-        if(at.x < firstLine) {
+        if(at.x < 0) {
+            iMin = 0;
+            iMax = boardSize;
+        } else if(at.x < firstLine) {
             iMin = 0;
             iMax = firstLine;
         } else if(at.x < secondLine) {
@@ -105,107 +122,89 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
 
         ArrayList<Point> points = new ArrayList<>();
+
         for(int i = iMin;i < iMax;i++) {
-            for(int j =0;j < boardSize;j++) {
-                if(!hasObjectOn(i, j)) {
-                    points.add(new Point(i, j));
+            for(int j = 0;j < boardSize;j++) {
+                decideAddPoint(new Point(i, j), points, param);
+            }
+
+        }
+        return points;
+    }
+
+    public ArrayList<Point> getSurrounding(Point p, PointParam param) {
+        if(param.range == 0) {
+            throw new IllegalArgumentException("You forgot to set the range parameter.");
+        }
+        ArrayList<Point> points = new ArrayList<>();
+        for (int x = p.x - param.range;x <= p.x + param.range;x++) {
+            if(!inBounds(x)) {
+                continue;
+            }
+            for (int y = p.y - param.range;y <= p.y + param.range;y++) {
+                if (!inBounds(y)) {
+                    continue;
                 }
+                decideAddPoint(p, points, param);
             }
         }
         return points;
     }
 
-    public ArrayList<Point> allSpaces(Point at) {
-        int iMin, iMax;
-        if(at.x < firstLine) {
-            iMin = 0;
-            iMax = firstLine;
-        } else if(at.x < secondLine) {
-            iMin = firstLine;
-            iMax = secondLine;
+    private void decideAddPoint(Point p, ArrayList<Point> points, PointParam param) {
+        if(hasObjectOn(p.x, p.y)) {
+            WarObject object = getObjectOn(p.x, p.y);
+            if(!param.emptySpace) {
+                boolean clean = true;
+                for(Status status:param.excludeObjectStatus) {
+                    if(object.hasStatus(status)) {
+                        clean = false;
+                        break;
+                    }
+                }
+                if(clean) {
+                    points.add(p);
+                }
+            }
         } else {
-            iMin = secondLine;
-            iMax = boardSize;
+            points.add(p);
         }
-
-        ArrayList<Point> points = new ArrayList<>();
-        for(int i = iMin;i < iMax;i++) {
-            for(int j =0;j < boardSize;j++) {
-                points.add(new Point(i, j));
-            }
-        }
-        return points;
     }
 
-    public ArrayList<Point> getSurroundingEmpty(Point p, int range) {
-        ArrayList<Point> points = new ArrayList<>();
-        for(int x = p.x - range;x <= p.x + range;x++) {
-            if(!inBounds(x)) {
-                continue;
-            }
-            for(int y = p.y-range; y <= p.y+range;y++) {
-                if(!inBounds(y)) {
-                    continue;
-                }
-                if(!hasObjectOn(x, y)) {
-                    points.add(new Point(x, y));
-                }
-            }
-        }
-        return points;
-    }
-
-    public ArrayList<Point> getSurrounding(Point p, int range) {
-        // the return list DOESN'T contain p
-        ArrayList<Point> points = new ArrayList<>();
-        for(int x = p.x - range;x <= p.x + range;x++) {
-            if(!inBounds(x)) {
-                continue;
-            }
-            for(int y = p.y - range; y <= p.y + range; y++) {
-                if(!inBounds(y) || (x == p.x && y == p.y)) {
-                    continue;
-                }
-                points.add(new Point(x, y));
-            }
-        }
-        return points;
-    }
-
-    public ArrayList<Point> get4Ways(Point p, int range) {
+    public ArrayList<Point> get4Ways(Point p, PointParam param) {
         // the return list DOESN'T contain p.
         ArrayList<Point> points = new ArrayList<>();
-        int x = p.x - range, y = p.y;
-        while(x <= p.x + range) {
+        int x = p.x - param.range, y = p.y;
+        while(x <= p.x + param.range) {
             if(x < 0 || x == p.x) {
                 continue;
             }
             if(x >= boardSize) {
                 break;
             }
-            points.add(new Point(x, y));
+            decideAddPoint(new Point(x, y), points, param);
             x++;
         }
         x = p.x;
-        y = p.y - range;
-        while(y <= p.y + range) {
+        y = p.y - param.range;
+        while(y <= p.y + param.range) {
             if(y < 0 || y == p.y) {
                 continue;
             }
             if(y >= boardSize) {
                 break;
             }
-            points.add(new Point(x, y));
+            decideAddPoint(new Point(x, y), points, param);
             y++;
         }
         return points;
     }
 
-    public ArrayList<Point> get8ways(Point p, int range) {
+    public ArrayList<Point> get8ways(Point p, PointParam param) {
         // the return list DOESN'T contain p
-        ArrayList<Point> points = get4Ways(p, range);
-        int x = p.x - range, y = p.y - range, y2 = p.y + range;
-        while(x <= p.x + range) {
+        ArrayList<Point> points = get4Ways(p, param);
+        int x = p.x - param.range, y = p.y - param.range, y2 = p.y + param.range;
+        while(x <= p.x + param.range) {
             if(x <0 || x == p.x) {
                 continue;
             }
@@ -213,14 +212,27 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
                 break;
             }
             if(inBounds(y)) {
-                points.add(new Point(x, y));
+                decideAddPoint(new Point(x, y), points, param);
             }
             if(inBounds(y2)) {
-                points.add(new Point(x, y2));
+                decideAddPoint(new Point(x, y2), points, param);
             }
             x++;
             y++;
             y2--;
+        }
+        return points;
+    }
+
+    public ArrayList<Point> getLine(Point p, int dx, int dy, PointParam param) {
+        ArrayList<Point> points = new ArrayList<>();
+        int x = p.x + dx, y = p.y + dy;
+
+        for(int i = 0;i < param.range; i++) {
+            if(!inBounds(x, y)) {
+                break;
+            }
+            decideAddPoint(new Point(x, y), points, param);
         }
         return points;
     }
@@ -232,6 +244,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
         board[x][y] = object;
         object.updatePosition(point);
+        game.sendEvent(this, new ObjectEnterEvent(object));
     }
 
     @Override
@@ -259,18 +272,6 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
         }
     }
 
-    public ArrayList<Point> getLine(Point p, int dx, int dy, int num) {
-        ArrayList<Point> points = new ArrayList<>();
-        int x = p.x + dx, y = p.y + dy;
-
-        for(int i = 0;i < num; i++) {
-            if(!inBounds(x, y)) {
-                break;
-            }
-            points.add(new Point(x, y));
-        }
-        return points;
-    }
 
     public class Snapshot implements eod.snapshots.Snapshot {
         private WarObject[][] allObjects = board;

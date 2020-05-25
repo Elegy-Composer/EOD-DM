@@ -59,6 +59,16 @@ public class RegionalAttack extends Attack {
         return to(singleTarget);
     }
 
+    public RegionalAttack to(WarObject target) {
+        ArrayList<Point> singleTarget = new ArrayList<>();
+        singleTarget.add(target.position);
+        return to(singleTarget);
+    }
+
+    protected ArrayList<Point> getTargets() {
+        return targets;
+    }
+
     @Override
     public void action(EffectExecutor executor) throws WrongExecutorException {
         Game game = castExecutor(executor);

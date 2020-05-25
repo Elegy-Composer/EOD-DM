@@ -5,18 +5,13 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.warObject.CanAttack;
-import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Leader extends Character {
-    protected int max_hp, hp;
-    protected int attack;
     private ArrayList<Card> command;
-    protected ArrayList<Status> status;
-    private CanAttack attacker;
 
     public Leader(Player player, int hp, int attack, Party party) {
         super(player, hp, attack, party);
@@ -24,23 +19,6 @@ public abstract class Leader extends Character {
         this.hp = max_hp;
 
         command = generateCommand();
-    }
-
-    @Override
-    public void addStatus(Status s) {
-        if(!hasStatus(s)) {
-            status.add(s);
-        }
-    }
-
-    @Override
-    public boolean hasStatus(Status s) {
-        return status.contains(s);
-    }
-
-    @Override
-    public void removeStatus(Status s) {
-        status.remove(s);
     }
 
     @Override

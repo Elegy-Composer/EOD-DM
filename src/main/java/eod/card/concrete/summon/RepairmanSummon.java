@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class RepairmanSummon extends SummonCard {
     public RepairmanSummon() {
-        super(SummonCardType.NORMAL);
+        super(2, SummonCardType.NORMAL);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class RepairmanSummon extends SummonCard {
         Card c = new RepairmanSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 2;
     }
 
     @Override

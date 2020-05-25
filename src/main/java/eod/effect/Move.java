@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Move implements Effect, GameObject {
-
     private enum MoveMode {
         STEP, TELEPORT
     }
@@ -34,11 +33,24 @@ public class Move implements Effect, GameObject {
         return this;
     }
 
+    public Move from(WarObject object) {
+        target = object;
+        return this;
+    }
+
     public Move to(Player player, ArrayList<Point> points) throws MoveInvalidException {
         if(mode != MoveMode.TELEPORT) {
             throw new MoveInvalidException("the method \"to\" is used only for teleport moves.");
         }
         selected = askToSelectOneFrom(player, points);
+        return this;
+    }
+
+    public Move to(Point point) throws MoveInvalidException {
+        if(mode != MoveMode.TELEPORT) {
+            throw new MoveInvalidException("the method \"to\" is used only for teleport moves.");
+        }
+        selected = point;
         return this;
     }
 

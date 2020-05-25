@@ -178,6 +178,15 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
         return attacker.attack(gameboard, targets, param);
     }
 
+    public ArrayList<Damageable> damage(CanAttack attacker,
+                                        Point target,
+                                        AttackParam param) throws NotSupportedException {
+        ArrayList<Point> targets = new ArrayList<Point>(){{
+            add(target);
+        }};
+        return damage(attacker, targets, param);
+    }
+
     public void sendEvent(GameObject sender, Event event) {
         eventManager.send(sender, event);
     }

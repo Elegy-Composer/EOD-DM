@@ -6,6 +6,9 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.SWATSummon;
 import eod.effect.EffectExecutor;
+import eod.param.PointParam;
+import eod.warObject.Status;
+import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -32,6 +35,7 @@ public class SWAT extends Character {
 
     @Override
     public void attack(EffectExecutor executor) {
+        super.attack(executor);
         decideAddHealthAndAttack();
         executor.tryToExecute(
                 RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1)
@@ -40,7 +44,9 @@ public class SWAT extends Character {
 
     private void decideAddHealthAndAttack() {
         Gameboard gameboard = player.getBoard();
-        ArrayList<Point> surrounding = gameboard.get4Ways(position, 1);
+        PointParam param = new PointParam();
+        param.range = 1;
+        ArrayList<Point> surrounding = gameboard.get4Ways(position, param);
         Character c;
         for(Point p:surrounding) {
             try {
@@ -59,9 +65,22 @@ public class SWAT extends Character {
     @Override
     public ArrayList<Point> getAttackRange() {
         ArrayList<Point> r = new ArrayList<>();
-        r.addAll(player.getFL(position, 1));
-        r.addAll(player.getFR(position, 1));
-        r.addAll(player.getFront(position, 1));
+        PointParam param = new PointParam();
+        param.range = 1;
+        r.addAll(player.getFL(position, param));
+        r.addAll(player.getFR(position, param));
+        r.addAll(player.getFront(position, param));
+        Gameboard board = player.getBoard();
+        for(Point point:r) {
+            try {
+                WarObject object = board.getObjectOn(point.x, point.y);
+                if(object.getPlayer().isPlayerA() != player.isPlayerA() && object.hasStatus(Status.SNEAK)) {
+                    r.remove(point);
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("No object on the point.\n Skipping.");
+            }
+        }
         return r;
     }
 }

@@ -5,6 +5,9 @@ import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.RepairmanSummon;
 import eod.effect.EffectExecutor;
+import eod.effect.Summon;
+import eod.exceptions.NotSupportedException;
+import eod.param.PointParam;
 import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.supporter.Sapper;
 
@@ -35,6 +38,7 @@ public class Repairman extends Sapper {
 
     @Override
     public void attack(EffectExecutor executor) {
+        super.attack(executor);
         Arrays.stream(WarObject(player.getBoard())
                 .which(InRangeOf(this))
                 .which(OwnedBy(player))
@@ -50,6 +54,8 @@ public class Repairman extends Sapper {
 
     @Override
     public ArrayList<Point> getAttackRange() {
-        return player.getBoard().getSurrounding(position, 1);
+        PointParam param = new PointParam();
+        param.range = 1;
+        return player.getBoard().getSurrounding(position, param);
     }
 }

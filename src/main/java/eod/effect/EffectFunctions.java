@@ -1,5 +1,6 @@
 package eod.effect;
 
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 
 //EffectFunctions is used to describe a (set of) property changes of an object.
@@ -30,4 +31,7 @@ public class EffectFunctions {
         return new IncreaseAttack(hp);
     }
 
+    public static GiveStatus GiveStatus(Status status, Effect.HandlerType handlerType) {
+        return new GiveStatus(status, handlerType);
+    }
 }

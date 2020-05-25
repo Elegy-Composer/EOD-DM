@@ -1,18 +1,15 @@
 package eod.warObject.leader.red;
 
-import eod.GameObject;
-import eod.Gameboard;
-import eod.Party;
-import eod.Player;
+import eod.*;
 import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
 import eod.effect.Attack;
 import eod.effect.EffectExecutor;
-import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.param.AttackParam;
+import eod.param.PointParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
@@ -27,6 +24,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.Summon;
+import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class Sundar extends Leader {
     public Sundar(Player player) {
@@ -41,13 +39,19 @@ public class Sundar extends Leader {
 
     @Override
     public void attack(EffectExecutor executor) {
-        Point p = player.selectPosition(player.getBoard().getSurroundingEmpty(position, 1));
+        super.attack(executor);
+        PointParam param = new PointParam();
+        param.emptySpace = true;
+        param.range = 1;
+        Point p = player.selectPosition(player.getBoard().getSurrounding(position, param));
         executor.tryToExecute(Summon(new LittleGhost(player)).on(p));
     }
 
     public Attack deathPulse() {
-        ArrayList<Point> targets = player.getBoard().get8ways(position, Gameboard.boardSize);
-        return new RegionalAttack(4).from(this).to(targets);
+        PointParam pointParam = new PointParam();
+        pointParam.range = Gameboard.boardSize;
+        ArrayList<Point> targets = player.getBoard().get8ways(position, pointParam);
+        return RequestRegionalAttack(4).from(this).to(targets);
     }
 
     @Override

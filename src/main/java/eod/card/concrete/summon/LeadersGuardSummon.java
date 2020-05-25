@@ -11,7 +11,7 @@ import static eod.effect.EffectFunctions.Summon;
 
 public class LeadersGuardSummon extends SummonCard {
     public LeadersGuardSummon() {
-        super(SummonCardType.NORMAL);
+        super(3, SummonCardType.NORMAL);
     }
 
     @Override
@@ -24,11 +24,6 @@ public class LeadersGuardSummon extends SummonCard {
         Card c = new LeadersGuardSummon();
         c.setPlayer(player);
         return c;
-    }
-
-    @Override
-    public int getCost() {
-        return 3;
     }
 
     @Override
