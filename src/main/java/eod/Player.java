@@ -213,10 +213,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return game.getBoard().inBase(this, p);
     }
 
-    public ArrayList<Damageable> damage(CanAttack attacker,
+    public ArrayList<Damageable> attack(CanAttack attacker,
                                         Damageable target,
                                         AttackParam param) throws NotSupportedException {
         return attacker.attack(target, param);
+    }
+
+    public void damage(Damageable target, int hp) {
+        target.damage(hp);
     }
 
     public void heal(Damageable damageable, int hp) {

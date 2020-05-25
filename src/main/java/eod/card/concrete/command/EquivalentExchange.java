@@ -8,7 +8,7 @@ import eod.effect.EffectExecutor;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
 
-import static eod.effect.EffectFunctions.RequestDirectAttack;
+import static eod.effect.EffectFunctions.Damage;
 import static eod.effect.EffectFunctions.Summon;
 
 public class EquivalentExchange extends NormalCard {
@@ -20,8 +20,7 @@ public class EquivalentExchange extends NormalCard {
     public void applyEffect(EffectExecutor executor) {
         Leader leader = player.getLeader();
         Effect[] effects = new Effect[] {
-            //An attack to itself, then the handler should be its owner
-            RequestDirectAttack(2, Effect.HandlerType.Owner).from(leader).to(leader),
+            Damage(4, Effect.HandlerType.Owner).on(leader),
             Summon(new LittleGhost(player)).onOnePointOf(player, player.getBaseEmpty())
         };
         executor.tryToExecuteInSequence(effects);

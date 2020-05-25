@@ -15,8 +15,11 @@ public class EffectFunctions {
     public static Move RequestMove() {
         return new Move();
     }
-    public static DirectAttack RequestDirectAttack(int hp, Effect.HandlerType handlerType) {
-        return new DirectAttack(hp, handlerType);
+    public static DirectAttack RequestDirectAttack(int hp) {
+        return new DirectAttack(hp);
+    }
+    public static Damage Damage(int hp, Effect.HandlerType handlerType) {
+        return new Damage(hp, handlerType);
     }
     public static RegionalAttack RequestRegionalAttack(int hp) {
         return new RegionalAttack(hp);
