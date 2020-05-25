@@ -9,6 +9,7 @@ import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 import eod.warObject.leader.Leader;
@@ -57,12 +58,31 @@ public class MafiaAssassin extends Assassin {
         }
 
         @Override
+        public RegionalAttack to(ArrayList<Point> candidates, int number) {
+            if(number >= candidates.size()) {
+                return to(candidates);
+            }
+
+            ArrayList<Point> targets = new ArrayList<>();
+            for(int i = 0;i < number;i++) {
+                Point selected = player.selectPosition(candidates);
+                candidates.remove(selected);
+                targets.add(selected);
+            }
+
+            return to(targets);
+        }
+
+        @Override
         public RegionalAttack to(ArrayList<Point> targets) {
             Gameboard board = player.getBoard();
             for(Point p:targets) {
                 try {
                     WarObject target = board.getObjectOn(p.x, p.y);
                     if(target instanceof Leader) {
+                        param.hp *= 2;
+                    }
+                    if(hasStatus(Status.FURIOUS)) {
                         param.hp *= 2;
                     }
                     Damageable t = (Damageable) target;
