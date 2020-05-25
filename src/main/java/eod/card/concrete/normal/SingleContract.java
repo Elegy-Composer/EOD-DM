@@ -19,10 +19,10 @@ public class SingleContract extends NormalCard {
     @Override
     public void applyEffect(EffectExecutor executor) {
         WarObject[]  characters = WarObject(player.getBoard()).which(OwnedBy(player.rival())).which(Being(Character.class)).which(WithoutStatus(Status.SNEAK)).get();
-        //TODO: adapt the attack to effect
-        //Here we have two problems:
-        //1. An attack should now be directed by a player
-        //2. The damage is caused by a rule, which means the attacker is null
+        //TODO: adapt this attack to effect
+        // Here we have two problems:
+        // 1. An attack should now be directed by a player
+        // 2. The damage is caused by a rule, which means the attacker is null
         ((Character) player.selectObject(characters)).damage(4);
         player.getDeck().dropAll(this);
         player.getHand().dropAll(this);

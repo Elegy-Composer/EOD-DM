@@ -55,7 +55,6 @@ public class GrandFeast extends NormalCard implements EventListener {
         if (event instanceof AttackEvent) {
             AttackEvent e = (AttackEvent) event;
             if(e.getSender().isPlayerA() == player.isPlayerA()) {
-                //TODO: don't think this will really work, need tests and fixes if necessary
                 e.param.hp *= 2;
             }
         }
