@@ -4,6 +4,7 @@ import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.BloodThirstFighter;
 
 import java.awt.*;
@@ -17,8 +18,8 @@ public class BloodThirstFighterSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
-        Summon(player, new BloodThirstFighter(player)).from(baseAndConflict());
+    public Summon summonEffect() {
+        return Summon(new BloodThirstFighter(player)).onOnePointOf(player, baseAndConflict());
     }
 
     @Override

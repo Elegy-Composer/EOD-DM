@@ -6,6 +6,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.AssaultDirectorSummon;
+import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
 
@@ -34,8 +35,8 @@ public class AssaultDirector extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
 
         Gameboard board = player.getBoard();
         PointParam param = new PointParam();
@@ -55,7 +56,7 @@ public class AssaultDirector extends Character {
                     gangster.addAttack(2);
                     gangster.addHealth(2);
                 }
-                gangster.attack();
+                gangster.attack(executor);
                 break;
             } else {
                 gangster.moveTo(p);

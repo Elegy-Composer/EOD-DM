@@ -5,6 +5,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.BloodThirstFighterSummon;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectEnterEvent;
@@ -38,14 +39,16 @@ public class BloodThirstFighter extends Fighter {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RegionalAttack a = RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        RegionalAttack a = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
+        executor.tryToExecute(a);
+        afterAttack();
         for(Damageable victim:a.getAffected()) {
             if(victim.getHp() <= 0) {
                 addAttack(1);
                 addHealth(1);
-                attack();
+                attack(executor);
                 break;
             }
         }
@@ -79,7 +82,7 @@ public class BloodThirstFighter extends Fighter {
             if(event instanceof ObjectEnterEvent) {
                 ObjectEnterEvent e = (ObjectEnterEvent) event;
                 if(e.getObject() == holder) {
-                    holder.attack();
+                    holder.attack(player);
                     teardown();
                 }
             }

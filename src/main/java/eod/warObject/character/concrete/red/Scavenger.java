@@ -5,6 +5,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.ScavengerSummon;
+import eod.effect.EffectExecutor;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
 import eod.param.DamageParam;
@@ -44,15 +45,19 @@ public class Scavenger extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1)
+        );
 
         afterAttack();
     }
 
+
+
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         int a;
         if(hasStatus(Status.FURIOUS)) {
             a = param.hp *2;
@@ -60,7 +65,6 @@ public class Scavenger extends Character {
             a = param.hp;
         }
         ArrayList<Damageable> affected = new ArrayList<>();
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);

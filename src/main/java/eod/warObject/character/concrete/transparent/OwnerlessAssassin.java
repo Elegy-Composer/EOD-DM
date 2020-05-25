@@ -5,6 +5,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.OwnerlessAssassinSummon;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.event.relay.EventReceiver;
@@ -37,9 +38,11 @@ public class OwnerlessAssassin extends Assassin {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1)
+        );
     }
 
     @Override

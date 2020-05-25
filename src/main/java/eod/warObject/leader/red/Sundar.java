@@ -4,6 +4,8 @@ import eod.*;
 import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
+import eod.effect.Attack;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.relay.EventReceiver;
@@ -14,17 +16,18 @@ import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
+import eod.warObject.character.abstraction.Bunker;
+import eod.warObject.character.abstraction.Machine;
 import eod.warObject.character.abstraction.other.Ghost;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 import eod.warObject.character.concrete.red.LittleGhost;
 import eod.warObject.leader.Leader;
-import eod.warObject.character.abstraction.Bunker;
-import eod.warObject.character.abstraction.Machine;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.Summon;
+import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class Sundar extends Leader {
     public Sundar(Player player) {
@@ -38,30 +41,26 @@ public class Sundar extends Leader {
     }
 
     @Override
-    public void attack() {
-        super.attack();
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
         PointParam param = new PointParam();
         param.emptySpace = true;
         param.range = 1;
         Point p = player.selectPosition(player.getBoard().getSurrounding(position, param));
-        player.summonObject(new LittleGhost(player), p);
+        executor.tryToExecute(Summon(new LittleGhost(player)).on(p));
     }
 
-    public void deathPulse() {
+    public Attack deathPulse() {
         PointParam pointParam = new PointParam();
         pointParam.range = Gameboard.boardSize;
         ArrayList<Point> targets = player.getBoard().get8ways(position, pointParam);
-        AttackParam attackParam = new AttackParam();
-        attackParam.hp = 4;
-        attackParam.realDamage = true;
-        attack(targets, attackParam);
-
-        afterAttack();
+        return RequestRegionalAttack(4).from(this).to(targets);
     }
 
     @Override
-    public ArrayList<Damageable> attack(ArrayList<Point> targets, AttackParam param) {
+    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
         ArrayList<Damageable> affected = new ArrayList<>();
+        this.damage(new DamageParam(param.hp));
         int a;
         if(hasStatus(Status.FURIOUS)) {
             a = param.hp * 2;
@@ -71,7 +70,6 @@ public class Sundar extends Leader {
         this.damage(new DamageParam(param.hp));
         DamageParam dp = new DamageParam(a);
         dp.realDamage = param.realDamage;
-        Gameboard gameboard = player.getBoard();
         for(Point p:targets) {
             try {
                 WarObject target = gameboard.getObjectOn(p.x, p.y);
@@ -80,7 +78,7 @@ public class Sundar extends Leader {
                 }
                 if(target.getPlayer().isPlayerA() == player.isPlayerA()) {
                     if(target instanceof Ghost) {
-                        ((Ghost) target).attack();
+                        ((Ghost) target).attack(player); //TODO: This need to be fixed
                     }
                 } else {
                     ((Damageable) target).attacked(this, dp);
@@ -106,6 +104,29 @@ public class Sundar extends Leader {
         deck.add(equivalentExchange);
         deck.add(deathPulse);
         return deck;
+    }
+
+    @Override
+    public void onEventOccurred(GameObject sender, Event event) {
+        if (event instanceof ObjectDeadEvent) {
+            Damageable deadObject = ((ObjectDeadEvent) event).getDeadObject();
+            WarObject object = (WarObject) deadObject;
+            CanAttack attacker = deadObject.getAttacker();
+            int x = object.position.x, y = object.position.y;
+            if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
+                heal(2);
+            } else if (object.getPlayer().equals(player)) {
+                player.tryToExecute(
+                    Summon(new LittleGhost(player)).on(new Point(x, y))
+                );
+            } else if(isDeadObjectOwnedByEnemy(object) && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
+                player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
+            }
+        }
+    }
+
+    private boolean isDeadObjectOwnedByEnemy(WarObject object) {
+        return object.getPlayer().isPlayerA() == player.isPlayerA();
     }
 
     private class OwnedAbilities implements EventReceiver {
@@ -138,7 +159,9 @@ public class Sundar extends Leader {
                 if(deadObject instanceof Ghost && object.getPlayer().equals(player)) {
                     heal(2);
                 } else if (object.getPlayer().equals(player)) {
-                    Summon(player, new LittleGhost(player)).on(new Point(x, y));
+                    player.tryToExecute(
+                            Summon(new LittleGhost(player)).on(new Point(x, y))
+                    );
                 } else if(object.getPlayer().isPlayerA() == holder.player.isPlayerA() && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                     player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
                 }

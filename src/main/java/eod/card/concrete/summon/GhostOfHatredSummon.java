@@ -1,10 +1,10 @@
 package eod.card.concrete.summon;
 
 import eod.Party;
-import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.GhostOfHatred;
 
 import static eod.effect.EffectFunctions.Summon;
@@ -16,8 +16,8 @@ public class GhostOfHatredSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
-        Summon(player, new GhostOfHatred(player)).from(player.getBaseEmpty());
+    public Summon summonEffect() {
+        return Summon(new GhostOfHatred(player)).onOnePointOf(player, player.getBaseEmpty());
     }
 
     @Override

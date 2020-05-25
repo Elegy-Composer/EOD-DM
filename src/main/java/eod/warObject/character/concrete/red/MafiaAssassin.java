@@ -1,10 +1,12 @@
 package eod.warObject.character.concrete.red;
 
+import eod.Game;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.MafiaAssassinSummon;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
@@ -37,12 +39,10 @@ public class MafiaAssassin extends Assassin {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, attack);
-        SRA.from(this).to(getAttackRange(), 1);
-
-        afterAttack();
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        SpecialRegionalAttack a = new SpecialRegionalAttack(attack);
+        a.from(this).to(player, getAttackRange(), 1);
     }
 
     @Override
@@ -52,31 +52,17 @@ public class MafiaAssassin extends Assassin {
         return player.getBoard().get4Ways(position, param);
     }
 
-    private class SpecialRegionalAttack extends RegionalAttack {
-        public SpecialRegionalAttack(Player player, int hp) {
-            super(player, hp);
+    public class SpecialRegionalAttack extends RegionalAttack {
+        public SpecialRegionalAttack(int hp) {
+            super(hp);
         }
 
         @Override
-        public RegionalAttack to(ArrayList<Point> candidates, int number) {
-            if(number >= candidates.size()) {
-                return to(candidates);
-            }
+        public void action(EffectExecutor executor) throws WrongExecutorException {
+            Game game = castExecutor(executor);
+            Gameboard board = game.getBoard();
 
-            ArrayList<Point> targets = new ArrayList<>();
-            for(int i = 0;i < number;i++) {
-                Point selected = player.selectPosition(candidates);
-                candidates.remove(selected);
-                targets.add(selected);
-            }
-
-            return to(targets);
-        }
-
-        @Override
-        public RegionalAttack to(ArrayList<Point> targets) {
-            Gameboard board = player.getBoard();
-            for(Point p:targets) {
+            for(Point p:getTargets()) {
                 try {
                     WarObject target = board.getObjectOn(p.x, p.y);
                     if(target instanceof Leader) {
@@ -85,15 +71,13 @@ public class MafiaAssassin extends Assassin {
                     if(hasStatus(Status.FURIOUS)) {
                         param.hp *= 2;
                     }
-                    Damageable t = (Damageable) target;
-                    affected.addAll(attacker.attack(t, param));
+                    affected.addAll(game.damage(attacker, p, param));
                 } catch (IllegalArgumentException e) {
                     System.out.println("There's no object on ("+p.x+", "+p.y+"). \nSkipping.");
                 } catch (NotSupportedException e) {
                     System.out.println("The attacker "+((WarObject)attacker).getName()+" cannot attack a target directly.");
                 }
             }
-            return this;
         }
     }
 }

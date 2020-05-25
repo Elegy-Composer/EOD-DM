@@ -10,6 +10,7 @@ import eod.event.BeforeObjectDamageEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.param.PointParam;
+import eod.effect.EffectExecutor;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -36,9 +37,12 @@ public class HeavyPolice extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
+
         afterAttack();
     }
 

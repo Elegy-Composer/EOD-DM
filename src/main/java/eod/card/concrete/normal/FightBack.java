@@ -4,6 +4,9 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Damage;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.RoundEndEvent;
@@ -26,12 +29,12 @@ public class FightBack extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         new AttackDetect(player.selectObject(
-                WarObject(player.getBoard())
-                .which(Being(Character.class))
-                .which(OwnedBy(player)).get()
-        ));
+            WarObject(player.getBoard())
+                    .which(Being(Damageable.class))
+                    .which(OwnedBy(player)).get())
+        );
     }
 
     @Override
@@ -57,11 +60,10 @@ public class FightBack extends NormalCard {
 
         public AttackDetect(WarObject watching) {
             this.watching = watching;
-            watching.registerReceiver(this);
             canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
             canHandle.add(TargetedEvent.class);
             canHandle.add(RoundEndEvent.class);
+            watching.registerReceiver(this);
         }
         @Override
         public ArrayList<Class<? extends Event>> supportedEventTypes() {
@@ -70,11 +72,6 @@ public class FightBack extends NormalCard {
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
-            if(event instanceof ObjectDeadEvent) {
-                if(((ObjectDeadEvent) event).getDeadObject() == watching) {
-                    teardown();
-                }
-            }
             if(event instanceof RoundEndEvent) {
                 if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() == player.rival().isPlayerA()) {
                     teardown();
@@ -83,9 +80,7 @@ public class FightBack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
-                    Damageable attacker = (Damageable) e.getAttacker();
-                    DamageParam param = new DamageParam(4);
-                    attacker.damage(param);
+                    new Damage(new DamageParam(4), Effect.HandlerType.Rival).on((Damageable) e.getAttacker());
                 }
                 teardown();
             }

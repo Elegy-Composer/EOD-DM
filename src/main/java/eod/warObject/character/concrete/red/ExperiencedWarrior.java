@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.ExperiencedWarriorSummon;
+import eod.effect.EffectExecutor;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
@@ -19,9 +20,9 @@ public class ExperiencedWarrior extends Fighter {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        RequestRegionalAttack(player, attack).from(this).to(getAttackRange(), 1);
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
 
         afterAttack();
     }

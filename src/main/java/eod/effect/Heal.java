@@ -5,34 +5,49 @@ import eod.Player;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Heal implements Effect, GameObject {
     private int hp;
-    private Player player;
+    private int number;
+    private ArrayList<Damageable> objects;
 
-    public Heal(Player player, int hp) {
+    public Heal(int hp) {
         this.hp = hp;
-        this.player = player;
+        objects = new ArrayList<>();
     }
 
-    public void to(WarObject[] objects) {
-        Damageable selected = (Damageable) askToSelectOneFrom(objects);
-        selected.heal(hp);
+    public Heal to(Player player, WarObject[] objects) {
+        number = 1;
+        this.objects.add((Damageable) askToSelectOneFrom(player, objects));
+        return this;
     }
 
-    public void to(WarObject[] objects, int number) {
-        Damageable[] selectedGroup = (Damageable[]) askToSelectMultipleFrom(objects, number);
-        for(Damageable select: selectedGroup) {
-            select.heal(hp);
+    public Heal to(Player player, WarObject[] objects, int number) {
+        Damageable[] selectedGroup = (Damageable[]) askToSelectMultipleFrom(player, objects, number);
+        this.number = number;
+        this.objects.addAll(Arrays.asList(selectedGroup));
+        return this;
+    }
+
+    @Override
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        Player owner = castExecutor(executor);
+        for(int i = 0; i < number; i++) {
+            owner.heal(objects.get(i), hp);
         }
     }
 
     @Override
-    public void teardown() {
-        player = null;
+    public HandlerType desiredHandlerType() {
+        return HandlerType.Owner;
     }
 
+
     @Override
-    public Player getPlayer() {
-        return player;
+    public void teardown() {
+        objects.clear();
+        objects = null;
     }
 }

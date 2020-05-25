@@ -1,7 +1,7 @@
 package eod.card.abstraction.action;
 
-import eod.Player;
 import eod.card.abstraction.Card;
+import eod.effect.EffectExecutor;
 
 public abstract class ActionCard extends Card {
 
@@ -9,10 +9,10 @@ public abstract class ActionCard extends Card {
         super(cost);
     }
 
-    @Override
-    public void effect() {
-        applyEffect();
-    }
+    public abstract void applyEffect(EffectExecutor executor);
 
-    public abstract void applyEffect();
+    @Override
+    public void effect(EffectExecutor executor) {
+        applyEffect(executor);
+    }
 }

@@ -4,6 +4,8 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
@@ -16,21 +18,27 @@ import eod.warObject.character.abstraction.assaulter.Assassin;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static eod.effect.EffectFunctions.GiveStatus;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
-import static eod.effect.EffectFunctions.GiveStatus;
 
-public class Sneak extends NormalCard{
+public class Sneak extends NormalCard {
+
     public Sneak() {
         super(2);
     }
+
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         Accessing ownedObjects = WarObject(player.getBoard()).which(OwnedBy(player));
         WarObject[] assassins = ownedObjects.which(Being(Assassin.class)).get();
         boolean afterEffect = assassins.length >= 3;
-        GiveStatus(player, Status.SNEAK).to(player.selectObject(ownedObjects.which(Being(Character.class)).get()));
+        executor.tryToExecute(
+            GiveStatus(Status.SNEAK, Effect.HandlerType.Owner)
+                    .to(player.selectObject(ownedObjects.which(Being(Character.class)).get()))
+        );
+
 
         if(afterEffect) {
             Arrays.stream(assassins)

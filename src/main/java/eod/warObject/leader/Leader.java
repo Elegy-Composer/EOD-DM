@@ -7,14 +7,12 @@ import eod.card.abstraction.summon.SummonCard;
 import eod.param.AttackParam;
 import eod.param.DamageParam;
 import eod.warObject.CanAttack;
-import eod.warObject.Damageable;
-import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class Leader extends Character implements Damageable, CanAttack {
+public abstract class Leader extends Character {
     private ArrayList<Card> command;
 
     public Leader(Player player, int hp, int attack, Party party) {

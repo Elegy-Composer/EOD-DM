@@ -1,6 +1,8 @@
 package eod.card.abstraction.action;
 
 import eod.Player;
+import eod.effect.Attack;
+import eod.effect.EffectExecutor;
 
 public abstract class AttackCard extends ActionCard {
     public AttackCard(int cost) {
@@ -8,11 +10,16 @@ public abstract class AttackCard extends ActionCard {
     }
     public Player rival;
 
-    public abstract void attack();
+    public abstract Attack attack();
 
     @Override
-    public void applyEffect() {
-        rival = player.rival();
-        attack();
+    public void setPlayer(Player p) {
+        super.setPlayer(p);
+        rival = p.rival();
+    }
+
+    @Override
+    public void applyEffect(EffectExecutor executor) {
+        executor.tryToExecute(attack());
     }
 }

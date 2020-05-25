@@ -4,6 +4,9 @@ import eod.GameObject;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.Damage;
+import eod.effect.Effect;
+import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
 import eod.event.TargetedEvent;
@@ -24,7 +27,7 @@ public class SupportAttack extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         new EnemyAttack((Character) player.selectObject(
                 WarObject(player.getBoard())
                 .which(Being(Character.class))
@@ -55,10 +58,10 @@ public class SupportAttack extends NormalCard {
 
         public EnemyAttack(Character holder) {
             this.holder = holder;
-            holder.registerReceiver(this);
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
             canHandle.add(TargetedEvent.class);
+            holder.registerReceiver(this);
         }
 
         @Override
@@ -77,7 +80,7 @@ public class SupportAttack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() != holder) {
-                    ((Damageable) e.getAttacker()).damage(new DamageParam(2));
+                    new Damage(new DamageParam(2), Effect.HandlerType.Rival).on((Damageable) e.getAttacker());
                     teardown();
                 }
             }

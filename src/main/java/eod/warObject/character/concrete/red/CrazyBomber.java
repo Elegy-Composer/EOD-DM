@@ -6,6 +6,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.CrazyBomberSummon;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
@@ -45,18 +46,20 @@ public class CrazyBomber extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
         Point p = player.selectPosition(getAttackRange());
 
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(p);
-        RequestRegionalAttack(player, attack).from(this).to(singleTarget);
+        RequestRegionalAttack(attack).from(this).to(singleTarget);
 
         PointParam param = new PointParam();
         param.range = 1;
-        SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, 1);
+        SpecialRegionalAttack SRA = new SpecialRegionalAttack(1);
         SRA.to(player.getBoard().getSurrounding(p, param));
+
+        afterAttack();
     }
 
     private class OwnedAbilities implements EventReceiver {
@@ -82,7 +85,7 @@ public class CrazyBomber extends Character {
                 if(e.getDeadObject() == holder) {
                     PointParam param = new PointParam();
                     param.range = 1;
-                    SpecialRegionalAttack SRA = new SpecialRegionalAttack(player, 3);
+                    SpecialRegionalAttack SRA = new SpecialRegionalAttack(3);
                     SRA.from(holder).to(player.getBoard().getSurrounding(position, param));
                 }
             }
@@ -99,8 +102,8 @@ public class CrazyBomber extends Character {
 
     private class SpecialRegionalAttack extends RegionalAttack {
 
-        public SpecialRegionalAttack(Player player, int hp) {
-            super(player, hp);
+        public SpecialRegionalAttack(int hp) {
+            super(hp);
         }
 
         @Override

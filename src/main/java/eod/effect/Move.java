@@ -13,36 +13,44 @@ public class Move implements Effect, GameObject {
         STEP, TELEPORT
     }
     private final MoveMode mode;
-    private int step;
-    private Player player;
+    private int step = -1; //use with MoveMode.STEP
+    private Point selected; //use with MoveMode.TELEPORT
+
     private WarObject target;
 
-    public Move(Player player) {
+    public Move() {
         // this declares a teleport move
         mode = MoveMode.TELEPORT;
-        this.player = player;
     }
 
-    public Move(Player player, int step) {
+    public Move(int step) {
         this.step = step;
         mode = MoveMode.STEP;
-        this.player = player;
     }
 
-    public Move from(WarObject[] objects) {
-        target = askToSelectOneFrom(objects);
-        if(mode == MoveMode.STEP) {
-            target.move(step);
-        }
+    public Move from(Player player, WarObject[] objects) {
+        target = askToSelectOneFrom(player, objects);
         return this;
     }
 
-    public Move to(ArrayList<Point> points) throws MoveInvalidException {
+    public Move from(WarObject object) {
+        target = object;
+        return this;
+    }
+
+    public Move to(Player player, ArrayList<Point> points) throws MoveInvalidException {
         if(mode != MoveMode.TELEPORT) {
             throw new MoveInvalidException("the method \"to\" is used only for teleport moves.");
         }
-        Point selected = askToSelectOneFrom(points);
-        target.moveTo(selected);
+        selected = askToSelectOneFrom(player, points);
+        return this;
+    }
+
+    public Move to(Point point) throws MoveInvalidException {
+        if(mode != MoveMode.TELEPORT) {
+            throw new MoveInvalidException("the method \"to\" is used only for teleport moves.");
+        }
+        selected = point;
         return this;
     }
 
@@ -51,13 +59,22 @@ public class Move implements Effect, GameObject {
     }
 
     @Override
-    public void teardown() {
-        player = null;
-        target = null;
+    public void action(EffectExecutor executor) throws WrongExecutorException {
+        Player owner = castExecutor(executor);
+        if (mode == MoveMode.STEP && step != -1) {
+            owner.move(target, step);
+        } else if (mode == MoveMode.TELEPORT && selected != null) {
+            owner.moveObject(target, selected);
+        }
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
+    public HandlerType desiredHandlerType() {
+        return HandlerType.Owner;
+    }
+
+    @Override
+    public void teardown() {
+        target = null;
     }
 }

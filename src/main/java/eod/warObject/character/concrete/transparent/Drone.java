@@ -8,6 +8,7 @@ import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.specifier.Accessing;
 import eod.warObject.CanAttack;
+import eod.effect.EffectExecutor;
 import eod.warObject.Damageable;
 import eod.warObject.character.abstraction.Machine;
 
@@ -18,7 +19,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 import static eod.specifier.WarObjectSpecifier.*;
 import static eod.specifier.condition.Conditions.*;
 
-public class Drone extends Machine implements CanAttack, Damageable {
+public class Drone extends Machine {
 
     public Drone(Player player) {
         super(player, 2, 3, Party.TRANSPARENT);
@@ -30,15 +31,19 @@ public class Drone extends Machine implements CanAttack, Damageable {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        Accessing objects = WarObject(player.getBoard()).which(InRangeOf(this));
-        if(objects.which(OwnedBy(player)).which(Being(Drone.class)).get().length >= 1) {
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        if(WarObject(player.getBoard()).which(OwnedBy(player)).which(Being(Drone.class)).which(InRangeOf(this)).get().length >= 1) {
             attack += 2;
         }
-        RequestRegionalAttack(player, attack).from(this).to(objects
-                .which(OwnedBy(player.rival()))
-                .which(Being(Damageable.class)).get());
+        executor.tryToExecute(
+                RequestRegionalAttack(attack)
+                        .from(this)
+                        .to(player, WarObject(player.getBoard())
+                        .which(OwnedBy(player.rival()))
+                        .which(Being(Damageable.class))
+                        .which(InRangeOf(this)).get())
+        );
     }
 
     @Override

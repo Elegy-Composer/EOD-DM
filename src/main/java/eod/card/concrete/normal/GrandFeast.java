@@ -3,6 +3,7 @@ package eod.card.concrete.normal;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.effect.EffectExecutor;
 import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.RoundEndEvent;
@@ -27,7 +28,7 @@ public class GrandFeast extends NormalCard {
     }
 
     @Override
-    public void applyEffect() {
+    public void applyEffect(EffectExecutor executor) {
         for(WarObject object:WarObject (player.getBoard()).which(OwnedBy(player)).which(Being(Character.class)).which(InParty(Party.RED)).get()) {
             object.addStatus(Status.FURIOUS);
         }

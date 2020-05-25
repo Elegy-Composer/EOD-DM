@@ -5,6 +5,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.FrenzyCommanderSummon;
+import eod.effect.EffectExecutor;
 import eod.effect.Summon;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
@@ -14,7 +15,7 @@ import eod.warObject.character.abstraction.Character;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.Summon;
+import static eod.effect.EffectFunctions.*;
 
 public class FrenzyCommander extends Character {
     public FrenzyCommander(Player player) {
@@ -34,13 +35,13 @@ public class FrenzyCommander extends Character {
     }
 
     @Override
-    public void attack() {
-        super.attack();
-        Summon s = Summon(player, new Gangster(player));
-        s.from(getAttackRange());
+    public void attack(EffectExecutor executor) {
+        super.attack(executor);
+        Summon s = Summon(new Gangster(player));
+        s.onOnePointOf(player, getAttackRange());
         Gangster g = (Gangster) s.getObject();
-        g.addHealth(2);
-        g.addAttack(2);
+        IncreaseAttack(2).to(g);
+        IncreaseHealth(2).to(g);
 
         afterAttack();
     }

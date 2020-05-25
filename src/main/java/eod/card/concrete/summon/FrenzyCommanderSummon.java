@@ -4,6 +4,7 @@ import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.FrenzyCommander;
 
 import static eod.effect.EffectFunctions.Summon;
@@ -14,8 +15,8 @@ public class FrenzyCommanderSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
-        Summon(player, new FrenzyCommander(player)).from(player.getBaseEmpty());
+    public Summon summonEffect() {
+        return Summon(new FrenzyCommander(player)).onOnePointOf(player, player.getBaseEmpty());
     }
 
     @Override

@@ -4,6 +4,7 @@ import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
+import eod.effect.Summon;
 import eod.warObject.character.concrete.red.MafiaAssassin;
 
 import java.awt.*;
@@ -17,8 +18,8 @@ public class MafiaAssassinSummon extends SummonCard {
     }
 
     @Override
-    public void summon() {
-        Summon(player, new MafiaAssassin(player)).from(summonRange());
+    public Summon summonEffect() {
+        return Summon(new MafiaAssassin(player)).onOnePointOf(player, summonRange());
     }
 
     private ArrayList<Point> summonRange() {
