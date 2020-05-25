@@ -1,16 +1,13 @@
 package eod.warObject.character.concrete.red;
 
-import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GuerrillaShooterSummon;
 import eod.effect.EffectExecutor;
-import eod.exceptions.NotSupportedException;
+import eod.effect.RegionalAttack;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
-import eod.warObject.Status;
-import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
 import java.awt.*;
@@ -39,7 +36,9 @@ public class GuerrillaShooter extends Shooter {
     @Override
     public void attack(EffectExecutor executor) {
         super.attack(executor);
-        ArrayList<Damageable> affected = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1).getAffected();
+        RegionalAttack effect = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
+        executor.tryToExecute(effect);
+        ArrayList<Damageable> affected = effect.getAffected();
         if(affected.size() > 0 && affected.get(0).getHp() <= 0) {
             specialEffectTimes++;
             move();
