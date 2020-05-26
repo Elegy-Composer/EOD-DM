@@ -8,7 +8,7 @@ public class IncreaseAttack implements Effect {
     private int ap;
     private CanAttack target;
 
-    public IncreaseAttack(int ap) {
+    IncreaseAttack(int ap) {
         this.ap = ap;
     }
 

@@ -14,7 +14,7 @@ public class DirectAttack extends Attack {
     // If there's a ranged attack, use RegionalAttack.
     private ArrayList<Damageable> targets;
 
-    public DirectAttack(int hp) {
+    protected DirectAttack(int hp) {
         super(hp);
         targets = new ArrayList<>();
     }
