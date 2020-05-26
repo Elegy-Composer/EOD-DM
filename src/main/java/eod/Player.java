@@ -460,30 +460,26 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void onEventOccurred(GameObject sender, Event event) {
         if(event instanceof RoundStartEvent) {
             output.sendRoundStarted(((RoundStartEvent) event).getStartedRound());
-            return;
-        }
-        if(event instanceof RoundEndEvent) {
+        } else if(event instanceof RoundEndEvent) {
             output.sendRoundEnded(((RoundEndEvent) event).getEndedRound());
-            return;
-        }
-        if(event instanceof DirectAttackEvent) {
+        } else if(event instanceof DirectAttackEvent) {
             DirectAttackEvent directAttack = (DirectAttackEvent) event;
             Character attacker = directAttack.getAttacker();
             for(Damageable victim: directAttack.getTargets()) {
                 output.sendCharacterAttacked(attacker, (Character) victim);
             }
-            return;
-        }
-        if(event instanceof ObjectDeadEvent) {
+        } else if(event instanceof ObjectDeadEvent) {
             ObjectDeadEvent objectDeadEvent = (ObjectDeadEvent) event;
             WarObject deadObject = (WarObject) objectDeadEvent.getDeadObject();
             output.sendWarObjectDied(deadObject);
-            return;
-        }
-        if(event instanceof ObjectMovingEvent) {
+        } else if(event instanceof ObjectMovingEvent) {
             ObjectMovingEvent movingEvent = (ObjectMovingEvent) event;
             output.sendWarObjectMoved(movingEvent.getObject(), movingEvent.getNewPos());
         }
+
+        receivers.stream()
+                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+                .forEach(receiver -> receiver.onEventOccurred(sender, event));
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {
