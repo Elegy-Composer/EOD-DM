@@ -10,7 +10,7 @@ public class Damage implements Effect {
     private Damageable target;
     private int hp;
 
-    public Damage(int hp, HandlerType handlerType) {
+    Damage(int hp, HandlerType handlerType) {
         this.hp = hp;
         this.handlerType = handlerType;
     }

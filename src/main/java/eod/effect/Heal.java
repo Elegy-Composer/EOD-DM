@@ -13,7 +13,7 @@ public class Heal implements Effect, GameObject {
     private int number;
     private ArrayList<Damageable> objects;
 
-    public Heal(int hp) {
+    Heal(int hp) {
         this.hp = hp;
         objects = new ArrayList<>();
     }

@@ -13,7 +13,7 @@ public abstract class Attack implements Effect, GameObject {
     protected CanAttack attacker;
     protected ArrayList<Damageable> affected;
 
-    public Attack(int hp) {
+    protected Attack(int hp) {
         param = new AttackParam();
         param.hp = hp;
         affected = new ArrayList<>();

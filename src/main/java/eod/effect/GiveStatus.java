@@ -9,7 +9,7 @@ public class GiveStatus implements Effect {
     private WarObject[] targets;
     private HandlerType handlerType;
 
-    public GiveStatus(Status status, HandlerType handlerType) {
+    GiveStatus(Status status, HandlerType handlerType) {
         this.status = status;
         this.handlerType = handlerType;
     }
