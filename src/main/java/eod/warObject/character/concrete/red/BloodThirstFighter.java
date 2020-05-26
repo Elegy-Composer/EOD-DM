@@ -23,7 +23,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class BloodThirstFighter extends Fighter {
     public BloodThirstFighter(Player player) {
         super(player, 4, 3, Party.RED);
-        new OwnedAbilities(this);
+        new OwnedAbilities();
     }
 
     @Override
@@ -62,14 +62,12 @@ public class BloodThirstFighter extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private BloodThirstFighter holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public OwnedAbilities(BloodThirstFighter holder) {
-            this.holder = holder;
+        public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectEnterEvent.class);
-            holder.registerReceiver(this);
+            BloodThirstFighter.this.registerReceiver(this);
         }
 
         @Override
@@ -81,8 +79,8 @@ public class BloodThirstFighter extends Fighter {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof ObjectEnterEvent) {
                 ObjectEnterEvent e = (ObjectEnterEvent) event;
-                if(e.getObject() == holder) {
-                    holder.attack(player);
+                if(e.getObject() == BloodThirstFighter.this) {
+                    BloodThirstFighter.this.attack(player);
                     teardown();
                 }
             }
@@ -90,8 +88,7 @@ public class BloodThirstFighter extends Fighter {
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            BloodThirstFighter.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }

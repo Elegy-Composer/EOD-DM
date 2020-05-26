@@ -357,9 +357,9 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void moveObject(WarObject object, Point point) {
         game.getBoard().moveObject(object.position, point);
-        game.sendEvent(this, new ObjectMovingEvent(object, point));
+        sendUp(this, new ObjectMovingEvent(object, point));
         if(inEnemyBase(object.position)) {
-            game.sendEvent(this, new ObjectEnterEnemyBaseEvent(object));
+            sendUp(this, new ObjectEnterEnemyBaseEvent(object));
         }
         object.updatePosition(point);
     }

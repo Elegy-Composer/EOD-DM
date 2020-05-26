@@ -107,9 +107,6 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
 
     @Override
     public void onEventOccurred(GameObject sender, Event event) {
-        if(hasStatus(Status.NO_EFFECT)) {
-            return;
-        }
         send(sender, event);
     }
 

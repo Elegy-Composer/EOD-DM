@@ -23,6 +23,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
         super(player, 5, 2, Party.RED);
+        new OwnedAbilities();
     }
 
     @Override
@@ -41,7 +42,9 @@ public class LeadersGuard extends Shooter {
     public void attack(EffectExecutor executor) {
         super.attack(executor);
         SpecialRegionalAttack SRA = new SpecialRegionalAttack(attack);
-        SRA.from(this).to(player, getAttackRange(), 1);
+        executor.tryToExecute(
+            SRA.from(this).to(player, getAttackRange(), 1)
+        );
     }
 
     @Override
@@ -50,14 +53,12 @@ public class LeadersGuard extends Shooter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private LeadersGuard holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public OwnedAbilities(LeadersGuard holder) {
-            this.holder = holder;
+        public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectMovingEvent.class);
-            holder.registerReceiver(this);
+            LeadersGuard.this.registerReceiver(this);
         }
 
         @Override
@@ -69,7 +70,7 @@ public class LeadersGuard extends Shooter {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof ObjectMovingEvent) {
                 ObjectMovingEvent e = (ObjectMovingEvent) event;
-                if(e.getObject() == holder && !player.inBase(e.getNewPos())) {
+                if(e.getObject() == LeadersGuard.this && !player.inBase(e.getNewPos())) {
                     e.setNewPos(e.getOrigPos());
                 }
             }
@@ -77,8 +78,7 @@ public class LeadersGuard extends Shooter {
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            LeadersGuard.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }

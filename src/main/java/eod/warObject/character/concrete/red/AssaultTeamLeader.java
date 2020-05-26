@@ -19,12 +19,12 @@ import eod.warObject.character.abstraction.Character;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
+import static eod.effect.EffectFunctions.*;
 
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        new OwnedAbilities(this);
+        new OwnedAbilities();
     }
 
     @Override
@@ -57,16 +57,14 @@ public class AssaultTeamLeader extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private AssaultTeamLeader holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public OwnedAbilities(AssaultTeamLeader holder) {
-            this.holder = holder;
+        public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(RoundStartEvent.class);
             canHandle.add(ObjectEnterEnemyBaseEvent.class);
             canHandle.add(StatusAcquiredEvent.class);
-            holder.registerReceiver(this);
+            AssaultTeamLeader.this.registerReceiver(this);
         }
 
 
@@ -79,7 +77,7 @@ public class AssaultTeamLeader extends Character {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof RoundStartEvent) {
                 RoundStartEvent e = (RoundStartEvent) event;
-                if (e.getStartedRound().getPlayer().isPlayerA() == holder.getPlayer().isPlayerA()) {
+                if (e.getStartedRound().getPlayer().isPlayerA() == AssaultTeamLeader.this.getPlayer().isPlayerA()) {
                     PointParam param = new PointParam();
                     param.emptySpace = true;
                     param.range = 1;
@@ -91,24 +89,33 @@ public class AssaultTeamLeader extends Character {
             }
             if(event instanceof StatusAcquiredEvent) {
                 StatusAcquiredEvent e = (StatusAcquiredEvent) event;
-                if(e.getObject() == holder && e.getStatus() == Status.SNEAK) {
-                    holder.addAttack(1);
-                    holder.addHealth(1);
+                if(e.getObject() == AssaultTeamLeader.this && e.getStatus() == Status.SNEAK) {
+                    Player owner = AssaultTeamLeader.this.getPlayer();
+                    owner.tryToExecute(
+                            IncreaseAttack(1).to(AssaultTeamLeader.this)
+                    );
+                    owner.tryToExecute(
+                            IncreaseHealth(1).to(AssaultTeamLeader.this)
+                    );
                 }
             }
             if(event instanceof ObjectEnterEnemyBaseEvent) {
                 ObjectEnterEnemyBaseEvent e = (ObjectEnterEnemyBaseEvent) event;
-                if(e.getObject() == holder) {
-                    holder.addAttack(1);
-                    holder.addHealth(1);
+                if(e.getObject() == AssaultTeamLeader.this) {
+                    Player owner = AssaultTeamLeader.this.getPlayer();
+                    owner.tryToExecute(
+                            IncreaseAttack(1).to(AssaultTeamLeader.this)
+                    );
+                    owner.tryToExecute(
+                            IncreaseHealth(1).to(AssaultTeamLeader.this)
+                    );
                 }
             }
         }
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            AssaultTeamLeader.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }

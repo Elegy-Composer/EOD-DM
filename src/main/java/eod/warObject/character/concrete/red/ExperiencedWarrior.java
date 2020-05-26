@@ -22,7 +22,9 @@ public class ExperiencedWarrior extends Fighter {
     @Override
     public void attack(EffectExecutor executor) {
         super.attack(executor);
-        RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1)
+        );
 
         afterAttack();
     }

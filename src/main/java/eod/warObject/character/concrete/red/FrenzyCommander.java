@@ -38,10 +38,16 @@ public class FrenzyCommander extends Character {
     public void attack(EffectExecutor executor) {
         super.attack(executor);
         Summon s = Summon(new Gangster(player));
-        s.onOnePointOf(player, getAttackRange());
+        executor.tryToExecute(
+            s.onOnePointOf(player, getAttackRange())
+        );
         Gangster g = (Gangster) s.getObject();
-        IncreaseAttack(2).to(g);
-        IncreaseHealth(2).to(g);
+        executor.tryToExecute(
+            IncreaseAttack(2).to(g)
+        );
+        executor.tryToExecute(
+            IncreaseHealth(2).to(g)
+        );
 
         afterAttack();
     }

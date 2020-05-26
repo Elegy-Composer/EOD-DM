@@ -22,7 +22,6 @@ public class SingleContract extends NormalCard {
     @Override
     public void applyEffect(EffectExecutor executor) {
         WarObject[]  characters = WarObject(player.getBoard()).which(OwnedBy(player.rival())).which(Being(Character.class)).which(WithoutStatus(Status.SNEAK)).get();
-        ((Character) player.selectObject(characters)).damage(new DamageParam(4));
         executor.tryToExecute(
                 Damage(new DamageParam(4), Effect.HandlerType.Rival).onOneOf(player, characters)
         );

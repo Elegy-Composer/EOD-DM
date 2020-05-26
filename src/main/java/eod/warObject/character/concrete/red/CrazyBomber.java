@@ -25,7 +25,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class CrazyBomber extends Character {
     public CrazyBomber(Player player) {
         super(player, 1, 2, Party.RED);
-        new OwnedAbilities(this);
+        new OwnedAbilities();
     }
 
     @Override
@@ -52,7 +52,9 @@ public class CrazyBomber extends Character {
 
         ArrayList<Point> singleTarget = new ArrayList<>();
         singleTarget.add(p);
-        RequestRegionalAttack(attack).from(this).to(singleTarget);
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(singleTarget)
+        );
 
         PointParam param = new PointParam();
         param.range = 1;
@@ -63,14 +65,12 @@ public class CrazyBomber extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private CrazyBomber holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public OwnedAbilities(CrazyBomber holder) {
-            holder.registerReceiver(this);
-            this.holder = holder;
+        public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
+            CrazyBomber.this.registerReceiver(this);
         }
 
         @Override
@@ -82,19 +82,18 @@ public class CrazyBomber extends Character {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof ObjectDeadEvent) {
                 ObjectDeadEvent e = (ObjectDeadEvent) event;
-                if(e.getDeadObject() == holder) {
+                if(e.getDeadObject() == CrazyBomber.this) {
                     PointParam param = new PointParam();
                     param.range = 1;
                     SpecialRegionalAttack SRA = new SpecialRegionalAttack(3);
-                    SRA.from(holder).to(player.getBoard().getSurrounding(position, param));
+                    SRA.from(CrazyBomber.this).to(player.getBoard().getSurrounding(position, param));
                 }
             }
         }
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            CrazyBomber.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }

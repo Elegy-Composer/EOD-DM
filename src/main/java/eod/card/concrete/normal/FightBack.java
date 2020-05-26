@@ -13,6 +13,7 @@ import eod.event.RoundEndEvent;
 import eod.event.TargetedEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
+import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
+import static eod.effect.EffectFunctions.*;
 
 public class FightBack extends NormalCard {
     public FightBack() {
@@ -80,7 +82,10 @@ public class FightBack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
-                    new Damage(new DamageParam(4), Effect.HandlerType.Rival).on((Damageable) e.getAttacker());
+                    CanAttack attacker = e.getAttacker();
+                    ((WarObject) attacker).getPlayer().tryToExecute(
+                        Damage(new DamageParam(4), Effect.HandlerType.Rival).on((Damageable) attacker)
+                    );
                 }
                 teardown();
             }

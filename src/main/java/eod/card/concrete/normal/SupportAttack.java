@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
+import static eod.effect.EffectFunctions.*;
 
 public class SupportAttack extends NormalCard {
     public SupportAttack() {
@@ -80,7 +81,9 @@ public class SupportAttack extends NormalCard {
             if(event instanceof TargetedEvent) {
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() != holder) {
-                    new Damage(new DamageParam(2), Effect.HandlerType.Rival).on((Damageable) e.getAttacker());
+                    player.tryToExecute(
+                        Damage(new DamageParam(2), Effect.HandlerType.Rival).on((Damageable) e.getAttacker())
+                    );
                     teardown();
                 }
             }

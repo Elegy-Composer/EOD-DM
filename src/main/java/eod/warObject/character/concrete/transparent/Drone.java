@@ -44,6 +44,8 @@ public class Drone extends Machine {
                         .which(Being(Damageable.class))
                         .which(InRangeOf(this)).get())
         );
+
+        afterAttack();
     }
 
     @Override

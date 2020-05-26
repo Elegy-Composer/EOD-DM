@@ -16,11 +16,12 @@ import eod.warObject.character.abstraction.assaulter.Fighter;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
+import static eod.effect.EffectFunctions.*;
 
 public class ToughGuy extends Fighter {
     public ToughGuy(Player player) {
         super(player, 6, 3, Party.RED);
+        new OwnedAbilities();
     }
 
     @Override
@@ -51,14 +52,12 @@ public class ToughGuy extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ToughGuy holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
-        public OwnedAbilities(ToughGuy holder) {
-            this.holder = holder;
+        public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(AfterObjectDamageEvent.class);
-            holder.registerReceiver(this);
+            ToughGuy.this.registerReceiver(this);
         }
 
         @Override
@@ -70,17 +69,21 @@ public class ToughGuy extends Fighter {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof AfterObjectDamageEvent) {
                 AfterObjectDamageEvent e = (AfterObjectDamageEvent) event;
-                if(e.getVictim() == holder) {
-                    holder.addAttack(2);
-                    holder.addHealth(2);
+                if(e.getVictim() == ToughGuy.this) {
+                    Player owner = ToughGuy.this.getPlayer();
+                    owner.tryToExecute(
+                            IncreaseAttack(2).to(ToughGuy.this)
+                    );
+                    owner.tryToExecute(
+                            IncreaseHealth(2).to(ToughGuy.this)
+                    );
                 }
             }
         }
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            ToughGuy.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }
