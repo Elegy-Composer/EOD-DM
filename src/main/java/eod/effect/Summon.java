@@ -11,7 +11,7 @@ public class Summon implements Effect, GameObject {
     private WarObject object;
     private Point summonPoint;
 
-    public Summon(WarObject object) {
+    Summon(WarObject object) {
         this.object = object;
     }
 

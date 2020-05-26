@@ -8,7 +8,7 @@ public class IncreaseHealth implements Effect {
     private int hp;
     private Damageable target;
 
-    public IncreaseHealth(int hp) {
+    IncreaseHealth(int hp) {
         this.hp = hp;
     }
 

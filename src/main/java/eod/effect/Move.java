@@ -18,7 +18,7 @@ public class Move implements Effect, GameObject {
 
     private WarObject target;
 
-    public Move() {
+    Move() {
         // this declares a teleport move
         mode = MoveMode.TELEPORT;
     }

@@ -14,7 +14,7 @@ public class RegionalAttack extends Attack {
     // If there's a direct attack, use DirectAttack.
     private ArrayList<Point> targets;
 
-    public RegionalAttack(int hp) {
+    protected RegionalAttack(int hp) {
         super(hp);
         targets = new ArrayList<>();
     }

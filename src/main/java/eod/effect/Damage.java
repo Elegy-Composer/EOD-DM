@@ -11,7 +11,7 @@ public class Damage implements Effect {
     private Damageable target;
     private DamageParam param;
 
-    public Damage(DamageParam param, HandlerType handlerType) {
+    Damage(DamageParam param, HandlerType handlerType) {
         this.param = param;
         this.handlerType = handlerType;
     }
