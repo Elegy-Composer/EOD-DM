@@ -6,9 +6,7 @@ import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.collection.Hand;
 import eod.effect.Effect;
-import eod.effect.EffectExecutor;
-import eod.effect.Summon;
-import eod.event.Event;
+import eod.effect.EffectExecutor;import eod.event.Event;
 import eod.event.*;
 import eod.event.listener.EventListener;
 import eod.exceptions.GameLosingException;
@@ -148,10 +146,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     @Override
     public void tryToExecute(Effect effect) {
-        Summon.HandlerType desired = effect.desiredHandlerType();
-        if(desired == Summon.HandlerType.Owner && isActingPlayer) {
+        Effect.HandlerType desired = effect.desiredHandlerType();
+        if(desired == Effect.HandlerType.Owner && isActingPlayer) {
             effect.action(this);
-        } else if(desired == Summon.HandlerType.Rival && !isActingPlayer) {
+        } else if(desired == Effect.HandlerType.Rival && !isActingPlayer) {
             effect.action(this);
         } else if(effectNextHandler != null) {
             effectNextHandler.tryToExecute(effect);
