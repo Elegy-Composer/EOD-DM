@@ -61,8 +61,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     @Override
     public void attack(EffectExecutor executor) {
         removeStatus(Status.SNEAK);
-
-        afterAttack();
     }
 
     @Override

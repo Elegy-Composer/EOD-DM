@@ -31,7 +31,12 @@ public class GrandFeast extends NormalCard {
 
     @Override
     public void applyEffect(EffectExecutor executor) {
-        for(WarObject object:WarObject (player.getBoard()).which(OwnedBy(player)).which(Being(Character.class)).which(InParty(Party.RED)).get()) {
+        for(WarObject object:WarObject(
+                player.getBoard())
+                .which(OwnedBy(player))
+                .which(Being(Character.class))
+                .which(InParty(Party.RED)).get()
+        ) {
             player.tryToExecute(
                     GiveStatus(Status.FURIOUS, Effect.HandlerType.Owner).to(object)
             );

@@ -477,9 +477,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
             output.sendWarObjectMoved(movingEvent.getObject(), movingEvent.getNewPos());
         }
 
-        receivers.stream()
-                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
-                .forEach(receiver -> receiver.onEventOccurred(sender, event));
+        send(sender, event);
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {
