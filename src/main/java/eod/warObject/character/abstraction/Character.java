@@ -4,8 +4,11 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
+import eod.event.AfterObjectDamageEvent;
+import eod.event.BeforeObjectDamageEvent;
 import eod.effect.EffectExecutor;
 import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
 import eod.warObject.Status;
@@ -20,16 +23,14 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     protected int max_hp;
     protected int hp;
     protected int attack;
-    protected final Party party;
     protected CanAttack attacker;
 
     public Character(Player player, int hp, int attack, Party party) {
-        super(player);
+        super(player, party);
         this.player = player;
         max_hp = hp;
         this.hp = max_hp;
         this.attack = attack;
-        this.party = party;
     }
 
     @Override
@@ -64,16 +65,19 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
 
     @Override
     public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
-        int hp = param.hp;
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp * 2;
+        } else {
+            a = param.hp;
+        }
         ArrayList<Damageable> affected = new ArrayList<>();
         for(Point p:targets) {
             try {
                 Damageable target = gameboard.getObjectOn(p.x, p.y);
-                if(param.realDamage) {
-                    target.realDamage(hp);
-                } else {
-                    target.attacked(this, hp);
-                }
+                DamageParam dp = new DamageParam(a);
+                dp.realDamage = param.realDamage;
+                target.attacked(this, dp);
                 affected.add(target);
                 ((WarObject)target).addStatus(Status.ATTACKED);
             } catch (IllegalArgumentException e) {
@@ -90,38 +94,44 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
 
     @Override
     public ArrayList<Damageable> attack(Damageable[] targets, AttackParam param) {
-        int hp = param.hp;
+        int a;
+        if(hasStatus(Status.FURIOUS)) {
+            a = param.hp * 2;
+        } else {
+            a = param.hp;
+        }
         ArrayList<Damageable> affected = new ArrayList<>();
         Arrays.stream(targets)
                 .forEach(target -> {
-                    if(param.realDamage) {
-                        target.realDamage(hp);
-                    } else {
-                        target.attacked(this, hp);
-                    }
+                    DamageParam dp = new DamageParam(a);
+                    dp.realDamage = param.realDamage;
+                    target.attacked(this, dp);
                     affected.add(target);
                     ((WarObject)target).addStatus(Status.ATTACKED);
                 });
         return affected;
     }
 
-    @Override
-    public void realDamage(int val) {
-        hp -= val;
-        if(hp <= 0) {
-            die();
+    protected void afterAttack() {
+        if(status.contains(Status.FURIOUS)) {
+            damage(new DamageParam(1));
         }
     }
 
     @Override
-    public void damage(int val) {
-        realDamage(val);
+    public void damage(DamageParam param) {
+        player.sendUp(this, new BeforeObjectDamageEvent(this, param));
+        hp -= param.damage;
+        if(hp <= 0) {
+            die();
+        }
+        player.sendUp(this, new AfterObjectDamageEvent(this, param));
     }
 
     @Override
-    public void attacked(CanAttack attacker, int hp) {
+    public void attacked(CanAttack attacker, DamageParam param) {
         this.attacker = attacker;
-        damage(hp);
+        damage(param);
         this.attacker = null;
     }
 
@@ -140,10 +150,6 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public void teardown() {
         super.teardown();
         status.clear();
-    }
-
-    public Party getParty() {
-        return party;
     }
 
     @Override

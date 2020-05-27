@@ -1,5 +1,7 @@
 package eod.warObject.character.concrete.red;
 
+import eod.BoardPosition;
+import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
@@ -7,6 +9,8 @@ import eod.card.concrete.summon.GangsterSummon;
 import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
+
+import java.awt.*;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
@@ -33,7 +37,17 @@ public class Gangster extends Character {
         PointParam param = new PointParam();
         param.range = 1;
         executor.tryToExecute(
-                RequestRegionalAttack(attack).from(this).to(player.getFront(position, param))
+            RequestRegionalAttack(attack).from(this).to(player.getFront(position, param))
         );
+
+        afterAttack();
+    }
+
+    @Override
+    public void moveTo(Point point) {
+        super.moveTo(point);
+        if(player.getPosition(position) == BoardPosition.ENEMY_BASE && (position.x == 0 || position.x == Gameboard.boardSize - 1)) {
+            transferTo(new ExperiencedWarrior(player));
+        }
     }
 }

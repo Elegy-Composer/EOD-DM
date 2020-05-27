@@ -5,8 +5,10 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.AssaultTeamLeaderSummon;
+import eod.event.*;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
+import eod.event.relay.EventReceiver;
 import eod.event.ObjectEnterEvent;
 import eod.event.RoundStartEvent;
 import eod.event.StatusAcquiredEvent;
@@ -17,14 +19,12 @@ import eod.warObject.character.abstraction.Character;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
+import static eod.effect.EffectFunctions.*;
 
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        canHandle.add(ObjectEnterEvent.class);
-        canHandle.add(StatusAcquiredEvent.class);
-        canHandle.add(RoundStartEvent.class);
+        new OwnedAbilities();
     }
 
     @Override
@@ -33,6 +33,8 @@ public class AssaultTeamLeader extends Character {
         executor.tryToExecute(
                 RequestRegionalAttack(attack).from(this).to(getAttackRange())
         );
+
+        afterAttack();
     }
 
     @Override
@@ -54,34 +56,68 @@ public class AssaultTeamLeader extends Character {
         return "特攻隊隊長";
     }
 
-    @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(event instanceof ObjectEnterEvent) {
-            if(((ObjectEnterEvent) event).getObject() == this) {
-                addAttack(1);
-                addHealth(1);
-            }
+    private class OwnedAbilities implements EventReceiver {
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities() {
+            canHandle = new ArrayList<>();
+            canHandle.add(RoundStartEvent.class);
+            canHandle.add(ObjectEnterEnemyBaseEvent.class);
+            canHandle.add(StatusAcquiredEvent.class);
+            AssaultTeamLeader.this.registerReceiver(this);
         }
 
-        if(event instanceof StatusAcquiredEvent) {
-            StatusAcquiredEvent e = (StatusAcquiredEvent) event;
-            if(e.getObject() == this && e.getStatus() == Status.SNEAK) {
-                addAttack(1);
-                addHealth(1);
-            }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
         }
 
-        if(event instanceof RoundStartEvent) {
-            if(((RoundStartEvent) event).getStartedRound().getPlayer().isPlayerA() == player.isPlayerA()) {
-                PointParam param = new PointParam();
-                param.emptySpace = true;
-                param.range = 1;
-                ArrayList<Point> front = player.getFront(position, param);
-                if(front.size() != 0) {
-                    moveTo(front.get(0));
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof RoundStartEvent) {
+                RoundStartEvent e = (RoundStartEvent) event;
+                if (e.getStartedRound().getPlayer().isPlayerA() == AssaultTeamLeader.this.getPlayer().isPlayerA()) {
+                    PointParam param = new PointParam();
+                    param.emptySpace = true;
+                    param.range = 1;
+                    ArrayList<Point> front = player.getFront(position, param);
+                    if(front.size() != 0) {
+                        moveTo(front.get(0));
+                    }
                 }
             }
+            if(event instanceof StatusAcquiredEvent) {
+                StatusAcquiredEvent e = (StatusAcquiredEvent) event;
+                if(e.getObject() == AssaultTeamLeader.this && e.getStatus() == Status.SNEAK) {
+                    Player owner = AssaultTeamLeader.this.getPlayer();
+                    owner.tryToExecute(
+                            IncreaseAttack(1).to(AssaultTeamLeader.this)
+                    );
+                    owner.tryToExecute(
+                            IncreaseHealth(1).to(AssaultTeamLeader.this)
+                    );
+                }
+            }
+            if(event instanceof ObjectEnterEnemyBaseEvent) {
+                ObjectEnterEnemyBaseEvent e = (ObjectEnterEnemyBaseEvent) event;
+                if(e.getObject() == AssaultTeamLeader.this) {
+                    Player owner = AssaultTeamLeader.this.getPlayer();
+                    owner.tryToExecute(
+                            IncreaseAttack(1).to(AssaultTeamLeader.this)
+                    );
+                    owner.tryToExecute(
+                            IncreaseHealth(1).to(AssaultTeamLeader.this)
+                    );
+                }
+            }
+        }
+
+        @Override
+        public void teardown() {
+            AssaultTeamLeader.this.unregisterReceiver(this);
+            canHandle.clear();
+            canHandle = null;
         }
     }
 }

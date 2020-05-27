@@ -1,5 +1,6 @@
 package eod.effect;
 
+import eod.param.DamageParam;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 
@@ -18,8 +19,8 @@ public class EffectFunctions {
     public static DirectAttack RequestDirectAttack(int hp) {
         return new DirectAttack(hp);
     }
-    public static Damage Damage(int hp, Effect.HandlerType handlerType) {
-        return new Damage(hp, handlerType);
+    public static Damage Damage(DamageParam param, Effect.HandlerType handlerType) {
+        return new Damage(param, handlerType);
     }
     public static RegionalAttack RequestRegionalAttack(int hp) {
         return new RegionalAttack(hp);

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class SecureGuardBot extends Machine {
-    private CanAttack attacker;
     public SecureGuardBot(Player player) {
         super(player, 4, 4, Party.BLUE);
     }
@@ -48,27 +47,8 @@ public class SecureGuardBot extends Machine {
         executor.tryToExecute(
                 RequestRegionalAttack(attack).from(this).to(getAttackRange())
         );
-    }
 
-    @Override
-    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
-        int hp = param.hp;
-        ArrayList<Damageable> affected = new ArrayList<>();
-        for(Point p:targets) {
-            try {
-                Damageable target = gameboard.getObjectOn(p.x, p.y);
-                if(param.realDamage) {
-                    target.damage(hp);
-                } else {
-                    target.attacked(this, hp);
-                }
-                affected.add(target);
-                ((WarObject) target).addStatus(Status.ATTACKED);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.toString());
-            }
-        }
-        return affected;
+        afterAttack();
     }
 
     @Override

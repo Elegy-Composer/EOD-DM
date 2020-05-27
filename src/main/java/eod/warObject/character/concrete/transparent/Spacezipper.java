@@ -9,8 +9,10 @@ import eod.card.concrete.summon.SpacezipperSummon;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
+import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Marker;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -22,8 +24,8 @@ public class Spacezipper extends Character implements Marker {
     private ArrayList<Point> marked;
     public Spacezipper(Player player) {
         super(player, 5, 3, Party.TRANSPARENT);
-        canHandle.add(RoundStartEvent.class);
         marked = new ArrayList<>();
+        new OwnedAbilities();
     }
 
     @Override
@@ -68,15 +70,6 @@ public class Spacezipper extends Character implements Marker {
     }
 
     @Override
-    public void onEventOccurred(GameObject sender, Event event) {
-        super.onEventOccurred(sender, event);
-        if(event instanceof RoundStartEvent) {
-            mark(position);
-            move();
-        }
-    }
-
-    @Override
     public void teardown() {
         super.teardown();
         clearMark();
@@ -109,5 +102,38 @@ public class Spacezipper extends Character implements Marker {
     @Override
     public ArrayList<Point> getMarks() {
         return marked;
+    }
+
+    private class OwnedAbilities implements EventReceiver {
+        private ArrayList<Class<? extends Event>> canHandle;
+
+        public OwnedAbilities() {
+            canHandle = new ArrayList<>();
+            canHandle.add(RoundStartEvent.class);
+            Spacezipper.this.registerReceiver(this);
+        }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return canHandle;
+        }
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if(event instanceof RoundStartEvent) {
+                RoundStartEvent e = (RoundStartEvent) event;
+                if(e.getStartedRound().getPlayer().isPlayerA() == Spacezipper.this.player.isPlayerA()) {
+                    Spacezipper.this.mark(Spacezipper.this.position);
+                    Spacezipper.this.move();
+                }
+            }
+        }
+
+        @Override
+        public void teardown() {
+            Spacezipper.this.unregisterReceiver(this);
+            canHandle.clear();
+            canHandle = null;
+        }
     }
 }

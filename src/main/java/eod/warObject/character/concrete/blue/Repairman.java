@@ -48,8 +48,11 @@ public class Repairman extends Sapper {
                     machine.addAttack(1);
         });
         executor.tryToExecute(
-            RequestRegionalAttack(attack).from(this).to(getAttackRange())
+                RequestRegionalAttack(attack).from(this).to(getAttackRange())
         );
+
+        afterAttack();
+
     }
 
     @Override

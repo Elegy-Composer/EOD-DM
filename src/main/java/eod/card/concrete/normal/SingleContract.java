@@ -3,6 +3,7 @@ package eod.card.concrete.normal;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.param.DamageParam;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.warObject.Status;
@@ -22,7 +23,7 @@ public class SingleContract extends NormalCard {
     public void applyEffect(EffectExecutor executor) {
         WarObject[]  characters = WarObject(player.getBoard()).which(OwnedBy(player.rival())).which(Being(Character.class)).which(WithoutStatus(Status.SNEAK)).get();
         executor.tryToExecute(
-                Damage(4, Effect.HandlerType.Rival).onOneOf(player, characters)
+                Damage(new DamageParam(4), Effect.HandlerType.Rival).onOneOf(player, characters)
         );
 
         player.getDeck().dropAll(this);

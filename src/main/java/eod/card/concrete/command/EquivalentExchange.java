@@ -3,6 +3,7 @@ package eod.card.concrete.command;
 import eod.Party;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.NormalCard;
+import eod.param.DamageParam;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.warObject.character.concrete.red.LittleGhost;
@@ -20,7 +21,7 @@ public class EquivalentExchange extends NormalCard {
     public void applyEffect(EffectExecutor executor) {
         Leader leader = player.getLeader();
         Effect[] effects = new Effect[] {
-            Damage(4, Effect.HandlerType.Owner).on(leader),
+            Damage(new DamageParam(4), Effect.HandlerType.Owner).on(leader),
             Summon(new LittleGhost(player)).onOnePointOf(player, player.getBaseEmpty())
         };
         executor.tryToExecuteInSequence(effects);

@@ -9,10 +9,12 @@ import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.*;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
+import eod.event.relay.EventSender;
 import eod.exceptions.GameLosingException;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.snapshots.Snapshotted;
 import eod.warObject.CanAttack;
@@ -28,7 +30,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Player implements Snapshotted<Player.Snapshot>,
-                                GameObject, EventListener, EffectExecutor {
+                                GameObject, EventReceiver, EventSender, EffectExecutor {
 
     private Deck deck;
     private Game game;
@@ -39,6 +41,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private String name;
     private boolean isPlayerA;
     private boolean isActingPlayer = false;
+    private ArrayList<EventReceiver> receivers;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -48,6 +51,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         this.deck = deck;
         this.hand = hand;
         this.name = name;
+        receivers = new ArrayList<>();
     }
 
     public String getName() {
@@ -60,7 +64,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void attachToGame(Game game) {
         this.game = game;
-        game.registerListener(this);
+        game.registerReceiver(this);
     }
     public void attachIO(Input input, Output output) {
         this.input = input;
@@ -218,8 +222,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return attacker.attack(target, param);
     }
 
-    public void damage(Damageable target, int hp) {
-        target.damage(hp);
+    public void damage(Damageable target, DamageParam param) {
+        target.damage(param);
     }
 
     public void heal(Damageable damageable, int hp) {
@@ -288,6 +292,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
         output.sendWarObjectSummoned(object, point);
     }
 
+    public void transferObjectTo(WarObject from, WarObject to) {
+        getBoard().transfer(from, to);
+        output.sendWarObjectTransferred(from, to);
+    }
+
     @Override
     public void teardown() {
         hand.teardown();
@@ -296,6 +305,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         deck = null;
         leader.teardown();
         leader = null;
+        for(EventReceiver receiver:receivers) {
+            receiver.teardown();
+        }
+        receivers.clear();
     }
 
     @Override
@@ -343,8 +356,19 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void moveObject(WarObject object, Point point) {
         game.getBoard().moveObject(object.position, point);
-        game.sendEvent(this, new ObjectMovingEvent(object, point));
+        sendUp(this, new ObjectMovingEvent(object, point));
+        if(inEnemyBase(object.position)) {
+            sendUp(this, new ObjectEnterEnemyBaseEvent(object));
+        }
         object.updatePosition(point);
+    }
+
+    public boolean inEnemyBase(Point p) {
+        if(isPlayerA) {
+            return p.x < Gameboard.firstLine;
+        } else {
+            return p.x >= Gameboard.secondLine;
+        }
     }
 
     public void loseObject(WarObject object) {
@@ -392,15 +416,30 @@ public class Player implements Snapshotted<Player.Snapshot>,
         return getBoard().getLine(p, dx, 0, param);
     }
 
-    public void registerListener(EventListener listener) {
-        game.registerListener(listener);
+    public BoardPosition getPosition(Point p) {
+        return getBoard().getPosition(this, p);
     }
 
-    public void unregisterListener(EventListener listener) {
-        game.unregisterListener(listener);
+    @Override
+    public void registerReceiver(EventReceiver receiver) {
+        receivers.add(receiver);
     }
 
-    public void sendEvent(GameObject sender, Event event) {
+
+
+    @Override
+    public void unregisterReceiver(EventReceiver receiver) {
+        receivers.remove(receiver);
+    }
+
+    @Override
+    public void send(GameObject sender, Event event) {
+        receivers.stream()
+                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+                .forEach(receiver -> receiver.onEventOccurred(sender, event));
+    }
+
+    public void sendUp(GameObject sender, Event event) {
         game.sendEvent(sender, event);
     }
 
@@ -420,30 +459,24 @@ public class Player implements Snapshotted<Player.Snapshot>,
     public void onEventOccurred(GameObject sender, Event event) {
         if(event instanceof RoundStartEvent) {
             output.sendRoundStarted(((RoundStartEvent) event).getStartedRound());
-            return;
-        }
-        if(event instanceof RoundEndEvent) {
+        } else if(event instanceof RoundEndEvent) {
             output.sendRoundEnded(((RoundEndEvent) event).getEndedRound());
-            return;
-        }
-        if(event instanceof DirectAttackEvent) {
+        } else if(event instanceof DirectAttackEvent) {
             DirectAttackEvent directAttack = (DirectAttackEvent) event;
             Character attacker = directAttack.getAttacker();
             for(Damageable victim: directAttack.getTargets()) {
                 output.sendCharacterAttacked(attacker, (Character) victim);
             }
-            return;
-        }
-        if(event instanceof ObjectDeadEvent) {
+        } else if(event instanceof ObjectDeadEvent) {
             ObjectDeadEvent objectDeadEvent = (ObjectDeadEvent) event;
             WarObject deadObject = (WarObject) objectDeadEvent.getDeadObject();
             output.sendWarObjectDied(deadObject);
-            return;
-        }
-        if(event instanceof ObjectMovingEvent) {
+        } else if(event instanceof ObjectMovingEvent) {
             ObjectMovingEvent movingEvent = (ObjectMovingEvent) event;
             output.sendWarObjectMoved(movingEvent.getObject(), movingEvent.getNewPos());
         }
+
+        send(sender, event);
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

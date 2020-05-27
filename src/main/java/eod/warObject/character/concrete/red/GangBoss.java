@@ -4,6 +4,7 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.GangBossSummon;
+import eod.exceptions.NotSupportedException;
 import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
@@ -69,14 +70,22 @@ public class GangBoss extends Fighter {
             gangster.attack(executor);
         });
 
+        executor.tryToExecute(
+                RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
+
+        afterAttack();
+    }
+
+    @Override
+    public ArrayList<Point> getAttackRange() {
         ArrayList<Point> targets = new ArrayList<>();
         PointParam param = new PointParam();
         param.range = 1;
         targets.addAll(player.getFL(position, param));
         targets.addAll(player.getFront(position, param));
         targets.addAll(player.getFR(position, param));
-        executor.tryToExecute(
-                RequestRegionalAttack(attack).from(this).to(targets)
-        );
+        return targets;
+
     }
 }

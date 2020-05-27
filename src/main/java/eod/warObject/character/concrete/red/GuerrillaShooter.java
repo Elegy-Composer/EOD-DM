@@ -38,11 +38,15 @@ public class GuerrillaShooter extends Shooter {
         super.attack(executor);
         RegionalAttack effect = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
         executor.tryToExecute(effect);
+
+        afterAttack();
+
         ArrayList<Damageable> affected = effect.getAffected();
         if(affected.size() > 0 && affected.get(0).getHp() <= 0) {
             specialEffectTimes++;
             move();
         }
+
         if(specialEffectTimes >= 2) {
             specialEffectTimes -= 2;
             attack(executor);

@@ -1,12 +1,15 @@
 package eod.card.concrete.attack.transparent;
 
 import eod.Party;
+import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.action.AttackCard;
 import eod.effect.Attack;
+import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.specifier.Accessing;
 import eod.warObject.Status;
+import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
@@ -20,14 +23,15 @@ public class PreciseShot extends AttackCard {
     }
 
     @Override
-    public Attack attack() {
+    public void attack(EffectExecutor executor) {
         Accessing characters = WarObject(player.getBoard()).which(Being(Character.class));
         RegionalAttack attack = RequestRegionalAttack(3)
                 .from(player,
                     characters.which(OwnedBy(player)).which(Being(Shooter.class)).get()
                 );
-        return attack.to(player,
-                characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get());
+        executor.tryToExecute(attack.to(player,
+                characters.which(OwnedBy(rival)).which(InRangeOf(attack.attacker())).which(WithoutStatus(Status.SNEAK)).get())
+        );
     }
 
     @Override

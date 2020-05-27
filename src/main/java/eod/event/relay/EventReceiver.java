@@ -1,12 +1,11 @@
-package eod.event.listener;
+package eod.event.relay;
 
 import eod.GameObject;
-import eod.Player;
 import eod.event.Event;
 
 import java.util.ArrayList;
 
-public interface EventListener {
+public interface EventReceiver extends GameObject {
     public ArrayList<Class<? extends Event>> supportedEventTypes();
     void onEventOccurred(GameObject sender, Event event);
 }

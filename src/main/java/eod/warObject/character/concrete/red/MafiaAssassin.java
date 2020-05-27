@@ -10,12 +10,16 @@ import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
+import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 import eod.warObject.leader.Leader;
 
 import java.awt.*;
 import java.util.ArrayList;
+
+import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class MafiaAssassin extends Assassin {
     public MafiaAssassin(Player player) {
@@ -54,12 +58,6 @@ public class MafiaAssassin extends Assassin {
         }
 
         @Override
-        public RegionalAttack to(Player player, ArrayList<Point> targets, int num) {
-            super.to(player, targets, num);
-            return this;
-        }
-
-        @Override
         public void action(EffectExecutor executor) throws WrongExecutorException {
             Game game = castExecutor(executor);
             Gameboard board = game.getBoard();
@@ -68,6 +66,9 @@ public class MafiaAssassin extends Assassin {
                 try {
                     WarObject target = board.getObjectOn(p.x, p.y);
                     if(target instanceof Leader) {
+                        param.hp *= 2;
+                    }
+                    if(hasStatus(Status.FURIOUS)) {
                         param.hp *= 2;
                     }
                     affected.addAll(game.damage(attacker, p, param));

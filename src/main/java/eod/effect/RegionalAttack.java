@@ -43,6 +43,7 @@ public class RegionalAttack extends Attack {
         if(number >= candidates.size()) {
             return to(candidates);
         }
+
         ArrayList<Point> targets = new ArrayList<>();
         for(int i = 0;i < number;i++) {
             Point target = askToSelectOneFrom(player, candidates);

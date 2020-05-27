@@ -1,6 +1,7 @@
 package eod.effect;
 
 import eod.Player;
+import eod.param.DamageParam;
 import eod.warObject.Damageable;
 import eod.warObject.WarObject;
 
@@ -8,10 +9,10 @@ public class Damage implements Effect {
 
     private HandlerType handlerType;
     private Damageable target;
-    private int hp;
+    private DamageParam param;
 
-    Damage(int hp, HandlerType handlerType) {
-        this.hp = hp;
+    Damage(DamageParam param, HandlerType handlerType) {
+        this.param = param;
         this.handlerType = handlerType;
     }
 
@@ -21,8 +22,7 @@ public class Damage implements Effect {
     }
 
     public Damage onOneOf(Player player, WarObject[] targets) {
-        Damageable target = (Damageable) askToSelectOneFrom(player, targets);
-        this.target = target;
+        this.target = (Damageable) askToSelectOneFrom(player, targets);
         return this;
     }
 
@@ -32,7 +32,7 @@ public class Damage implements Effect {
             throw new WrongExecutorException("A damage should be executed by a player");
         }
         Player player = castExecutor(executor);
-        player.damage(target, hp);
+        player.damage(target, param);
     }
 
     @Override

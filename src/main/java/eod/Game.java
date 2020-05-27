@@ -5,10 +5,10 @@ import eod.card.abstraction.action.ActionCard;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
-import eod.event.EventManager;
+import eod.event.relay.EventManager;
 import eod.event.RoundEndEvent;
 import eod.event.RoundStartEvent;
-import eod.event.listener.EventListener;
+import eod.event.relay.EventReceiver;
 import eod.exceptions.GameLosingException;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
@@ -196,11 +196,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
         eventManager.send(sender, event);
     }
 
-    public void registerListener(EventListener listener) {
-        eventManager.registerListener(listener);
+    public void registerReceiver(EventReceiver receiver) {
+        eventManager.registerReceiver(receiver);
     }
-    public void unregisterListener(EventListener listener) {
-        eventManager.unregisterListener(listener);
+    public void unregisterReceiver(EventReceiver receiver) {
+        eventManager.unregisterReceiver(receiver);
     }
 
     @Override

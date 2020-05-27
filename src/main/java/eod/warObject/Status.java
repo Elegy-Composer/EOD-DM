@@ -7,4 +7,6 @@ public enum Status {
     DEAD,
     STABLE,
     FURIOUS,
+    CANT_ATTACK,
+    NO_EFFECT
 }

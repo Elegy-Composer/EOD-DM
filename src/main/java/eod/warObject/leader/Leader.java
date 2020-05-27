@@ -4,6 +4,8 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.abstraction.summon.SummonCard;
+import eod.param.AttackParam;
+import eod.param.DamageParam;
 import eod.warObject.CanAttack;
 import eod.warObject.character.abstraction.Character;
 
@@ -52,23 +54,8 @@ public abstract class Leader extends Character {
     protected abstract ArrayList<Card> generateCommand();
 
     @Override
-    public void attacked(CanAttack attacker, int hp) {
-        this.attacker = attacker;
-        damage(hp);
-        this.attacker = null;
-    }
-
-    @Override
     public CanAttack getAttacker() {
         return attacker;
-    }
-
-    @Override
-    public void damage(int hp) {
-        this.hp -= hp;
-        if(this.hp <= 0) {
-            die();
-        }
     }
 
     @Override
