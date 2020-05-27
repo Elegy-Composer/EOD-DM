@@ -8,5 +8,6 @@ public enum Status {
     STABLE,
     FURIOUS,
     CANT_ATTACK,
-    NO_EFFECT
+    NO_EFFECT,
+    POISON
 }
