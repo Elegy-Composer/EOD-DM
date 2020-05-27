@@ -10,7 +10,7 @@ public abstract class AttackCard extends ActionCard {
     }
     public Player rival;
 
-    public abstract Attack attack();
+    public abstract void attack(EffectExecutor executor);
 
     @Override
     public void setPlayer(Player p) {
@@ -20,6 +20,6 @@ public abstract class AttackCard extends ActionCard {
 
     @Override
     public void applyEffect(EffectExecutor executor) {
-        executor.tryToExecute(attack());
+        attack(executor);
     }
 }

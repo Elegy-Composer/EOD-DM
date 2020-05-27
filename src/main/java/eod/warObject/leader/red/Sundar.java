@@ -5,6 +5,7 @@ import eod.card.abstraction.Card;
 import eod.card.concrete.command.DeathPulse;
 import eod.card.concrete.command.EquivalentExchange;
 import eod.effect.Attack;
+import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
@@ -26,8 +27,7 @@ import eod.warObject.leader.Leader;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.Summon;
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
+import static eod.effect.EffectFunctions.*;
 
 public class Sundar extends Leader {
     public Sundar(Player player) {
@@ -48,47 +48,6 @@ public class Sundar extends Leader {
         param.range = 1;
         Point p = player.selectPosition(player.getBoard().getSurrounding(position, param));
         executor.tryToExecute(Summon(new LittleGhost(player)).on(p));
-    }
-
-    public Attack deathPulse() {
-        PointParam pointParam = new PointParam();
-        pointParam.range = Gameboard.boardSize;
-        ArrayList<Point> targets = player.getBoard().get8ways(position, pointParam);
-        return RequestRegionalAttack(4).from(this).to(targets);
-    }
-
-    @Override
-    public ArrayList<Damageable> attack(Gameboard gameboard, ArrayList<Point> targets, AttackParam param) {
-        ArrayList<Damageable> affected = new ArrayList<>();
-        this.damage(new DamageParam(param.hp));
-        int a;
-        if(hasStatus(Status.FURIOUS)) {
-            a = param.hp * 2;
-        } else {
-            a = param.hp;
-        }
-        this.damage(new DamageParam(param.hp));
-        DamageParam dp = new DamageParam(a);
-        dp.realDamage = param.realDamage;
-        for(Point p:targets) {
-            try {
-                WarObject target = gameboard.getObjectOn(p.x, p.y);
-                if(target instanceof Bunker || target instanceof Machine) {
-                    continue;
-                }
-                if(target.getPlayer().isPlayerA() == player.isPlayerA()) {
-                    if(target instanceof Ghost) {
-                        ((Ghost) target).attack(player); //TODO: This need to be fixed
-                    }
-                } else {
-                    ((Damageable) target).attacked(this, dp);
-                    affected.add((Damageable) target);
-                }
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-        }
-        return affected;
     }
 
     @Override
