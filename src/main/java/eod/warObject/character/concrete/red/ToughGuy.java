@@ -39,7 +39,9 @@ public class ToughGuy extends Fighter {
     @Override
     public void attack(EffectExecutor executor) {
         super.attack(executor);
-        RequestRegionalAttack(attack).from(this).to(getAttackRange());
+        executor.tryToExecute(
+            RequestRegionalAttack(attack).from(this).to(getAttackRange())
+        );
 
         afterAttack();
     }

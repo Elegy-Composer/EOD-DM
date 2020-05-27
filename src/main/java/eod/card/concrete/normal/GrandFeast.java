@@ -37,7 +37,7 @@ public class GrandFeast extends NormalCard {
                 .which(Being(Character.class))
                 .which(InParty(Party.RED)).get()
         ) {
-            player.tryToExecute(
+            executor.tryToExecute(
                     GiveStatus(Status.FURIOUS, Effect.HandlerType.Owner).to(object)
             );
         }

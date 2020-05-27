@@ -34,7 +34,7 @@ public class OwnerlessAssassin extends Assassin {
 
     @Override
     public String getName() {
-        return "無主的殺手";
+        return "無主的刺客";
     }
 
     @Override

@@ -20,6 +20,7 @@ import eod.warObject.character.abstraction.Character;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static eod.effect.EffectFunctions.Damage;
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class CrazyBomber extends Character {
@@ -59,7 +60,9 @@ public class CrazyBomber extends Character {
         PointParam param = new PointParam();
         param.range = 1;
         SpecialRegionalAttack SRA = new SpecialRegionalAttack(1);
-        SRA.to(player.getBoard().getSurrounding(p, param));
+        executor.tryToExecute(
+            SRA.to(player.getBoard().getSurrounding(p, param))
+        );
 
         afterAttack();
     }
@@ -111,7 +114,7 @@ public class CrazyBomber extends Character {
             for(Point p:targets) {
                 try {
                     Damageable target = board.getObjectOn(p.x, p.y);
-                    target.damage(new DamageParam(param.hp));
+                    Damage(new DamageParam(param.hp), HandlerType.Rival).on(target);
                 } catch (IllegalArgumentException e) {
                     System.out.println("There's no object on the point, skipping.");
                 }
