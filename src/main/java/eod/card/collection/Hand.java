@@ -60,6 +60,9 @@ public class Hand implements GameObject, Iterable<Card>, Snapshotted<Hand.Snapsh
         return hand.contains(c);
     }
 
+    public int size() {
+        return hand.size();
+    }
     public Stream<Card> stream() {
         return hand.stream();
     }
