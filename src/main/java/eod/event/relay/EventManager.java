@@ -19,6 +19,11 @@ public class EventManager implements EventSender, GameObject {
     }
 
     @Override
+    public EventReceiver[] getStatusHolders() {
+        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).toArray(EventReceiver[]::new);
+    }
+
+    @Override
     public void send(GameObject sender, Event event) {
         receivers.stream()
                 .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))

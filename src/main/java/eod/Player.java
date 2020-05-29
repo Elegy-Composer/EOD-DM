@@ -11,6 +11,7 @@ import eod.event.Event;
 import eod.event.*;
 import eod.event.relay.EventReceiver;
 import eod.event.relay.EventSender;
+import eod.event.relay.StatusHolder;
 import eod.exceptions.GameLosingException;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
@@ -430,6 +431,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
         receivers.remove(receiver);
+    }
+
+    @Override
+    public EventReceiver[] getStatusHolders() {
+        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).toArray(EventReceiver[]::new);
     }
 
     @Override

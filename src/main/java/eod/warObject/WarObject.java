@@ -95,7 +95,7 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     }
 
     @Override
-    public EventReceiver[] getTemporaryReceivers() {
+    public EventReceiver[] getStatusHolders() {
         return receivers.stream()
                 .filter(receiver -> receiver instanceof StatusHolder)
                 .toArray(EventReceiver[]::new);
