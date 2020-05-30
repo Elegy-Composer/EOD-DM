@@ -8,10 +8,12 @@ import eod.card.concrete.summon.red.BloodThirstFighterSummon;
 import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
+import eod.event.ObjectEnterEnemyBaseEvent;
 import eod.event.ObjectEnterEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -61,21 +63,16 @@ public class BloodThirstFighter extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectEnterEvent.class);
-            BloodThirstFighter.this.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            BloodThirstFighter.this.registerReceiver(ObjectEnterEvent.class, this);
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(BloodThirstFighter.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof ObjectEnterEvent) {
                 ObjectEnterEvent e = (ObjectEnterEvent) event;
                 if(e.getObject() == BloodThirstFighter.this) {
@@ -87,9 +84,7 @@ public class BloodThirstFighter extends Fighter {
 
         @Override
         public void teardown() {
-            BloodThirstFighter.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            BloodThirstFighter.this.unregisterReceiver(ObjectEnterEvent.class, this);
         }
     }
 }

@@ -11,6 +11,7 @@ import eod.event.Event;
 import eod.event.ObjectMovingEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
 import java.awt.*;
@@ -49,21 +50,16 @@ public class LeadersGuard extends Shooter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectMovingEvent.class);
-            LeadersGuard.this.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            LeadersGuard.this.registerReceiver(ObjectMovingEvent.class, this);
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(LeadersGuard.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof ObjectMovingEvent) {
                 ObjectMovingEvent e = (ObjectMovingEvent) event;
                 if(e.getObject() == LeadersGuard.this && !player.inBase(e.getNewPos())) {
@@ -74,9 +70,7 @@ public class LeadersGuard extends Shooter {
 
         @Override
         public void teardown() {
-            LeadersGuard.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            LeadersGuard.this.unregisterReceiver(ObjectMovingEvent.class, this);
         }
     }
 

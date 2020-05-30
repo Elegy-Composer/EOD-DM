@@ -67,19 +67,10 @@ public class Sneak extends NormalCard {
 
     public class NextDamageDouble implements EventReceiver, GameObject {
         private Assassin assassin;
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public NextDamageDouble(Assassin assassin) {
             this.assassin = assassin;
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-            canHandle.add(AttackEvent.class);
-            assassin.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            assassin.registerReceiver(AttackEvent.class, this);
         }
 
         @Override
@@ -91,19 +82,12 @@ public class Sneak extends NormalCard {
                     teardown();
                 }
             }
-            if(event instanceof ObjectDeadEvent) {
-                if(((ObjectDeadEvent) event).getDeadObject() == assassin) {
-                    teardown();
-                }
-            }
         }
 
         @Override
         public void teardown() {
-            assassin.unregisterReceiver(this);
+            assassin.unregisterReceiver(AttackEvent.class, this);
             assassin = null;
-            canHandle.clear();
-            canHandle = null;
         }
     }
 }

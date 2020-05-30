@@ -71,7 +71,7 @@ public class IntelligenceVendor extends Character {
             this.holder = object;
             canHandle = new ArrayList<>();
             canHandle.add(RoundEndEvent.class);
-            holder.registerReceiver(this);
+            holder.registerReceiver(RoundEndEvent.class, this);
 
             holdingStatus = new ArrayList<>();
             holdingStatus.add(Status.NO_ATTACK);
@@ -80,11 +80,6 @@ public class IntelligenceVendor extends Character {
             holdingStatus.forEach(status -> object.getPlayer().tryToExecute(
                     GiveStatus(status, Effect.HandlerType.Owner).to(object)
                     ));
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
         }
 
         @Override
@@ -100,10 +95,10 @@ public class IntelligenceVendor extends Character {
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            EventReceiver[] temporaryReceivers = holder.getStatusHolders();
+            holder.unregisterReceiver(RoundEndEvent.class, this);
+            EventReceiver[] statusHolders = holder.getStatusHolders();
             holdingStatus.forEach(status -> {
-                    if(Arrays.stream(temporaryReceivers)
+                    if(Arrays.stream(statusHolders)
                             .filter(receiver -> (
                                     (StatusHolder) receiver).holdingStatus().contains(status)
                             ).toArray().length == 0) {
@@ -127,17 +122,9 @@ public class IntelligenceVendor extends Character {
 
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundEndEvent.class);
-            IntelligenceVendor.this.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            IntelligenceVendor.this.registerReceiver(RoundEndEvent.class, this);
         }
 
         @Override
@@ -159,7 +146,7 @@ public class IntelligenceVendor extends Character {
 
         @Override
         public void teardown() {
-            IntelligenceVendor.this.unregisterReceiver(this);
+            IntelligenceVendor.this.unregisterReceiver(RoundEndEvent.class, this);
         }
     }
 }

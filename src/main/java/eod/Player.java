@@ -28,7 +28,9 @@ import eod.warObject.leader.Leader;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject, EventReceiver, EventSender, EffectExecutor {
@@ -42,7 +44,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private String name;
     private boolean isPlayerA;
     private boolean isActingPlayer = false;
-    private ArrayList<EventReceiver> receivers;
+    private HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -52,7 +54,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         this.deck = deck;
         this.hand = hand;
         this.name = name;
-        receivers = new ArrayList<>();
+        receivers = new HashMap<>();
     }
 
     public String getName() {
@@ -65,7 +67,9 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     public void attachToGame(Game game) {
         this.game = game;
-        game.registerReceiver(this);
+        for(Class<? extends Event> c:Event.allEvents) {
+            game.registerReceiver(c, this);
+        }
     }
     public void attachIO(Input input, Output output) {
         this.input = input;
@@ -315,8 +319,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         deck = null;
         leader.teardown();
         leader = null;
-        for(EventReceiver receiver:receivers) {
-            receiver.teardown();
+        for(ArrayList<EventReceiver> subReceiver:receivers.values()) {
+            subReceiver.forEach(GameObject::teardown);
         }
         receivers.clear();
     }
@@ -431,43 +435,35 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     @Override
-    public void registerReceiver(EventReceiver receiver) {
-        receivers.add(receiver);
+    public void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
+        receivers.putIfAbsent(supportedType, new ArrayList<>());
+        receivers.get(supportedType).add(receiver);
     }
 
 
 
     @Override
-    public void unregisterReceiver(EventReceiver receiver) {
-        receivers.remove(receiver);
+    public void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
+        receivers.get(supportedType).remove(receiver);
     }
 
     @Override
     public EventReceiver[] getStatusHolders() {
-        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).toArray(EventReceiver[]::new);
+        ArrayList<EventReceiver> holders = new ArrayList<>();
+        for(ArrayList<EventReceiver> subReceivers:receivers.values()) {
+            holders.addAll(subReceivers.stream().filter(receiver -> receiver instanceof StatusHolder).collect(Collectors.toList()));
+        }
+        return holders.toArray(EventReceiver[]::new);
     }
 
     @Override
     public void send(GameObject sender, Event event) {
-        receivers.stream()
-                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+        receivers.get(event.getClass())
                 .forEach(receiver -> receiver.onEventOccurred(sender, event));
     }
 
     public void sendUp(GameObject sender, Event event) {
         game.sendEvent(sender, event);
-    }
-
-    @Override
-    public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        //TODO: add RegionalAttackEvent support
-        return new ArrayList<Class<? extends Event>>(){{
-            add(RoundStartEvent.class);
-            add(RoundEndEvent.class);
-            add(DirectAttackEvent.class);
-            add(ObjectDeadEvent.class);
-            add(ObjectMovingEvent.class);
-        }};
     }
 
     @Override

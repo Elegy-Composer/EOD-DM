@@ -10,6 +10,7 @@ import eod.event.AfterObjectDamageEvent;
 import eod.event.Event;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;
@@ -53,21 +54,16 @@ public class ToughGuy extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(AfterObjectDamageEvent.class);
-            ToughGuy.this.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            ToughGuy.this.registerReceiver(AfterObjectDamageEvent.class, this);
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(ToughGuy.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof AfterObjectDamageEvent) {
                 AfterObjectDamageEvent e = (AfterObjectDamageEvent) event;
                 if(e.getVictim() == ToughGuy.this) {
@@ -84,9 +80,7 @@ public class ToughGuy extends Fighter {
 
         @Override
         public void teardown() {
-            ToughGuy.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            ToughGuy.this.unregisterReceiver(AfterObjectDamageEvent.class, this);
         }
     }
 }

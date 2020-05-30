@@ -13,6 +13,7 @@ import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 
 import java.util.ArrayList;
@@ -55,28 +56,24 @@ public class FightBack extends NormalCard {
 
     public class AttackDetect implements EventReceiver, GameObject {
         private WarObject watching;
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public AttackDetect(WarObject watching) {
             this.watching = watching;
-            canHandle = new ArrayList<>();
-            canHandle.add(TargetedEvent.class);
-            canHandle.add(RoundEndEvent.class);
-            watching.registerReceiver(this);
-        }
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            watching.registerReceiver(TargetedEvent.class, this);
+            watching.registerReceiver(RoundEndEvent.class, this);
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof RoundEndEvent) {
-                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() == player.rival().isPlayerA()) {
+                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() != watching.getPlayer().isPlayerA()) {
                     teardown();
                 }
             }
             if(event instanceof TargetedEvent) {
+                if(watching.hasStatus(Status.NO_EFFECT)) {
+                    return;
+                }
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
                     CanAttack attacker = e.getAttacker();
@@ -90,8 +87,8 @@ public class FightBack extends NormalCard {
 
         @Override
         public void teardown() {
-            canHandle.clear();
-            watching.unregisterReceiver(this);
+            watching.unregisterReceiver(TargetedEvent.class, this);
+            watching.unregisterReceiver(RoundEndEvent.class, this);
             watching = null;
         }
     }

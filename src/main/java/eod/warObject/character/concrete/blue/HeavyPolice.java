@@ -11,6 +11,7 @@ import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.effect.EffectExecutor;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -54,22 +55,17 @@ public class HeavyPolice extends Character {
     }
 
     public class DamageLessThan2 implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public DamageLessThan2() {
-            this.canHandle = new ArrayList<>();
-            canHandle.add(BeforeObjectDamageEvent.class);
-            HeavyPolice.this.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
+            HeavyPolice.this.registerReceiver(BeforeObjectDamageEvent.class, this);
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof BeforeObjectDamageEvent) {
+                if(HeavyPolice.this.hasStatus(Status.NO_EFFECT)) {
+                    return;
+                }
                 BeforeObjectDamageEvent e = (BeforeObjectDamageEvent) event;
                 DamageParam param = e.getParam();
                 if(e.getVictim() == HeavyPolice.this && !param.realDamage) {
@@ -82,8 +78,7 @@ public class HeavyPolice extends Character {
 
         @Override
         public void teardown() {
-            canHandle.clear();
-            HeavyPolice.this.unregisterReceiver(this);
+            HeavyPolice.this.unregisterReceiver(BeforeObjectDamageEvent.class, this);
         }
     }
 }
