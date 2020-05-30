@@ -2,6 +2,7 @@ package eod.card.concrete.summon;
 
 import eod.Party;
 import eod.card.abstraction.Card;
+import eod.card.abstraction.summon.MachineSummon;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
 import eod.effect.Summon;
@@ -9,7 +10,7 @@ import eod.warObject.character.concrete.blue.SecureGuardBot;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class SecureGuardBotSummon extends SummonCard {
+public class SecureGuardBotSummon extends MachineSummon {
     public SecureGuardBotSummon() {
         super(3, SummonCardType.TOKEN);
     }

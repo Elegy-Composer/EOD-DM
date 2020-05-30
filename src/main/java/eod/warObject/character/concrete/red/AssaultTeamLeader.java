@@ -53,7 +53,7 @@ public class AssaultTeamLeader extends Character {
 
     @Override
     public String getName() {
-        return "特攻隊隊長";
+        return "特攻隊長";
     }
 
     private class OwnedAbilities implements EventReceiver {

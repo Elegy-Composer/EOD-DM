@@ -2,6 +2,7 @@ package eod.card.concrete.summon;
 
 import eod.Party;
 import eod.card.abstraction.Card;
+import eod.card.abstraction.summon.ShooterSummon;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
 import eod.effect.Summon;
@@ -9,7 +10,7 @@ import eod.warObject.character.concrete.red.LeadersGuard;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class LeadersGuardSummon extends SummonCard {
+public class LeadersGuardSummon extends ShooterSummon {
     public LeadersGuardSummon() {
         super(3, SummonCardType.NORMAL);
     }
