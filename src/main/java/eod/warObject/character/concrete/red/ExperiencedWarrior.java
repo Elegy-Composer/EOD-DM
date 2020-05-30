@@ -3,9 +3,8 @@ package eod.warObject.character.concrete.red;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.ExperiencedWarriorSummon;
+import eod.card.concrete.summon.red.ExperiencedWarriorSummon;
 import eod.effect.EffectExecutor;
-import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 

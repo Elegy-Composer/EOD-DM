@@ -4,21 +4,17 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.LeadersGuardSummon;
-import eod.effect.Effect;
+import eod.card.concrete.summon.red.LeadersGuardSummon;
 import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
 import eod.event.ObjectMovingEvent;
 import eod.event.relay.EventReceiver;
-import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Shooter;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {

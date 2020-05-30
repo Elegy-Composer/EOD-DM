@@ -4,7 +4,7 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.HeavyPoliceSummon;
+import eod.card.concrete.summon.blue.HeavyPoliceSummon;
 import eod.event.Event;
 import eod.event.BeforeObjectDamageEvent;
 import eod.event.relay.EventReceiver;

@@ -4,12 +4,11 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.ToughGuySummon;
+import eod.card.concrete.summon.red.ToughGuySummon;
 import eod.effect.EffectExecutor;
 import eod.event.AfterObjectDamageEvent;
 import eod.event.Event;
 import eod.event.relay.EventReceiver;
-import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 

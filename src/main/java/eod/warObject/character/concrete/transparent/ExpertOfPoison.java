@@ -4,7 +4,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.ExpertOfPoisonSummon;
+import eod.card.concrete.summon.transparent.ExpertOfPoisonSummon;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.param.PointParam;
@@ -16,8 +16,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.GiveStatus;
-import static eod.specifier.WarObjectSpecifier.WarObject;
-import static eod.specifier.condition.Conditions.InRangeOf;
 
 public class ExpertOfPoison extends Character {
     public ExpertOfPoison(Player player) {
