@@ -88,6 +88,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         isActingPlayer = acting;
     }
 
+    public boolean isActingPlayer() {
+        return isActingPlayer;
+    }
+
     public void handReceive(ArrayList<Card> h) {
         hand.receive(h);
         output.sendReceivedCards(this, h.toArray(new Card[0]));

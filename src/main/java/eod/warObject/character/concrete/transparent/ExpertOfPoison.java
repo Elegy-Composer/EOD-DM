@@ -49,7 +49,7 @@ public class ExpertOfPoison extends Character {
                 GiveStatus(Status.POISON, Effect.HandlerType.Rival).to(object)
             );
         } catch (IllegalArgumentException e) {
-            System.out.println("Some idiot selected an empty space. Skipping");
+            System.out.println("The selected position is empty. Skipping.");
         }
 
         afterAttack();

@@ -33,7 +33,7 @@ public class FacelessHuman extends Character {
 
     @Override
     public String getName() {
-        return "召喚 無面的人";
+        return "無面的人";
     }
 
     @Override
