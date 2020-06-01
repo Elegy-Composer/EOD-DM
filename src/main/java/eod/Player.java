@@ -443,8 +443,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
     }
 
     @Override
-    public EventReceiver[] getStatusHolders() {
-        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).toArray(EventReceiver[]::new);
+    public StatusHolder[] getStatusHolders() {
+        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).toArray(StatusHolder[]::new);
     }
 
     @Override

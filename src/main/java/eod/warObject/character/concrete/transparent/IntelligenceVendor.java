@@ -101,12 +101,11 @@ public class IntelligenceVendor extends Character {
         @Override
         public void teardown() {
             holder.unregisterReceiver(this);
-            EventReceiver[] temporaryReceivers = holder.getStatusHolders();
+            StatusHolder[] temporaryReceivers = holder.getStatusHolders();
             holdingStatus.forEach(status -> {
                     if(Arrays.stream(temporaryReceivers)
-                            .filter(receiver -> (
-                                    (StatusHolder) receiver).holdingStatus().contains(status)
-                            ).toArray().length == 0) {
+                            .filter(receiver -> receiver.holdingStatus().contains(status))
+                            .toArray().length == 0) {
                         holder.removeStatus(status);
                     }
             });
