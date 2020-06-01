@@ -22,12 +22,12 @@ public class EventManager implements EventSender, GameObject {
     }
 
     @Override
-    public EventReceiver[] getStatusHolders() {
-        ArrayList<EventReceiver> holders = new ArrayList<>();
+    public StatusHolder[] getStatusHolders() {
+        ArrayList<StatusHolder> holders = new ArrayList<>();
         for(ArrayList<EventReceiver> subReceiver:receivers.values()) {
-            holders.addAll(subReceiver.stream().filter(receiver -> receiver instanceof StatusHolder).collect(Collectors.toList()));
+            holders.addAll(subReceiver.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).collect(Collectors.toList()));
         }
-        return holders.toArray(EventReceiver[]::new);
+        return holders.toArray(StatusHolder[]::new);
     }
 
     @Override
