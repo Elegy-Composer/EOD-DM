@@ -52,7 +52,7 @@ public class IntelligenceVendor extends Character {
             Point p = player.selectPosition(getAttackRange());
             WarObject object = player.getBoard().getObjectOn(p.x, p.y);
 
-            new AttackEffectLock(object);
+            object.registerReceiver(new AttackEffectLock(object));
         } catch (IllegalArgumentException e) {
             System.out.println("There's no object on the selected point. Skipping.");
         }
@@ -71,7 +71,6 @@ public class IntelligenceVendor extends Character {
             this.holder = object;
             canHandle = new ArrayList<>();
             canHandle.add(RoundEndEvent.class);
-            holder.registerReceiver(this);
 
             holdingStatus = new ArrayList<>();
             holdingStatus.add(Status.NO_ATTACK);

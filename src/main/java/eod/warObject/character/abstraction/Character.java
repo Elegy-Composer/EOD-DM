@@ -169,7 +169,7 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     public void onEventOccurred(GameObject sender, Event event) {
         super.onEventOccurred(sender, event);
         if(event instanceof RoundStartEvent) {
-            if(((RoundStartEvent) event).getStartedRound().getPlayer().isPlayerA() == player.isPlayerA() && hasStatus(POISON)) {
+            if(player.isActingPlayer() && hasStatus(POISON)) {
                 player.tryToExecute(
                         Damage(new DamageParam(1), Effect.HandlerType.Owner).on(this)
                 );
