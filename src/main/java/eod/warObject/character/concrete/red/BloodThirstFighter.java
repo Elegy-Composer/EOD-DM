@@ -24,7 +24,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class BloodThirstFighter extends Fighter {
     public BloodThirstFighter(Player player) {
         super(player, 4, 3, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(ObjectEnterEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -63,10 +63,6 @@ public class BloodThirstFighter extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            BloodThirstFighter.this.registerReceiver(ObjectEnterEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
         super(player, 5, 2, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(ObjectMovingEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -50,10 +50,6 @@ public class LeadersGuard extends Shooter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            LeadersGuard.this.registerReceiver(ObjectMovingEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

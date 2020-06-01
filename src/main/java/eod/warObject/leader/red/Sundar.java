@@ -26,7 +26,7 @@ import static eod.effect.EffectFunctions.*;
 public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(ObjectDeadEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -83,11 +83,6 @@ public class Sundar extends Leader {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-
-        public OwnedAbilities() {
-            Sundar.this.registerReceiver(ObjectDeadEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

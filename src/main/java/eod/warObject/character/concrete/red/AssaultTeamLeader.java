@@ -23,7 +23,10 @@ import static eod.effect.EffectFunctions.*;
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        new OwnedAbilities();
+        OwnedAbilities ability = new OwnedAbilities();
+        registerReceiver(RoundStartEvent.class, ability);
+        registerReceiver(ObjectEnterEnemyBaseEvent.class, ability);
+        registerReceiver(StatusAcquiredEvent.class, ability);
     }
 
     @Override
@@ -56,12 +59,6 @@ public class AssaultTeamLeader extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            AssaultTeamLeader.this.registerReceiver(RoundStartEvent.class, this);
-            AssaultTeamLeader.this.registerReceiver(ObjectEnterEnemyBaseEvent.class, this);
-            AssaultTeamLeader.this.registerReceiver(StatusAcquiredEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

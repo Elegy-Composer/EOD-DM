@@ -21,7 +21,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class OwnerlessAssassin extends Assassin {
     public OwnerlessAssassin(Player player) {
         super(player, 2, 4, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(RoundStartEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -52,10 +52,6 @@ public class OwnerlessAssassin extends Assassin {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            OwnerlessAssassin.this.registerReceiver(RoundStartEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

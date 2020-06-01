@@ -25,7 +25,7 @@ import static eod.effect.EffectFunctions.GiveStatus;
 public class IntelligenceVendor extends Character {
     public IntelligenceVendor(Player player) {
         super(player, 3, 0, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(RoundEndEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -64,13 +64,10 @@ public class IntelligenceVendor extends Character {
     private class AttackEffectLock implements StatusHolder {
 
         private WarObject holder;
-        private ArrayList<Class<? extends Event>> canHandle;
         private ArrayList<Status> holdingStatus;
 
         public AttackEffectLock(WarObject object) {
             this.holder = object;
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundEndEvent.class);
             holder.registerReceiver(RoundEndEvent.class, this);
 
             holdingStatus = new ArrayList<>();
@@ -109,8 +106,6 @@ public class IntelligenceVendor extends Character {
             holder = null;
             holdingStatus.clear();
             holdingStatus = null;
-            canHandle.clear();
-            canHandle = null;
         }
 
         @Override
@@ -122,10 +117,6 @@ public class IntelligenceVendor extends Character {
 
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            IntelligenceVendor.this.registerReceiver(RoundEndEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {

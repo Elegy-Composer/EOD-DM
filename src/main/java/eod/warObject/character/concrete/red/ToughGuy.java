@@ -21,7 +21,7 @@ import static eod.effect.EffectFunctions.*;
 public class ToughGuy extends Fighter {
     public ToughGuy(Player player) {
         super(player, 6, 3, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(AfterObjectDamageEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -54,10 +54,6 @@ public class ToughGuy extends Fighter {
     }
 
     private class OwnedAbilities implements EventReceiver {
-
-        public OwnedAbilities() {
-            ToughGuy.this.registerReceiver(AfterObjectDamageEvent.class, this);
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
