@@ -25,7 +25,7 @@ import static eod.effect.EffectFunctions.GiveStatus;
 public class IntelligenceVendor extends Character {
     public IntelligenceVendor(Player player) {
         super(player, 3, 0, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -132,7 +132,6 @@ public class IntelligenceVendor extends Character {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(RoundEndEvent.class);
-            IntelligenceVendor.this.registerReceiver(this);
         }
 
         @Override

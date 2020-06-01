@@ -21,7 +21,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class HeavyPolice extends Character {
     public HeavyPolice(Player player) {
         super(player, 5,5, Party.BLUE);
-        new DamageLessThan2();
+        registerReceiver(new DamageLessThan2());
     }
 
     @Override
@@ -59,7 +59,6 @@ public class HeavyPolice extends Character {
         public DamageLessThan2() {
             this.canHandle = new ArrayList<>();
             canHandle.add(BeforeObjectDamageEvent.class);
-            HeavyPolice.this.registerReceiver(this);
         }
 
         @Override

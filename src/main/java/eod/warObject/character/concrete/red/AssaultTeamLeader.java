@@ -23,7 +23,7 @@ import static eod.effect.EffectFunctions.*;
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -63,7 +63,6 @@ public class AssaultTeamLeader extends Character {
             canHandle.add(RoundStartEvent.class);
             canHandle.add(ObjectEnterEnemyBaseEvent.class);
             canHandle.add(StatusAcquiredEvent.class);
-            AssaultTeamLeader.this.registerReceiver(this);
         }
 
 

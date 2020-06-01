@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
         super(player, 5, 2, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -54,7 +54,6 @@ public class LeadersGuard extends Shooter {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectMovingEvent.class);
-            LeadersGuard.this.registerReceiver(this);
         }
 
         @Override
