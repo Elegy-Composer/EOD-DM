@@ -32,7 +32,7 @@ import static eod.effect.EffectFunctions.*;
 public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
-        canHandle.add(ObjectDeadEvent.class);
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -89,15 +89,12 @@ public class Sundar extends Leader {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private Sundar holder;
         private ArrayList<Class<? extends Event>> canHandle;
 
 
-        public OwnedAbilities(Sundar holder) {
-            this.holder = holder;
+        public OwnedAbilities() {
             this.canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
-            holder.registerReceiver(this);
         }
 
         @Override
@@ -121,7 +118,7 @@ public class Sundar extends Leader {
                     player.tryToExecute(
                             Summon(new LittleGhost(player)).on(new Point(x, y))
                     );
-                } else if(object.getPlayer().isPlayerA() == holder.player.isPlayerA() && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
+                } else if(object.getPlayer().isPlayerA() == Sundar.this.player.isPlayerA() && isGhostOrSundar(attacker) && ((WarObject) attacker).getPlayer().equals(player)){
                     player.getBoard().summonObject(new GhostOfHatred(player), new Point(x, y));
                 }
             }
@@ -129,8 +126,7 @@ public class Sundar extends Leader {
 
         @Override
         public void teardown() {
-            holder.unregisterReceiver(this);
-            holder = null;
+            Sundar.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }
