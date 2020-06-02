@@ -1,57 +1,37 @@
-package eod.warObject.character.concrete.red;
+package eod.warObject.character.concrete.transparent;
 
 import eod.GameObject;
 import eod.Party;
 import eod.Player;
+import eod.card.abstraction.summon.AssassinSummon;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.BloodThirstFighterSummon;
-import eod.effect.EffectExecutor;
-import eod.effect.RegionalAttack;
+import eod.card.concrete.summon.AssassinsIntermediarySummon;
 import eod.event.Event;
 import eod.event.ObjectEnterEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
-import eod.warObject.Damageable;
-import eod.warObject.Status;
-import eod.warObject.character.abstraction.assaulter.Fighter;
+import eod.warObject.character.abstraction.Character;
+import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
-
-public class BloodThirstFighter extends Fighter {
-    public BloodThirstFighter(Player player) {
-        super(player, 4, 3, Party.RED);
+public class AssassinsIntermediary extends Character {
+    public AssassinsIntermediary(Player player) {
+        super(player, 2, 1, Party.TRANSPARENT);
         registerReceiver(new OwnedAbilities());
     }
 
     @Override
     public SummonCard getSummonCard() {
-        SummonCard c = new BloodThirstFighterSummon();
+        SummonCard c = new AssassinsIntermediarySummon();
         c.setPlayer(player);
         return c;
     }
 
     @Override
     public String getName() {
-        return "嗜血的戰鬥狂";
-    }
-
-    @Override
-    public void attack(EffectExecutor executor) {
-        super.attack(executor);
-        RegionalAttack a = RequestRegionalAttack(attack).from(this).to(player, getAttackRange(), 1);
-        executor.tryToExecute(a);
-        afterAttack();
-        for(Damageable victim:a.getAffected()) {
-            if(victim.getHp() <= 0) {
-                addAttack(1);
-                addHealth(1);
-                attack(executor);
-                break;
-            }
-        }
+        return "殺手掮客";
     }
 
     @Override
@@ -63,6 +43,7 @@ public class BloodThirstFighter extends Fighter {
 
     private class OwnedAbilities implements EventReceiver {
         private ArrayList<Class<? extends Event>> canHandle;
+
 
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
@@ -78,8 +59,8 @@ public class BloodThirstFighter extends Fighter {
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof ObjectEnterEvent) {
                 ObjectEnterEvent e = (ObjectEnterEvent) event;
-                if(e.getObject() == BloodThirstFighter.this) {
-                    BloodThirstFighter.this.attack(player);
+                if (e.getObject() == AssassinsIntermediary.this) {
+                    player.drawFromDeck(AssassinSummon.class, 1);
                     teardown();
                 }
             }
@@ -87,7 +68,7 @@ public class BloodThirstFighter extends Fighter {
 
         @Override
         public void teardown() {
-            BloodThirstFighter.this.unregisterReceiver(this);
+            AssassinsIntermediary.this.unregisterReceiver(this);
             canHandle.clear();
             canHandle = null;
         }

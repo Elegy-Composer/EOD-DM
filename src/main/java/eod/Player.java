@@ -11,6 +11,7 @@ import eod.event.Event;
 import eod.event.*;
 import eod.event.relay.EventReceiver;
 import eod.event.relay.EventSender;
+import eod.event.relay.StatusHolder;
 import eod.exceptions.GameLosingException;
 import eod.exceptions.NotSupportedException;
 import eod.param.AttackParam;
@@ -83,6 +84,10 @@ public class Player implements Snapshotted<Player.Snapshot>,
         isActingPlayer = acting;
     }
 
+    public boolean isActingPlayer() {
+        return isActingPlayer;
+    }
+
     public void handReceive(ArrayList<Card> h) {
         hand.receive(h);
         output.sendReceivedCards(this, h.toArray(new Card[0]));
@@ -101,6 +106,15 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
         Card[] cards = deck.draw(count);
         handReceive(new ArrayList<>(Arrays.asList(cards)));
+
+        output.sendReceivedCards(this, cards);
+    }
+
+    public void drawFromDeck(Class<? extends Card> cardType, int count) {
+        output.sendDrawingCards(this);
+
+        Card[] cards = deck.draw(cardType, count);
+        hand.receive(new ArrayList<>(Arrays.asList(cards)));
 
         output.sendReceivedCards(this, cards);
     }
@@ -430,6 +444,11 @@ public class Player implements Snapshotted<Player.Snapshot>,
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
         receivers.remove(receiver);
+    }
+
+    @Override
+    public StatusHolder[] getStatusHolders() {
+        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).toArray(StatusHolder[]::new);
     }
 
     @Override

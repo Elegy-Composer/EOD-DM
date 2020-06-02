@@ -9,6 +9,7 @@ import eod.event.Event;
 import eod.event.StatusAcquiredEvent;
 import eod.event.relay.EventReceiver;
 import eod.event.relay.EventSender;
+import eod.event.relay.StatusHolder;
 import eod.param.PointParam;
 
 import java.awt.*;
@@ -91,6 +92,14 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
         receivers.remove(receiver);
+    }
+
+    @Override
+    public StatusHolder[] getStatusHolders() {
+        return receivers.stream()
+                .filter(receiver -> receiver instanceof StatusHolder)
+                .map(receiver -> (StatusHolder) receiver)
+                .toArray(StatusHolder[]::new);
     }
 
     @Override

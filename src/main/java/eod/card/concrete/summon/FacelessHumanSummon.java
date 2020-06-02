@@ -2,34 +2,33 @@ package eod.card.concrete.summon;
 
 import eod.Party;
 import eod.card.abstraction.Card;
-import eod.card.abstraction.summon.MachineSummon;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.abstraction.summon.SummonCardType;
 import eod.effect.Summon;
-import eod.warObject.character.concrete.transparent.Drone;
+import eod.warObject.character.concrete.transparent.FacelessHuman;
 
 import static eod.effect.EffectFunctions.Summon;
 
-public class DroneSummon extends MachineSummon {
-    public DroneSummon() {
-        super(3, SummonCardType.TOKEN);
+public class FacelessHumanSummon extends SummonCard {
+    public FacelessHumanSummon() {
+        super(4, SummonCardType.NORMAL);
     }
 
     @Override
     public Summon summonEffect() {
-         return Summon(new Drone(player)).onOnePointOf(player, player.getBaseEmpty());
+        return Summon(new FacelessHuman(player)).onOnePointOf(player, player.getBaseEmpty());
     }
 
     @Override
     public Card copy() {
-        Card c = new DroneSummon();
+        Card c = new FacelessHumanSummon();
         c.setPlayer(player);
         return c;
     }
 
     @Override
     public String getName() {
-        return "召喚 無人機";
+        return "無面的人";
     }
 
     @Override

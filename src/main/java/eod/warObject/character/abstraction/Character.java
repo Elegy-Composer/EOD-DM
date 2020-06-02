@@ -1,12 +1,17 @@
 package eod.warObject.character.abstraction;
 
+import eod.GameObject;
 import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
+import eod.effect.Damage;
+import eod.effect.Effect;
 import eod.event.AfterObjectDamageEvent;
 import eod.event.BeforeObjectDamageEvent;
 import eod.effect.EffectExecutor;
+import eod.event.Event;
+import eod.event.RoundStartEvent;
 import eod.param.AttackParam;
 import eod.param.DamageParam;
 import eod.warObject.CanAttack;
@@ -17,6 +22,9 @@ import eod.warObject.WarObject;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static eod.effect.EffectFunctions.Damage;
+import static eod.warObject.Status.POISON;
 
 public abstract class Character extends WarObject implements Damageable, CanAttack {
     protected ArrayList<Status> status = new ArrayList<>();
@@ -147,14 +155,26 @@ public abstract class Character extends WarObject implements Damageable, CanAtta
     }
 
     @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
     public void teardown() {
         super.teardown();
         status.clear();
     }
 
     @Override
-    public int getHp() {
-        return hp;
+    public void onEventOccurred(GameObject sender, Event event) {
+        super.onEventOccurred(sender, event);
+        if(event instanceof RoundStartEvent) {
+            if(player.isActingPlayer() && hasStatus(POISON)) {
+                player.tryToExecute(
+                        Damage(new DamageParam(1), Effect.HandlerType.Owner).on(this)
+                );
+            }
+        }
     }
 
     public abstract SummonCard getSummonCard();

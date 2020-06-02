@@ -28,7 +28,7 @@ public class AssaultTeamLeaderSummon extends SummonCard {
 
     @Override
     public String getName() {
-        return "召喚 特攻隊隊長";
+        return "召喚 特攻隊長";
     }
 
     @Override

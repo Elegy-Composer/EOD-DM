@@ -6,6 +6,7 @@ import eod.exceptions.GameLosingException;
 import eod.snapshots.Snapshotted;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameObject {
 
@@ -41,6 +42,27 @@ public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameOb
             throw new GameLosingException("Deck is drained");
         }
 
+    }
+
+    public Card[] draw(Class<? extends Card> cardType, int count) {
+        // TODO:
+        //  Whether or not the drawn card will have the same reference as the card in deck is unknown. testing needed.
+        List<Card> canDraw = cards.stream().filter(card -> card.cardTypeEquals(cardType)).collect(Collectors.toList());
+        int n = Math.min(canDraw.size(), count);
+        Random random = new Random();
+
+        Card[] drew = new Card[n];
+
+        for(int i = 0;i < n;i++) {
+            drew[i] = canDraw.remove(random.nextInt(canDraw.size()));
+            cards.remove(drew[i]);
+        }
+
+        if(cards.size() == 0) {
+            throw new GameLosingException("Deck is drained.");
+        }
+
+        return drew;
     }
 
     public void dropCard(Card card) {
