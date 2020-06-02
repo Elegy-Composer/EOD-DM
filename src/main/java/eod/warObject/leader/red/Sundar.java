@@ -26,7 +26,7 @@ import static eod.effect.EffectFunctions.*;
 public class Sundar extends Leader {
     public Sundar(Player player) {
         super(player, 20, 0, Party.RED);
-        registerReceiver(new OwnedAbilities());
+        registerReceiver(ObjectDeadEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -83,18 +83,6 @@ public class Sundar extends Leader {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-
-        public OwnedAbilities() {
-            this.canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
@@ -120,9 +108,7 @@ public class Sundar extends Leader {
 
         @Override
         public void teardown() {
-            Sundar.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            Sundar.this.unregisterReceiver(ObjectDeadEvent.class, this);
         }
     }
 

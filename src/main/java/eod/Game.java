@@ -4,6 +4,7 @@ import eod.card.abstraction.Card;
 import eod.card.abstraction.action.ActionCard;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
+import eod.event.AttackEvent;
 import eod.event.Event;
 import eod.event.relay.EventManager;
 import eod.event.RoundEndEvent;
@@ -186,7 +187,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
     public ArrayList<Damageable> damage(CanAttack attacker,
                                         Point target,
                                         AttackParam param) throws NotSupportedException {
-        ArrayList<Point> targets = new ArrayList<Point>(){{
+        ArrayList<Point> targets = new ArrayList<Point>() {{
             add(target);
         }};
         return damage(attacker, targets, param);
@@ -196,11 +197,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
         eventManager.send(sender, event);
     }
 
-    public void registerReceiver(EventReceiver receiver) {
-        eventManager.registerReceiver(receiver);
+    public void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
+        eventManager.registerReceiver(supportedType, receiver);
     }
-    public void unregisterReceiver(EventReceiver receiver) {
-        eventManager.unregisterReceiver(receiver);
+    public void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
+        eventManager.unregisterReceiver(supportedType, receiver);
     }
 
     @Override

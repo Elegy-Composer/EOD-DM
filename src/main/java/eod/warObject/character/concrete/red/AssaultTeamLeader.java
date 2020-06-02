@@ -23,7 +23,10 @@ import static eod.effect.EffectFunctions.*;
 public class AssaultTeamLeader extends Character {
     public AssaultTeamLeader(Player player) {
         super(player, 1, 1, Party.RED);
-        registerReceiver(new OwnedAbilities());
+        OwnedAbilities ability = new OwnedAbilities();
+        registerReceiver(RoundStartEvent.class, ability);
+        registerReceiver(ObjectEnterEnemyBaseEvent.class, ability);
+        registerReceiver(StatusAcquiredEvent.class, ability);
     }
 
     @Override
@@ -56,23 +59,12 @@ public class AssaultTeamLeader extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundStartEvent.class);
-            canHandle.add(ObjectEnterEnemyBaseEvent.class);
-            canHandle.add(StatusAcquiredEvent.class);
-        }
-
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(AssaultTeamLeader.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof RoundStartEvent) {
                 RoundStartEvent e = (RoundStartEvent) event;
                 if (e.getStartedRound().getPlayer().isPlayerA() == AssaultTeamLeader.this.getPlayer().isPlayerA()) {
@@ -113,9 +105,10 @@ public class AssaultTeamLeader extends Character {
 
         @Override
         public void teardown() {
-            AssaultTeamLeader.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            AssaultTeamLeader.this.unregisterReceiver(RoundStartEvent.class, this);
+            AssaultTeamLeader.this.unregisterReceiver(ObjectEnterEnemyBaseEvent.class, this);
+            AssaultTeamLeader.this.unregisterReceiver(StatusAcquiredEvent.class, this);
+
         }
     }
 }

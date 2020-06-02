@@ -14,6 +14,7 @@ import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class CrazyBomber extends Character {
     public CrazyBomber(Player player) {
         super(player, 1, 2, Party.RED);
-        registerReceiver(new OwnedAbilities());
+        registerReceiver(ObjectDeadEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -67,20 +68,12 @@ public class CrazyBomber extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(CrazyBomber.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof ObjectDeadEvent) {
                 ObjectDeadEvent e = (ObjectDeadEvent) event;
                 if(e.getDeadObject() == CrazyBomber.this) {
@@ -94,9 +87,7 @@ public class CrazyBomber extends Character {
 
         @Override
         public void teardown() {
-            CrazyBomber.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            CrazyBomber.this.unregisterReceiver(ObjectDeadEvent.class, this);
         }
     }
 

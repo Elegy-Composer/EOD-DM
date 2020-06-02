@@ -10,6 +10,7 @@ import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
@@ -20,7 +21,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class OwnerlessAssassin extends Assassin {
     public OwnerlessAssassin(Player player) {
         super(player, 2, 4, Party.TRANSPARENT);
-        registerReceiver(new OwnedAbilities());
+        registerReceiver(RoundStartEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -51,20 +52,12 @@ public class OwnerlessAssassin extends Assassin {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundStartEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(OwnerlessAssassin.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof RoundStartEvent) {
                 RoundStartEvent e = (RoundStartEvent) event;
                 OwnerlessAssassin.this.player = e.getStartedRound().getPlayer();
@@ -73,9 +66,7 @@ public class OwnerlessAssassin extends Assassin {
 
         @Override
         public void teardown() {
-            OwnerlessAssassin.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            OwnerlessAssassin.this.unregisterReceiver(RoundStartEvent.class, this);
         }
     }
 }

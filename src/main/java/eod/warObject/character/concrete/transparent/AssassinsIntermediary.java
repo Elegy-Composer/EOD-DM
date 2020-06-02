@@ -10,6 +10,7 @@ import eod.event.Event;
 import eod.event.ObjectEnterEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class AssassinsIntermediary extends Character {
     public AssassinsIntermediary(Player player) {
         super(player, 2, 1, Party.TRANSPARENT);
-        registerReceiver(new OwnedAbilities());
+        registerReceiver(ObjectEnterEvent.class, new OwnedAbilities());
     }
 
     @Override
@@ -41,21 +42,12 @@ public class AssassinsIntermediary extends Character {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectEnterEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(AssassinsIntermediary.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof ObjectEnterEvent) {
                 ObjectEnterEvent e = (ObjectEnterEvent) event;
                 if (e.getObject() == AssassinsIntermediary.this) {
@@ -67,9 +59,7 @@ public class AssassinsIntermediary extends Character {
 
         @Override
         public void teardown() {
-            AssassinsIntermediary.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
+            AssassinsIntermediary.this.unregisterReceiver(ObjectEnterEvent.class, this);
         }
     }
 }

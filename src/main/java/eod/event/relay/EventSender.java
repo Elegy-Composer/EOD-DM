@@ -4,9 +4,9 @@ import eod.GameObject;
 import eod.event.Event;
 
 public interface EventSender {
-    void registerReceiver(EventReceiver receiver);
+    void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver);
 
-    void unregisterReceiver(EventReceiver receiver);
+    void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver);
 
     StatusHolder[] getStatusHolders();
 
