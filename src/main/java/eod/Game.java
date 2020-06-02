@@ -28,7 +28,7 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
 
     private Player A;
     private Player B;
-    private Gameboard gameboard;
+    private Gameboard gameboard = new Gameboard();
     private Player[] playerOrder;
     private EventManager eventManager = new EventManager();
     private Round currentRound;
