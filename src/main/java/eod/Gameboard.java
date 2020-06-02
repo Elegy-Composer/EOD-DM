@@ -17,12 +17,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     public static final int boardSize = 8;
     public static final int firstLine = 2, secondLine = 6;
     public static final int middle = 4;
-    private Game game;
     private WarObject[][] board = new Character[boardSize][boardSize];
-
-    public Gameboard(Game game) {
-        this.game = game;
-    }
 
     public <T extends WarObject> T getObjectOn(int x, int y) throws IllegalArgumentException {
         if(!hasObjectOn(x, y)) {
@@ -278,7 +273,6 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
 
     @Override
     public void teardown() {
-        game = null;
 
         for(GameObject[] line:board) {
             for(GameObject object:line) {
@@ -294,7 +288,7 @@ public class Gameboard implements Snapshotted<Gameboard.Snapshot>, GameObject {
     }
 
     public boolean inBase(Player sender, Point p) {
-        if(game.isPlayerA(sender)) {
+        if(sender.isPlayerA()) {
             return p.x < firstLine;
         } else {
             return p.x >= secondLine;
