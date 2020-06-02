@@ -47,4 +47,5 @@ public class FacelessHuman extends Character {
             System.out.println(e.getMessage());
         }
     }
+    // Todo: finish its abilities
 }
