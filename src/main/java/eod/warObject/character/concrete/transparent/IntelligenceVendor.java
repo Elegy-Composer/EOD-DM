@@ -25,7 +25,7 @@ import static eod.effect.EffectFunctions.GiveStatus;
 public class IntelligenceVendor extends Character {
     public IntelligenceVendor(Player player) {
         super(player, 3, 0, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class IntelligenceVendor extends Character {
             Point p = player.selectPosition(getAttackRange());
             WarObject object = player.getBoard().getObjectOn(p.x, p.y);
 
-            new AttackEffectLock(object);
+            object.registerReceiver(new AttackEffectLock(object));
         } catch (IllegalArgumentException e) {
             System.out.println("There's no object on the selected point. Skipping.");
         }
@@ -71,7 +71,6 @@ public class IntelligenceVendor extends Character {
             this.holder = object;
             canHandle = new ArrayList<>();
             canHandle.add(RoundEndEvent.class);
-            holder.registerReceiver(this);
 
             holdingStatus = new ArrayList<>();
             holdingStatus.add(Status.NO_ATTACK);
@@ -101,12 +100,11 @@ public class IntelligenceVendor extends Character {
         @Override
         public void teardown() {
             holder.unregisterReceiver(this);
-            EventReceiver[] temporaryReceivers = holder.getStatusHolders();
+            StatusHolder[] temporaryReceivers = holder.getStatusHolders();
             holdingStatus.forEach(status -> {
                     if(Arrays.stream(temporaryReceivers)
-                            .filter(receiver -> (
-                                    (StatusHolder) receiver).holdingStatus().contains(status)
-                            ).toArray().length == 0) {
+                            .filter(receiver -> receiver.holdingStatus().contains(status))
+                            .toArray().length == 0) {
                         holder.removeStatus(status);
                     }
             });
@@ -132,7 +130,6 @@ public class IntelligenceVendor extends Character {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(RoundEndEvent.class);
-            IntelligenceVendor.this.registerReceiver(this);
         }
 
         @Override

@@ -22,7 +22,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class OwnerlessAssassin extends Assassin {
     public OwnerlessAssassin(Player player) {
         super(player, 2, 4, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -58,7 +58,6 @@ public class OwnerlessAssassin extends Assassin {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(RoundStartEvent.class);
-            OwnerlessAssassin.this.registerReceiver(this);
         }
 
         @Override

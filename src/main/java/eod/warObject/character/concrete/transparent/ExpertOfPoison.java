@@ -16,8 +16,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.GiveStatus;
-import static eod.specifier.WarObjectSpecifier.WarObject;
-import static eod.specifier.condition.Conditions.InRangeOf;
 
 public class ExpertOfPoison extends Character {
     public ExpertOfPoison(Player player) {
@@ -51,7 +49,7 @@ public class ExpertOfPoison extends Character {
                 GiveStatus(Status.POISON, Effect.HandlerType.Rival).to(object)
             );
         } catch (IllegalArgumentException e) {
-            System.out.println("Some idiot selected an empty space. Skipping");
+            System.out.println("The selected position is empty. Skipping.");
         }
 
         afterAttack();

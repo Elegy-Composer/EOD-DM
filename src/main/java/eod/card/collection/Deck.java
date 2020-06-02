@@ -45,13 +45,16 @@ public class Deck implements Snapshotted<Deck.Snapshot>, Iterable<Card>,  GameOb
     }
 
     public Card[] draw(Class<? extends Card> cardType, int count) {
+        // TODO:
+        //  Whether or not the drawn card will have the same reference as the card in deck is unknown. testing needed.
         List<Card> canDraw = cards.stream().filter(card -> card.cardTypeEquals(cardType)).collect(Collectors.toList());
         int n = Math.min(canDraw.size(), count);
+        Random random = new Random();
 
         Card[] drew = new Card[n];
 
         for(int i = 0;i < n;i++) {
-            drew[i] = canDraw.remove(0);
+            drew[i] = canDraw.remove(random.nextInt(canDraw.size()));
             cards.remove(drew[i]);
         }
 

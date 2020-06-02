@@ -26,7 +26,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class CrazyBomber extends Character {
     public CrazyBomber(Player player) {
         super(player, 1, 2, Party.RED);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -73,7 +73,6 @@ public class CrazyBomber extends Character {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectDeadEvent.class);
-            CrazyBomber.this.registerReceiver(this);
         }
 
         @Override

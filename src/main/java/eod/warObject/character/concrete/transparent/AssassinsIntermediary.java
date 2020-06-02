@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class AssassinsIntermediary extends Character {
     public AssassinsIntermediary(Player player) {
         super(player, 2, 1, Party.TRANSPARENT);
-        new OwnedAbilities();
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -48,7 +48,6 @@ public class AssassinsIntermediary extends Character {
         public OwnedAbilities() {
             canHandle = new ArrayList<>();
             canHandle.add(ObjectEnterEvent.class);
-            AssassinsIntermediary.this.registerReceiver(this);
         }
 
         @Override
