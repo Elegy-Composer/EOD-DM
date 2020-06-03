@@ -17,7 +17,7 @@ This spec specifies the messages' formats used in the communication between the 
 Game object data structure.
 
 ## Player
-```json
+```jsonc
 {
     "name": string,
     "role": string,
@@ -40,7 +40,7 @@ Game object data structure.
 | hand_cards (Optional) | [card](#card)[] | Cards in player's hand. <br>This field only appears if player role is `player`. |
 
 ## Card
-```json
+```jsonc
 {
     "id": integer,
     "name": string,
@@ -63,7 +63,7 @@ Game object data structure.
 | effects | [effect](#effect)[] | The effects attached to card. |
 
 ## Object
-```json
+```jsonc
 {
     "position": position,
     "owner": string,
@@ -84,7 +84,7 @@ Game object data structure.
 | effects | [effect](#effect)[] | The effects attached to object. |
 
 ## Effect
-```json
+```jsonc
 {
     "type": string,
     "description": description
@@ -97,7 +97,7 @@ Game object data structure.
 | description | string | effect description |
 
 ## Position
-```json
+```jsonc
 [x, y]
 ```
 
@@ -110,7 +110,7 @@ Game object data structure.
 # Client
 Every message that client sends to the server should comply with the format below; otherwise, the server would ignore it.
 
-```json
+```jsonc
 {
     "id": message_id,
     "data": {
@@ -132,7 +132,7 @@ Every message that client sends to the server should comply with the format belo
 ### enter_room
 Send when client wants to join a specific room.
 
-```json
+```jsonc
 {
     "id": "enter_room",
     "data": {
@@ -151,7 +151,7 @@ Prerequisite: client is in a room
 
 Send when client is ready for a game.
 
-```json
+```jsonc
 {
     "id": "ready_start",
     "data": {
@@ -168,7 +168,7 @@ Send when client is ready for a game.
 ### choose_initial
 Send cards that player wants to keep.
 
-```json
+```jsonc
 {
     "id": "play_card",
     "data": {
@@ -186,7 +186,7 @@ Prerequisite: game has started and the player is qualified for doing action.
 
 Send when client wants to use a card.
 
-```json
+```jsonc
 {
     "id": "play_card",
     "data": {
@@ -206,7 +206,7 @@ Prerequisite: game has started and the player is qualified for doing action.
 
 Send when client move an object.
 
-```json
+```jsonc
 {
     "id": "move",
     "data": {
@@ -226,7 +226,7 @@ Prerequisite: game has started and the player is qualified for doing action.
 
 Send when client wants to use his object to attack another object.
 
-```json
+```jsonc
 {
     "id": "attack",
     "data": {
@@ -248,7 +248,7 @@ Send when client finishes his action in his round.
 
 **No data required**
 
-```json
+```jsonc
 {
     "id": "end_round",
     "data": {}
@@ -262,7 +262,7 @@ Send when client wants to give up the game.
 
 **No data required**
 
-```json
+```jsonc
 {
     "id": "surrender",
     "data": {}
@@ -290,7 +290,7 @@ Every message that the server send to the client would comply with the format be
 ### action_failed
 Send when action failed. (joining room, using card etc.)
 
-```json
+```jsonc
 {
     "id": "action_failed",
     "data": {
@@ -306,7 +306,7 @@ Send when action failed. (joining room, using card etc.)
 ### joined_room
 Return room information.
 
-```json
+```jsonc
 {
     "id": "joined_room",
     "data": {
@@ -324,7 +324,7 @@ Return room information.
 ### game_start
 Announce clients that game starts.
 
-```json
+```jsonc
 {
     "id": "game_start",
     "data": {
@@ -389,7 +389,7 @@ Announce clients that game starts.
 ### round_start
 Announce clients that round starts.
 
-```json
+```jsonc
 {
     "id": "round_start",
     "data": {
@@ -412,7 +412,7 @@ Announce clients that round starts.
 ### attack_stage_start
 Announce clients that attack stage starts.
 
-```json
+```jsonc
 {
     "id": "attack_stage_start",
     "data": {
@@ -435,7 +435,7 @@ Announce clients that attack stage starts.
 ### draw
 Someone draws card.
 
-```json
+```jsonc
 {
     "id": "draw",
     "data": {
@@ -459,7 +459,7 @@ Someone draws card.
 ### use
 Someone uses card.
 
-```json
+```jsonc
 {
     "id": "use",
     "data": {
@@ -481,7 +481,7 @@ Someone uses card.
 
 ### object_move
 
-```json
+```jsonc
 {
     "id": "object_move",
     "data": {
@@ -503,7 +503,7 @@ Someone uses card.
 
 ### object_attack
 
-```json
+```jsonc
 {
     "id": "object_attack",
     "data": {
@@ -527,7 +527,7 @@ Someone uses card.
 Object status has changed.
 
 - For type: `hp`, `atk`
-```json
+```jsonc
 {
     "id": "object_status_changed",
     "data": {
@@ -546,7 +546,7 @@ Object status has changed.
 | value | integer | Status change value. |
 
 - For type: `add_effect`, `remove_effect`
-```json
+```jsonc
 {
     "id": "object_status_changed",
     "data": {
@@ -567,7 +567,7 @@ Object status has changed.
 ### object_existence_changed
 Send when object existence changes.
 
-```json
+```jsonc
 {
     "id": "object_existence_changed",
     "data": {
@@ -588,7 +588,7 @@ Send when object existence changes.
 ### effect_activated
 Send when an effect has activated.
 
-```json
+```jsonc
 {
     "id": "effect_activated",
     "data": {
@@ -605,7 +605,7 @@ Send when an effect has activated.
 ### result
 Game result.
 
-```json
+```jsonc
 {
     "id": "result",
     "data": {
