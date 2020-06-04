@@ -14,6 +14,9 @@ import eod.param.PointParam;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 //WarObject represented anything on the gameboard
 // temporarily duplicated
@@ -22,14 +25,14 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     protected Player player;
     protected final Party party;
     ArrayList<Status> status;
-    protected ArrayList<Class<? extends Event>> canHandle;
-    protected ArrayList<EventReceiver> receivers;
+    private ArrayList<StatusHolder> statusHolders;
+    protected HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers;
 
     public WarObject(Player player, Party party) {
         this.player = player;
         this.party = party;
-        canHandle = new ArrayList<>();
-        receivers = new ArrayList<>();
+        statusHolders = new ArrayList<>();
+        receivers = new HashMap<>();
     }
 
     public Player getPlayer() {
@@ -79,39 +82,46 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
         }
     }
 
-    public void addSupportedEventType(Class<? extends Event> eventType) {
-        canHandle.add(eventType);
+
+    public void registerStatusHolder(StatusHolder holder) {
+        statusHolders.add(holder);
+    }
+
+    public void unregisterStatusHolder(StatusHolder holder) {
+        statusHolders.remove(holder);
+
     }
 
     @Override
     public void registerReceiver(EventReceiver receiver) {
-        receivers.add(receiver);
-        canHandle.addAll(receiver.supportedEventTypes());
+        for(Class<? extends Event> eventType:receiver.supportedEventTypes()) {
+            receivers.putIfAbsent(eventType, new ArrayList<>());
+            receivers.get(eventType).add(receiver);
+        }
     }
 
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
-        receivers.remove(receiver);
+        for(Class<? extends Event> eventType:receiver.supportedEventTypes()) {
+            receivers.get(eventType).remove(receiver);
+        }
     }
 
-    @Override
-    public StatusHolder[] getStatusHolders() {
-        return receivers.stream()
-                .filter(receiver -> receiver instanceof StatusHolder)
-                .map(receiver -> (StatusHolder) receiver)
-                .toArray(StatusHolder[]::new);
+    public ArrayList<StatusHolder> getStatusHolders() {
+        return statusHolders;
     }
 
     @Override
     public void send(GameObject sender, Event event) {
-        receivers.stream()
-                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+        receivers.get(event.getClass())
                 .forEach(receiver -> receiver.onEventOccurred(sender, event));
     }
 
     @Override
     public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        return canHandle;
+        return new ArrayList<Class<? extends Event>>() {{
+            addAll(Arrays.stream(Event.allEvents).collect(Collectors.toList()));
+        }};
     }
 
     @Override
@@ -138,8 +148,9 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     @Override
     public void teardown() {
         player = null;
-        canHandle.clear();
-        receivers.forEach(EventReceiver::teardown);
+        for(ArrayList<EventReceiver> subReceivers:receivers.values()) {
+            subReceivers.forEach(EventReceiver::teardown);
+        }
         receivers.clear();
     }
 

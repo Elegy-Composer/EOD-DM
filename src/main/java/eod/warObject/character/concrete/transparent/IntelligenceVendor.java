@@ -52,7 +52,7 @@ public class IntelligenceVendor extends Character {
             Point p = player.selectPosition(getAttackRange());
             WarObject object = player.getBoard().getObjectOn(p.x, p.y);
 
-            object.registerReceiver(new AttackEffectLock(object));
+            object.registerStatusHolder(new AttackEffectLock(object));
         } catch (IllegalArgumentException e) {
             System.out.println("There's no object on the selected point. Skipping.");
         }
@@ -61,81 +61,47 @@ public class IntelligenceVendor extends Character {
     }
 
 
-    private class AttackEffectLock implements StatusHolder {
+    private class AttackEffectLock extends StatusHolder {
 
-        private WarObject holder;
-        private ArrayList<Class<? extends Event>> canHandle;
-        private ArrayList<Status> holdingStatus;
-
-        public AttackEffectLock(WarObject object) {
-            this.holder = object;
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundEndEvent.class);
-
-            holdingStatus = new ArrayList<>();
-            holdingStatus.add(Status.NO_ATTACK);
-            holdingStatus.add(Status.NO_EFFECT);
-
-            holdingStatus.forEach(status -> object.getPlayer().tryToExecute(
-                    GiveStatus(status, Effect.HandlerType.Owner).to(object)
-                    ));
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
-
-        @Override
-        public void onEventOccurred(GameObject sender, Event event) {
-            if(event instanceof RoundEndEvent) {
-                RoundEndEvent e = (RoundEndEvent) event;
-                if(e.getEndedRound().getPlayer().isPlayerA() != player.rival().isPlayerA()) {
-                    // End of the enemy's round.
-                    teardown();
-                }
-            }
-        }
-
-        @Override
-        public void teardown() {
-            holder.unregisterReceiver(this);
-            StatusHolder[] temporaryReceivers = holder.getStatusHolders();
-            holdingStatus.forEach(status -> {
-                    if(Arrays.stream(temporaryReceivers)
-                            .filter(receiver -> receiver.holdingStatus().contains(status))
-                            .toArray().length == 0) {
-                        holder.removeStatus(status);
-                    }
-            });
-
-            holder = null;
-            holdingStatus.clear();
-            holdingStatus = null;
-            canHandle.clear();
-            canHandle = null;
+        public AttackEffectLock(WarObject carrier) {
+            super(carrier);
+            carrier.registerReceiver(new EndDetection());
         }
 
         @Override
         public ArrayList<Status> holdingStatus() {
-            return holdingStatus;
+            return new ArrayList<Status>() {{
+                add(Status.NO_EFFECT);
+                add(Status.NO_ATTACK);
+            }};
+        }
+
+        private class EndDetection implements EventReceiver {
+            @Override
+            public void onEventOccurred(GameObject sender, Event event) {
+                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() != player.isPlayerA()) {
+                    teardown();
+                }
+            }
+
+            @Override
+            public ArrayList<Class<? extends Event>> supportedEventTypes() {
+                return new ArrayList<Class<? extends Event>>(){{
+                    add(RoundEndEvent.class);
+                }};
+            }
+
+            @Override
+            public void teardown() {
+                getCarrier().unregisterReceiver(this);
+                AttackEffectLock.this.teardown();
+            }
         }
     }
 
 
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundEndEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
@@ -152,6 +118,13 @@ public class IntelligenceVendor extends Character {
                     }
                 }
             }
+        }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(RoundEndEvent.class);
+            }};
         }
 
         @Override

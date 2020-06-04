@@ -22,6 +22,7 @@ import static eod.effect.EffectFunctions.GiveStatus;
 import static eod.specifier.WarObjectSpecifier.WarObject;
 import static eod.specifier.condition.Conditions.Being;
 import static eod.specifier.condition.Conditions.OwnedBy;
+import static eod.warObject.Status.NO_EFFECT;
 
 public class Sneak extends NormalCard {
 
@@ -43,7 +44,7 @@ public class Sneak extends NormalCard {
         if(afterEffect) {
             Arrays.stream(assassins)
                 .map(object -> (Assassin) object)
-                .forEach(NextDamageDouble::new);
+                .forEach(assassin -> assassin.registerReceiver(new NextDamageDouble(assassin)));
         }
     }
 
@@ -65,21 +66,11 @@ public class Sneak extends NormalCard {
         return Party.TRANSPARENT;
     }
 
-    public class NextDamageDouble implements EventReceiver, GameObject {
+    private class NextDamageDouble implements EventReceiver, GameObject {
         private Assassin assassin;
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public NextDamageDouble(Assassin assassin) {
             this.assassin = assassin;
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-            canHandle.add(AttackEvent.class);
-            assassin.registerReceiver(this);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
         }
 
         @Override
@@ -87,23 +78,25 @@ public class Sneak extends NormalCard {
             if(event instanceof AttackEvent) {
                 AttackEvent e = (AttackEvent) event;
                 if(e.getAttacker() == assassin) {
-                    e.param.hp *= 2;
-                    teardown();
-                }
-            }
-            if(event instanceof ObjectDeadEvent) {
-                if(((ObjectDeadEvent) event).getDeadObject() == assassin) {
+                    if (!assassin.hasStatus(NO_EFFECT)) {
+                        e.param.hp *= 2;
+                    }
                     teardown();
                 }
             }
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(AttackEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
             assassin.unregisterReceiver(this);
             assassin = null;
-            canHandle.clear();
-            canHandle = null;
         }
     }
 }

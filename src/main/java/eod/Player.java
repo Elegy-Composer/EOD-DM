@@ -28,7 +28,9 @@ import eod.warObject.leader.Leader;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Player implements Snapshotted<Player.Snapshot>,
                                 GameObject, EventReceiver, EventSender, EffectExecutor {
@@ -42,7 +44,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
     private String name;
     private boolean isPlayerA;
     private boolean isActingPlayer = false;
-    private ArrayList<EventReceiver> receivers;
+    private HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers;
 
     public Player(Deck deck, String name) {
         this(deck, new Hand(), name);
@@ -52,7 +54,7 @@ public class Player implements Snapshotted<Player.Snapshot>,
         this.deck = deck;
         this.hand = hand;
         this.name = name;
-        receivers = new ArrayList<>();
+        receivers = new HashMap<>();
     }
 
     public String getName() {
@@ -107,16 +109,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         Card[] cards = deck.draw(count);
         handReceive(new ArrayList<>(Arrays.asList(cards)));
 
-        output.sendReceivedCards(this, cards);
     }
 
     public void drawFromDeck(Class<? extends Card> cardType, int count) {
         output.sendDrawingCards(this);
 
         Card[] cards = deck.draw(cardType, count);
-        hand.receive(new ArrayList<>(Arrays.asList(cards)));
+        handReceive(new ArrayList<>(Arrays.asList(cards)));
 
-        output.sendReceivedCards(this, cards);
     }
 
     public boolean checkCardTypeInHand(Class<? extends Card> c) {
@@ -319,8 +319,8 @@ public class Player implements Snapshotted<Player.Snapshot>,
         deck = null;
         leader.teardown();
         leader = null;
-        for(EventReceiver receiver:receivers) {
-            receiver.teardown();
+        for(ArrayList<EventReceiver> subReceiver:receivers.values()) {
+            subReceiver.forEach(GameObject::teardown);
         }
         receivers.clear();
     }
@@ -436,42 +436,29 @@ public class Player implements Snapshotted<Player.Snapshot>,
 
     @Override
     public void registerReceiver(EventReceiver receiver) {
-        receivers.add(receiver);
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.putIfAbsent(supportedEvent, new ArrayList<>());
+            receivers.get(supportedEvent).add(receiver);
+        }
     }
 
 
 
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
-        receivers.remove(receiver);
-    }
-
-    @Override
-    public StatusHolder[] getStatusHolders() {
-        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).toArray(StatusHolder[]::new);
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.get(supportedEvent).remove(receiver);
+        }
     }
 
     @Override
     public void send(GameObject sender, Event event) {
-        receivers.stream()
-                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+        receivers.get(event.getClass())
                 .forEach(receiver -> receiver.onEventOccurred(sender, event));
     }
 
     public void sendUp(GameObject sender, Event event) {
         game.sendEvent(sender, event);
-    }
-
-    @Override
-    public ArrayList<Class<? extends Event>> supportedEventTypes() {
-        //TODO: add RegionalAttackEvent support
-        return new ArrayList<Class<? extends Event>>(){{
-            add(RoundStartEvent.class);
-            add(RoundEndEvent.class);
-            add(DirectAttackEvent.class);
-            add(ObjectDeadEvent.class);
-            add(ObjectMovingEvent.class);
-        }};
     }
 
     @Override
@@ -496,6 +483,13 @@ public class Player implements Snapshotted<Player.Snapshot>,
         }
 
         send(sender, event);
+    }
+
+    @Override
+    public ArrayList<Class<? extends Event>> supportedEventTypes() {
+        return new ArrayList<Class<? extends Event>>(){{
+            addAll(Arrays.stream(Event.allEvents).collect(Collectors.toList()));
+        }};
     }
 
     public class Snapshot implements eod.snapshots.Snapshot {

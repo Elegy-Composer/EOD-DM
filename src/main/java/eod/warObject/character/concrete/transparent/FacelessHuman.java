@@ -1,10 +1,14 @@
 package eod.warObject.character.concrete.transparent;
 
+import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
 import eod.card.concrete.summon.transparent.FacelessHumanSummon;
 import eod.effect.EffectExecutor;
+import eod.event.Event;
+import eod.event.ObjectEnterEvent;
+import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
 
@@ -17,6 +21,7 @@ import static eod.specifier.WarObjectSpecifier.WarObject;
 public class FacelessHuman extends Character {
     public FacelessHuman(Player player) {
         super(player, 3, 3, Party.TRANSPARENT);
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -47,5 +52,30 @@ public class FacelessHuman extends Character {
             System.out.println(e.getMessage());
         }
     }
-    // Todo: finish its abilities
+
+    private class OwnedAbilities implements EventReceiver {
+
+        @Override
+        public void onEventOccurred(GameObject sender, Event event) {
+            if (event instanceof ObjectEnterEvent) {
+                ObjectEnterEvent e = (ObjectEnterEvent) event;
+                if(e.getObject() == FacelessHuman.this) {
+                    FacelessHuman.this.attack(FacelessHuman.this.player);
+                    teardown();
+                }
+            }
+        }
+
+        @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(ObjectEnterEvent.class);
+            }};
+        }
+
+        @Override
+        public void teardown() {
+            FacelessHuman.this.unregisterReceiver(this);
+        }
+    }
 }

@@ -83,18 +83,6 @@ public class Sundar extends Leader {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-
-        public OwnedAbilities() {
-            this.canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
@@ -119,10 +107,15 @@ public class Sundar extends Leader {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(ObjectDeadEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
             Sundar.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
         }
     }
 
