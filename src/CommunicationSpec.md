@@ -66,7 +66,7 @@ Game object data structure.
 ```jsonc
 {
     "position": position,
-    "owner": string,
+    "owner_role": string,
     "color": string,
     "hp": integer,
     "atk": integer,
@@ -77,7 +77,7 @@ Game object data structure.
 | Field | Type | Description |
 | --- | --- | --- |
 | position | [position](#position) | Position of the object. |
-| owner_type | string | Owner of the object. <br>Value: `player` or `enemy`. |
+| owner_role | string | Owner of the object. <br>Value: `player` or `enemy`. |
 | color | string | Color of the object. |
 | hp | integer | Object HP. |
 | atk | integer | Object attack point. |
@@ -182,7 +182,7 @@ Send cards that player wants to keep.
 | cards | integer | Serveral card IDs that the client wants to keep. |
 
 ### play_card
-Prerequisite: game has started and the player is qualified for doing action.
+Prerequisite: game has started and the player is qualified for doing actions.
 
 Send when client wants to use a card.
 
