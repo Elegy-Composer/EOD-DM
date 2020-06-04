@@ -25,7 +25,7 @@ public class Spacezipper extends Character implements Marker {
     public Spacezipper(Player player) {
         super(player, 5, 3, Party.TRANSPARENT);
         marked = new ArrayList<>();
-        registerReceiver(RoundStartEvent.class, new OwnedAbilities());
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -121,8 +121,15 @@ public class Spacezipper extends Character implements Marker {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(RoundStartEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            Spacezipper.this.unregisterReceiver(RoundStartEvent.class, this);
+            Spacezipper.this.unregisterReceiver(this);
         }
     }
 }

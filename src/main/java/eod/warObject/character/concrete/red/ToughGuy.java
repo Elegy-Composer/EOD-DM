@@ -21,7 +21,7 @@ import static eod.effect.EffectFunctions.*;
 public class ToughGuy extends Fighter {
     public ToughGuy(Player player) {
         super(player, 6, 3, Party.RED);
-        registerReceiver(AfterObjectDamageEvent.class, new OwnedAbilities());
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -75,8 +75,15 @@ public class ToughGuy extends Fighter {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(AfterObjectDamageEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            ToughGuy.this.unregisterReceiver(AfterObjectDamageEvent.class, this);
+            ToughGuy.this.unregisterReceiver(this);
         }
     }
 }

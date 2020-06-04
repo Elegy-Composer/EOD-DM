@@ -22,7 +22,7 @@ import static eod.effect.EffectFunctions.RequestRegionalAttack;
 public class HeavyPolice extends Character {
     public HeavyPolice(Player player) {
         super(player, 5,5, Party.BLUE);
-        registerReceiver(BeforeObjectDamageEvent.class, new DamageLessThan2());
+        registerReceiver(new DamageLessThan2());
     }
 
     @Override
@@ -73,8 +73,15 @@ public class HeavyPolice extends Character {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(BeforeObjectDamageEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            HeavyPolice.this.unregisterReceiver(BeforeObjectDamageEvent.class, this);
+            HeavyPolice.this.unregisterReceiver(this);
         }
     }
 }

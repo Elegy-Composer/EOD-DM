@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class LeadersGuard extends Shooter {
     public LeadersGuard(Player player) {
         super(player, 5, 2, Party.RED);
-        registerReceiver(ObjectMovingEvent.class, new OwnedAbilities());
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -65,8 +65,15 @@ public class LeadersGuard extends Shooter {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(ObjectMovingEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            LeadersGuard.this.unregisterReceiver(ObjectMovingEvent.class, this);
+            LeadersGuard.this.unregisterReceiver(this);
         }
     }
 

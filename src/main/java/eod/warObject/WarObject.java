@@ -14,6 +14,7 @@ import eod.param.PointParam;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -24,11 +25,13 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     protected Player player;
     protected final Party party;
     ArrayList<Status> status;
+    private ArrayList<StatusHolder> statusHolders;
     protected HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers;
 
     public WarObject(Player player, Party party) {
         this.player = player;
         this.party = party;
+        statusHolders = new ArrayList<>();
         receivers = new HashMap<>();
     }
 
@@ -80,30 +83,45 @@ public abstract class WarObject implements GameObject, EventReceiver, EventSende
     }
 
 
-    @Override
-    public void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        receivers.putIfAbsent(supportedType, new ArrayList<>());
-        receivers.get(supportedType).add(receiver);
+    public void registerStatusHolder(StatusHolder holder) {
+        statusHolders.add(holder);
+    }
+
+    public void unregisterStatusHolder(StatusHolder holder) {
+        statusHolders.remove(holder);
+
     }
 
     @Override
-    public void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        receivers.get(supportedType).remove(receiver);
-    }
-
-    @Override
-    public StatusHolder[] getStatusHolders() {
-        ArrayList<StatusHolder> holders = new ArrayList<>();
-        for(ArrayList<EventReceiver> subReceivers:receivers.values()) {
-            holders.addAll(subReceivers.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).collect(Collectors.toList()));
+    public void registerReceiver(EventReceiver receiver) {
+        for(Class<? extends Event> eventType:receiver.supportedEventTypes()) {
+            receivers.putIfAbsent(eventType, new ArrayList<>());
+            receivers.get(eventType).add(receiver);
         }
-        return holders.toArray(StatusHolder[]::new);
+    }
+
+    @Override
+    public void unregisterReceiver(EventReceiver receiver) {
+        for(Class<? extends Event> eventType:receiver.supportedEventTypes()) {
+            receivers.get(eventType).remove(receiver);
+        }
+    }
+
+    public ArrayList<StatusHolder> getStatusHolders() {
+        return statusHolders;
     }
 
     @Override
     public void send(GameObject sender, Event event) {
         receivers.get(event.getClass())
                 .forEach(receiver -> receiver.onEventOccurred(sender, event));
+    }
+
+    @Override
+    public ArrayList<Class<? extends Event>> supportedEventTypes() {
+        return new ArrayList<Class<? extends Event>>() {{
+            addAll(Arrays.stream(Event.allEvents).collect(Collectors.toList()));
+        }};
     }
 
     @Override

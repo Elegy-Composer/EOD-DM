@@ -197,11 +197,11 @@ public class Game implements Snapshotted<Game.Snapshot>, GameObject, EffectExecu
         eventManager.send(sender, event);
     }
 
-    public void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        eventManager.registerReceiver(supportedType, receiver);
+    public void registerReceiver(EventReceiver receiver) {
+        eventManager.registerReceiver(receiver);
     }
-    public void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        eventManager.unregisterReceiver(supportedType, receiver);
+    public void unregisterReceiver(EventReceiver receiver) {
+        eventManager.unregisterReceiver(receiver);
     }
 
     @Override

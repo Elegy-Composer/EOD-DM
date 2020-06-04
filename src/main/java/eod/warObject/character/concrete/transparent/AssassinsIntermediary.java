@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class AssassinsIntermediary extends Character {
     public AssassinsIntermediary(Player player) {
         super(player, 2, 1, Party.TRANSPARENT);
-        registerReceiver(ObjectEnterEvent.class, new OwnedAbilities());
+        registerReceiver(new OwnedAbilities());
     }
 
     @Override
@@ -58,8 +58,15 @@ public class AssassinsIntermediary extends Character {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(ObjectEnterEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            AssassinsIntermediary.this.unregisterReceiver(ObjectEnterEvent.class, this);
+            AssassinsIntermediary.this.unregisterReceiver(this);
         }
     }
 }

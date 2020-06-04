@@ -11,23 +11,18 @@ public class EventManager implements EventSender, GameObject {
     private HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers = new HashMap<>();
 
     @Override
-    public void registerReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        receivers.putIfAbsent(supportedType, new ArrayList<>());
-        receivers.get(supportedType).add(receiver);
-    }
-
-    @Override
-    public void unregisterReceiver(Class<? extends Event> supportedType, EventReceiver receiver) {
-        receivers.get(supportedType).remove(receiver);
-    }
-
-    @Override
-    public StatusHolder[] getStatusHolders() {
-        ArrayList<StatusHolder> holders = new ArrayList<>();
-        for(ArrayList<EventReceiver> subReceiver:receivers.values()) {
-            holders.addAll(subReceiver.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).collect(Collectors.toList()));
+    public void registerReceiver(EventReceiver receiver) {
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.putIfAbsent(supportedEvent, new ArrayList<>());
+            receivers.get(supportedEvent).add(receiver);
         }
-        return holders.toArray(StatusHolder[]::new);
+    }
+
+    @Override
+    public void unregisterReceiver(EventReceiver receiver) {
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.get(supportedEvent).remove(receiver);
+        }
     }
 
     @Override

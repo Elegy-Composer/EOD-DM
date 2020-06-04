@@ -60,8 +60,7 @@ public class SupportAttack extends NormalCard {
 
         public EnemyAttack(Character holder) {
             this.holder = holder;
-            holder.registerReceiver(RoundEndEvent.class, this);
-            holder.registerReceiver(TargetedEvent.class, this);
+            holder.registerReceiver(this);
         }
 
         @Override
@@ -87,9 +86,16 @@ public class SupportAttack extends NormalCard {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(RoundEndEvent.class);
+                add(TargetedEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            holder.unregisterReceiver(RoundEndEvent.class, this);
-            holder.unregisterReceiver(TargetedEvent.class, this);
+            holder.unregisterReceiver(this);
             holder = null;
         }
     }
