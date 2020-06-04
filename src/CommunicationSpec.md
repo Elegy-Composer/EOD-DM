@@ -70,6 +70,7 @@ Game object data structure.
     "color": string,
     "hp": integer,
     "atk": integer,
+    "attack_range": [position],
     "effects": [effect]
 }
 ```
@@ -81,6 +82,7 @@ Game object data structure.
 | color | string | Color of the object. |
 | hp | integer | Object HP. |
 | atk | integer | Object attack point. |
+| attack_range | [position](#position)[] | Allowed position to attack. |
 | effects | [effect](#effect)[] | The effects attached to object. |
 
 ## Effect
@@ -563,6 +565,25 @@ Object status has changed.
 | position | [position](#position) | Object position. |
 | type | string | Changed effect. <br> Value: `add_effect`, `remove_effect` |
 | effect | [effect](#effect) | Effect change. |
+
+- For type: `attack_range`
+```jsonc
+{
+    "id": "object_status_changed",
+    "data": {
+        "position": position,
+        "type": "attack_range",
+        "attack_range": [position]
+    }
+}
+```
+*Some fields are not fully expanded.*
+
+| Field | Type | Description |
+| --- | --- | --- |
+| position | [position](#position) | Object position. |
+| type | string | Changed status type. <br> Value: `attack_range` |
+| attack_range | [position](#position)[] | Full attack range after changing. |
 
 ### object_existence_changed
 Send when object existence changes.
