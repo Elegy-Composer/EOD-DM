@@ -109,16 +109,14 @@ public class Player implements Snapshotted<Player.Snapshot>,
         Card[] cards = deck.draw(count);
         handReceive(new ArrayList<>(Arrays.asList(cards)));
 
-        output.sendReceivedCards(this, cards);
     }
 
     public void drawFromDeck(Class<? extends Card> cardType, int count) {
         output.sendDrawingCards(this);
 
         Card[] cards = deck.draw(cardType, count);
-        hand.receive(new ArrayList<>(Arrays.asList(cards)));
+        handReceive(new ArrayList<>(Arrays.asList(cards)));
 
-        output.sendReceivedCards(this, cards);
     }
 
     public boolean checkCardTypeInHand(Class<? extends Card> c) {
