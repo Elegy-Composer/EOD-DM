@@ -155,8 +155,8 @@ Send when client is ready for a game.
 {
     "id": "ready_start",
     "data": {
-		"deck_id": 1
-	}
+        "deck_id": 1
+    }
 }
 ```
 
@@ -211,7 +211,7 @@ Send when client move an object.
     "id": "move",
     "data": {
         "original_position": [x1, y1],
-		"target_position": [x2, y2]
+        "target_position": [x2, y2]
     }
 }
 ```
@@ -231,7 +231,7 @@ Send when client wants to use his object to attack another object.
     "id": "attack",
     "data": {
         "original_position": [x1, y1],
-		"target_position": [x2, y2]
+        "target_position": [x2, y2]
     }
 }
 ```
