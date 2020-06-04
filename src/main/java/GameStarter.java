@@ -7,10 +7,10 @@ import eod.Player;
 import eod.card.abstraction.Card;
 import eod.card.collection.Deck;
 import eod.card.concrete.attack.transparent.PreciseShot;
-import eod.card.concrete.normal.DroneSupport;
-import eod.card.concrete.normal.EmergencyHeal;
-import eod.card.concrete.summon.LeadersGuardSummon;
-import eod.card.concrete.summon.SpacezipperSummon;
+import eod.card.concrete.normal.transparent.DroneSupport;
+import eod.card.concrete.normal.transparent.EmergencyHeal;
+import eod.card.concrete.summon.red.LeadersGuardSummon;
+import eod.card.concrete.summon.transparent.SpacezipperSummon;
 import eod.warObject.leader.red.Sundar;
 
 public class GameStarter {

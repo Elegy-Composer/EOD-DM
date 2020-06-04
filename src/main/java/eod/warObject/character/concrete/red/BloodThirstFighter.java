@@ -4,7 +4,7 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.BloodThirstFighterSummon;
+import eod.card.concrete.summon.red.BloodThirstFighterSummon;
 import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.event.Event;
@@ -12,7 +12,6 @@ import eod.event.ObjectEnterEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Damageable;
-import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Fighter;
 
 import java.awt.*;

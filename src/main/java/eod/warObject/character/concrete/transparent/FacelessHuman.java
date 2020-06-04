@@ -3,7 +3,7 @@ package eod.warObject.character.concrete.transparent;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.FacelessHumanSummon;
+import eod.card.concrete.summon.transparent.FacelessHumanSummon;
 import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;

@@ -5,14 +5,13 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.SpacezipperSummon;
+import eod.card.concrete.summon.transparent.SpacezipperSummon;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Marker;
-import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;

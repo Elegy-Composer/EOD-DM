@@ -5,13 +5,12 @@ import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.AssassinSummon;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.AssassinsIntermediarySummon;
+import eod.card.concrete.summon.transparent.AssassinsIntermediarySummon;
 import eod.event.Event;
 import eod.event.ObjectEnterEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;
-import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
 import java.util.ArrayList;

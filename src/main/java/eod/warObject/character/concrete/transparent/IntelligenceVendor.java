@@ -4,7 +4,7 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.IntelligenceVendorSummon;
+import eod.card.concrete.summon.transparent.IntelligenceVendorSummon;
 import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.event.Event;

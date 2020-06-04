@@ -5,12 +5,11 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.MafiaAssassinSummon;
+import eod.card.concrete.summon.red.MafiaAssassinSummon;
 import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.exceptions.NotSupportedException;
 import eod.param.PointParam;
-import eod.warObject.Damageable;
 import eod.warObject.Status;
 import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.assaulter.Assassin;
@@ -18,8 +17,6 @@ import eod.warObject.leader.Leader;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static eod.effect.EffectFunctions.RequestRegionalAttack;
 
 public class MafiaAssassin extends Assassin {
     public MafiaAssassin(Player player) {

@@ -2,7 +2,7 @@ package eod.warObject.character.concrete.red;
 
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.LittleGhostSummon;
+import eod.card.concrete.summon.red.LittleGhostSummon;
 import eod.warObject.character.abstraction.other.Ghost;
 
 public class LittleGhost extends Ghost {

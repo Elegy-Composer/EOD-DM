@@ -3,7 +3,7 @@ package eod.warObject.character.concrete.red;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.GuerrillaShooterSummon;
+import eod.card.concrete.summon.red.GuerrillaShooterSummon;
 import eod.effect.EffectExecutor;
 import eod.effect.RegionalAttack;
 import eod.param.PointParam;

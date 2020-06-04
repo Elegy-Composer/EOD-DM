@@ -5,7 +5,7 @@ import eod.Gameboard;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.GangsterSummon;
+import eod.card.concrete.summon.red.GangsterSummon;
 import eod.effect.EffectExecutor;
 import eod.param.PointParam;
 import eod.warObject.character.abstraction.Character;

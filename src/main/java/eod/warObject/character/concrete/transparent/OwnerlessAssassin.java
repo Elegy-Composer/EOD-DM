@@ -4,17 +4,15 @@ import eod.GameObject;
 import eod.Party;
 import eod.Player;
 import eod.card.abstraction.summon.SummonCard;
-import eod.card.concrete.summon.OwnerlessAssassinSummon;
+import eod.card.concrete.summon.transparent.OwnerlessAssassinSummon;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.RoundStartEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
-import eod.warObject.Status;
 import eod.warObject.character.abstraction.assaulter.Assassin;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static eod.effect.EffectFunctions.RequestRegionalAttack;
