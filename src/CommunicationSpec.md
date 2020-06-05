@@ -406,7 +406,7 @@ Announce clients that round starts.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| turn | integer | Cuurent turn number. |
+| turn | integer | current turn number. |
 | player | [player](#player) | The player status. |
 | enemy | [player](#player) | The enemy status. |
 | whose | string | Whose turn? <br>Value: `player` or `enemy`. |
@@ -429,7 +429,7 @@ Announce clients that attack stage starts.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| turn | integer | Cuurent turn number. |
+| turn | integer | current turn number. |
 | player | [player](#player) | The player status. |
 | enemy | [player](#player) | The enemy status. |
 | whose | string | Whose turn? <br>Value: `player` or `enemy`. |
