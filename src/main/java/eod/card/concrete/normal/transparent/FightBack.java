@@ -13,6 +13,7 @@ import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.warObject.CanAttack;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
 import eod.warObject.WarObject;
 
 import java.util.ArrayList;
@@ -29,11 +30,12 @@ public class FightBack extends NormalCard {
 
     @Override
     public void applyEffect(EffectExecutor executor) {
-        new AttackDetect(player.selectObject(
-            WarObject(player.getBoard())
-                    .which(Being(Damageable.class))
-                    .which(OwnedBy(player)).get())
+        WarObject selected = player.selectObject(
+                WarObject(player.getBoard())
+                .which(Being(Damageable.class))
+                .which(OwnedBy(player)).get()
         );
+        selected.registerReceiver(new AttackDetect(selected));
     }
 
     @Override
@@ -55,30 +57,25 @@ public class FightBack extends NormalCard {
 
     public class AttackDetect implements EventReceiver, GameObject {
         private WarObject watching;
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public AttackDetect(WarObject watching) {
             this.watching = watching;
-            canHandle = new ArrayList<>();
-            canHandle.add(TargetedEvent.class);
-            canHandle.add(RoundEndEvent.class);
-            watching.registerReceiver(this);
-        }
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
         }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
             if(event instanceof RoundEndEvent) {
-                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() == player.rival().isPlayerA()) {
+                if(((RoundEndEvent) event).getEndedRound().getPlayer().isPlayerA() != watching.getPlayer().isPlayerA()) {
                     teardown();
                 }
             }
             if(event instanceof TargetedEvent) {
+
                 TargetedEvent e = (TargetedEvent) event;
                 if(e.getTarget() == watching) {
+                    if(watching.hasStatus(Status.NO_EFFECT)) {
+                        return;
+                    }
                     CanAttack attacker = e.getAttacker();
                     ((WarObject) attacker).getPlayer().tryToExecute(
                         Damage(new DamageParam(4), Effect.HandlerType.Rival).on((Damageable) attacker)
@@ -89,8 +86,15 @@ public class FightBack extends NormalCard {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(TargetedEvent.class);
+                add(RoundEndEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
-            canHandle.clear();
             watching.unregisterReceiver(this);
             watching = null;
         }

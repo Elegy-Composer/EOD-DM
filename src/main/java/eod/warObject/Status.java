@@ -5,7 +5,6 @@ public enum Status {
     LOCKED,
     SNEAK,
     DEAD,
-    STABLE,
     FURIOUS,
     CANT_ATTACK,
     NO_EFFECT,

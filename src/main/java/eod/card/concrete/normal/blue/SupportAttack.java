@@ -8,10 +8,13 @@ import eod.effect.Effect;
 import eod.effect.EffectExecutor;
 import eod.event.Event;
 import eod.event.ObjectDeadEvent;
+import eod.event.RoundEndEvent;
 import eod.event.TargetedEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.DamageParam;
 import eod.warObject.Damageable;
+import eod.warObject.Status;
+import eod.warObject.WarObject;
 import eod.warObject.character.abstraction.Character;
 
 import java.util.ArrayList;
@@ -54,32 +57,26 @@ public class SupportAttack extends NormalCard {
 
     public class EnemyAttack implements EventReceiver, GameObject {
         private Character holder;
-        private ArrayList<Class<? extends Event>> canHandle;
 
         public EnemyAttack(Character holder) {
             this.holder = holder;
-            canHandle = new ArrayList<>();
-            canHandle.add(ObjectDeadEvent.class);
-            canHandle.add(TargetedEvent.class);
             holder.registerReceiver(this);
         }
 
         @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
-
-        @Override
         public void onEventOccurred(GameObject sender, Event event) {
-            if(event instanceof ObjectDeadEvent) {
-                ObjectDeadEvent e = (ObjectDeadEvent) event;
-                if(e.getDeadObject() == holder) {
+            if(event instanceof RoundEndEvent) {
+                RoundEndEvent e = (RoundEndEvent) event;
+                if(e.getEndedRound().getPlayer().isPlayerA() != holder.getPlayer().isPlayerA()) {
                     teardown();
                 }
             }
             if(event instanceof TargetedEvent) {
+                if(holder.hasStatus(Status.NO_EFFECT)) {
+                    return;
+                }
                 TargetedEvent e = (TargetedEvent) event;
-                if(e.getTarget() != holder) {
+                if(e.getTarget() != holder && ((WarObject)e.getAttacker()).getPlayer().isPlayerA() != holder.getPlayer().isPlayerA()) {
                     player.tryToExecute(
                         Damage(new DamageParam(2), Effect.HandlerType.Rival).on((Damageable) e.getAttacker())
                     );
@@ -89,10 +86,16 @@ public class SupportAttack extends NormalCard {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>() {{
+                add(RoundEndEvent.class);
+                add(TargetedEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
             holder.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
             holder = null;
         }
     }

@@ -4,34 +4,38 @@ import eod.GameObject;
 import eod.event.Event;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class EventManager implements EventSender, GameObject {
-    private ArrayList<EventReceiver> receivers = new ArrayList<>();
+    private HashMap<Class<? extends Event>, ArrayList<EventReceiver>> receivers = new HashMap<>();
 
     @Override
     public void registerReceiver(EventReceiver receiver) {
-        receivers.add(receiver);
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.putIfAbsent(supportedEvent, new ArrayList<>());
+            receivers.get(supportedEvent).add(receiver);
+        }
     }
 
     @Override
     public void unregisterReceiver(EventReceiver receiver) {
-        receivers.remove(receiver);
-    }
-
-    @Override
-    public StatusHolder[] getStatusHolders() {
-        return receivers.stream().filter(receiver -> receiver instanceof StatusHolder).map(receiver -> (StatusHolder) receiver).toArray(StatusHolder[]::new);
+        for(Class<? extends Event> supportedEvent:receiver.supportedEventTypes()) {
+            receivers.get(supportedEvent).remove(receiver);
+        }
     }
 
     @Override
     public void send(GameObject sender, Event event) {
-        receivers.stream()
-                .filter(receiver -> receiver.supportedEventTypes().contains(event.getClass()))
+        receivers.get(event.getClass())
                 .forEach(receiver -> receiver.onEventOccurred(sender, event));
     }
 
     @Override
     public void teardown() {
+        for(ArrayList<EventReceiver> subReceivers:receivers.values()) {
+            subReceivers.forEach(GameObject::teardown);
+        }
         receivers.clear();
         receivers = null;
     }

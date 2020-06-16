@@ -8,7 +8,5 @@ public interface EventSender {
 
     void unregisterReceiver(EventReceiver receiver);
 
-    StatusHolder[] getStatusHolders();
-
     void send(GameObject sender, Event event);
 }

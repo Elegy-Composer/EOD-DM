@@ -12,6 +12,7 @@ import eod.event.RoundStartEvent;
 import eod.event.relay.EventReceiver;
 import eod.param.PointParam;
 import eod.warObject.Marker;
+import eod.warObject.Status;
 import eod.warObject.character.abstraction.Character;
 
 import java.awt.*;
@@ -104,20 +105,12 @@ public class Spacezipper extends Character implements Marker {
     }
 
     private class OwnedAbilities implements EventReceiver {
-        private ArrayList<Class<? extends Event>> canHandle;
-
-        public OwnedAbilities() {
-            canHandle = new ArrayList<>();
-            canHandle.add(RoundStartEvent.class);
-        }
-
-        @Override
-        public ArrayList<Class<? extends Event>> supportedEventTypes() {
-            return canHandle;
-        }
 
         @Override
         public void onEventOccurred(GameObject sender, Event event) {
+            if(Spacezipper.this.hasStatus(Status.NO_EFFECT)) {
+                return;
+            }
             if(event instanceof RoundStartEvent) {
                 RoundStartEvent e = (RoundStartEvent) event;
                 if(e.getStartedRound().getPlayer().isPlayerA() == Spacezipper.this.player.isPlayerA()) {
@@ -128,11 +121,15 @@ public class Spacezipper extends Character implements Marker {
         }
 
         @Override
+        public ArrayList<Class<? extends Event>> supportedEventTypes() {
+            return new ArrayList<Class<? extends Event>>(){{
+                add(RoundStartEvent.class);
+            }};
+        }
+
+        @Override
         public void teardown() {
             Spacezipper.this.unregisterReceiver(this);
-            canHandle.clear();
-            canHandle = null;
-            clearMark();
         }
     }
 }
